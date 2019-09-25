@@ -1,4 +1,5 @@
-﻿using Assets.Libs.Esharknet.Broadcast;
+﻿using Assets.Libs.Esharknet;
+using Assets.Libs.Esharknet.Broadcast;
 using Assets.Libs.Esharknet.IP;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ public class UIManager : MonoBehaviour
     public int timedelay;
     private Broadcast_receive broadcast;
     private string ip;
+    public GameObject item;
+    public GameObject contexto;
     // Start is called before the first frame update
     void Start()
     {
@@ -62,7 +65,16 @@ public class UIManager : MonoBehaviour
         if (broadcast != null)
         {
             Btn_Buscar.GetComponent<Button>().interactable = true;
-            //crear_gameobjects(broadcast.getLista());
+
+            var Lista_diccionario = broadcast.GetListObtained();
+
+            var json_data = Newtonsoft.Json.JsonConvert.SerializeObject(Lista_diccionario, Newtonsoft.Json.Formatting.Indented);
+
+            Debug.Log(json_data);
+
+
+            crear_gameobjects(Lista_diccionario)
+                ;
             broadcast.Destroy();
             broadcast = null;
 
@@ -70,41 +82,50 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    /*
-     private void crear_gameobjects(List<servidor_datos> lista_servidores)
+    
+     private void crear_gameobjects(List <Data> lista_servidores)
     {
         int i = 0;
         int posicion_y = 80;
-        foreach (servidor_datos sdatos in lista_servidores)
+
+
+
+        foreach (var sdatos in lista_servidores)
         {
-            GameObject go = (GameObject)Instantiate(item_servidor, new Vector3(0, 0, 0), Quaternion.identity);
+            GameObject go = (GameObject)Instantiate(item, new Vector3(0, 0, 0), Quaternion.identity);
             go.transform.SetParent(contexto.transform);
 
-            go.transform.position = new Vector3(300, posicion_y + 75, 0);
+            go.transform.position = new Vector3(385, posicion_y + 75, 0);
 
             var valores = go.GetComponent<servidor_datos>();
-            valores.ip = sdatos.ip;
-            valores.clientes = sdatos.clientes;
-            valores.max_clientes = sdatos.max_clientes;
+
+            valores.ip = sdatos.value["ip"].ToString();
+            valores.players = int.Parse(sdatos.value["players"].ToString());
+            valores.max_players = int.Parse(sdatos.value["max_players"].ToString());
+            valores.name_server = sdatos.value["name_server"].ToString();
+            valores.port = int.Parse(sdatos.value["port"].ToString());
 
 
 
-            go.transform.GetChild(0).GetComponent<Text>().text = "" + (i + 1) + ". Partida " + sdatos.max_clientes + " de " + sdatos.clientes;
+            go.transform.GetChild(0).GetComponent<Text>().text = "" + (i + 1) + ". Sala " + valores.name_server+ " " +
+            valores.max_players + " de " + valores.players;
 
             var boton = go.transform.GetChild(1).gameObject.GetComponent<Button>();
-            boton.onClick.AddListener(() => delegar_dato(sdatos.ip));
+            boton.onClick.AddListener(() => delegar_dato(valores.ip,valores.port));
 
             posicion_y = posicion_y - 40;
 
             i++;
         }
 
-        void delegar_dato(string ip)
+        void delegar_dato(string ip, int port)
         {
 
-            PlayerPrefs.SetString("direccion_ip", ip);
-            SceneManager.LoadScene("NuevaPartida_Cliente");
+            PlayerPrefs.SetString("ip_address", ip);
+            PlayerPrefs.SetInt("port", port);
+
+            SceneManager.LoadScene("Sala_Cliente");
         }
     }
-     */
+     
 }

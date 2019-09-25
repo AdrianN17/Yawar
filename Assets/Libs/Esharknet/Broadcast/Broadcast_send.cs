@@ -27,16 +27,14 @@ namespace Assets.Libs.Esharknet.Broadcast
 
             this.broadcast_data = broadcast_data;
 
+            var data = new Data("broadcast", this.broadcast_data);
+
             thread = new Thread(delegate ()
             {
                 while (loop)
                 {
-                    var data = new Dictionary<string, dynamic>()
-                    {
-                        {"broadcast", broadcast_data}
-                    };
 
-                    var json_data = JsonConvert.SerializeObject(data, Formatting.Indented);
+                    var json_data  = JsonConvert.SerializeObject(data);
 
                     Debug.Log("Broadcast Send : "+ json_data);
 

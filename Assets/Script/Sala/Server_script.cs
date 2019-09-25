@@ -18,6 +18,8 @@ public class Server_script : MonoBehaviour
 
     void Start()
     {
+        //Application.targetFrameRate = 60;
+
         ip = new LocalIP().SetLocalIP();
 
         server = new Server(ip,port,max_clients,0,timeout);

@@ -15,7 +15,13 @@ public class Client_script : MonoBehaviour
     void Start()
     {
 
-        ip = new LocalIP().SetLocalIP();
+        ip = PlayerPrefs.GetString("ip_address");
+        port = (ushort)PlayerPrefs.GetInt("port");
+        
+        PlayerPrefs.DeleteKey("ip_address");
+        PlayerPrefs.DeleteKey("port");
+
+        Debug.LogWarning("ip " + ip + " port " + port);
 
         client = new Client(ip,port,0,timeout);
 

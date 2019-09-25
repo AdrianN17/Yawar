@@ -14,7 +14,7 @@ namespace Assets.Libs.Esharknet.Broadcast
         public UdpClient udpClient;
         private IPEndPoint ip_point;
         private Thread thread;
-        private Dictionary<string, dynamic> servers_list;
+        private Dictionary<string, Data> servers_list;
 
         private bool loop = true;
 
@@ -24,7 +24,7 @@ namespace Assets.Libs.Esharknet.Broadcast
             ip_point = new IPEndPoint(IPAddress.Parse(ip_address), port_send);
             udpClient.Client.Bind(ip_point);
 
-            servers_list = new Dictionary<string, dynamic>();
+            servers_list = new Dictionary<string, Data>();
 
             thread = new Thread(delegate ()
             {
@@ -35,16 +35,33 @@ namespace Assets.Libs.Esharknet.Broadcast
 
                         var bytes = udpClient.Receive(ref ip_point);
 
-                        if(bytes.Length>0)
+                        if (bytes.Length > 0)
                         {
                             var json_data = Encoding.ASCII.GetString(bytes);
-                            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json_data);
+                            var data = JsonConvert.DeserializeObject<Data>(json_data);
 
                             Debug.Log("Broadcast receive : " + json_data);
+
+                            if(data.key== "broadcast")
+                            {
+                                Debug.Log("Broadcast receive key : " + data.value["ip"]);
+
+                                var ip = data.value["ip"].ToString();
+
+
+                                if (servers_list.ContainsKey(ip))
+                                {
+                                    servers_list[ip] = data;
+                                }
+                                else
+                                {
+                                    servers_list.Add(ip, data);
+                                }
+                            }
+                            
                         }
 
-                        //var data = dictionary["Broadcast"];
-                        //validate(data["ip"], data);
+                        
                     }
                     catch (SocketException ex) // or whatever the exception is that you're getting
                     {
@@ -60,22 +77,16 @@ namespace Assets.Libs.Esharknet.Broadcast
 
         }
 
-        private void validate(string ip,dynamic data)
+        public List<Data> GetListObtained()
         {
-            if(servers_list.ContainsKey(ip))
-            {
-                var dictionary = data;
-                servers_list[ip]["players"] = data["players"];
-            }
-            else
-            {
-                servers_list.Add(ip,data);
-            }
-        }
+            var List_server_data = new List<Data>();
 
-        Dictionary<string, dynamic> GetListObtained()
-        {
-            return this.servers_list;
+            foreach (var item in servers_list)
+            {
+                List_server_data.Add(item.Value);
+            }
+
+            return List_server_data;
         }
 
         public void Destroy()
