@@ -94,8 +94,8 @@ public class Move : MonoBehaviour
             x = desacelerar_mov(x, dt);
         }
 
-        anim.SetFloat("VelX", x);
-        anim.SetFloat("VelY", y);
+        anim.SetFloat("VelX", y);
+        anim.SetFloat("VelY", x);
 
 
     }
