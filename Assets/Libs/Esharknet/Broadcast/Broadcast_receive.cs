@@ -16,50 +16,47 @@ namespace Assets.Libs.Esharknet.Broadcast
         private Thread thread;
         private Dictionary<string, dynamic> servers_list;
 
+        private bool loop = true;
+
         public Broadcast_receive(string ip_address, ushort port_send, int timedelay)
         {
             udpClient = new UdpClient();
             ip_point = new IPEndPoint(IPAddress.Parse(ip_address), port_send);
             udpClient.Client.Bind(ip_point);
 
-            //servers_list = new Dictionary<string, dynamic>();
+            servers_list = new Dictionary<string, dynamic>();
 
             thread = new Thread(delegate ()
             {
-                while (udpClient != null && thread != null)
+                while (loop)
                 {
                     try
                     {
-                        if (udpClient != null)
+
+                        var bytes = udpClient.Receive(ref ip_point);
+
+                        if(bytes.Length>0)
                         {
-                            var bytes = udpClient.Receive(ref ip_point);
                             var json_data = Encoding.ASCII.GetString(bytes);
                             var dictionary = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json_data);
 
                             Debug.Log("Broadcast receive : " + json_data);
-
-                            var data = dictionary["Broadcast"];
-                            validate(data["ip"], data);
                         }
+
+                        //var data = dictionary["Broadcast"];
+                        //validate(data["ip"], data);
                     }
-                    catch (ThreadAbortException ex)
+                    catch (SocketException ex) // or whatever the exception is that you're getting
                     {
                         Debug.LogWarning(ex.Message);
-                        Thread.ResetAbort();
                     }
 
 
-            }
-
+                    Thread.Sleep(timedelay);
+                }
             });
 
             thread.Start();
-            Thread.Sleep(1000);
-
-            /*
-             *  {broadcast = {ip=192.168.0.3,port=22122,players=1,max_players=5,name_server=room1}}
-             * 
-             */
 
         }
 
@@ -84,13 +81,12 @@ namespace Assets.Libs.Esharknet.Broadcast
         public void Destroy()
         {
             Debug.LogWarning("Broadcast receive finish");
-            thread.Abort();
+
+            loop = false;
+
             udpClient.Close();
             servers_list.Clear();
-
-            udpClient = null;
-            thread = null;
-            
+ 
         }
     }
 }

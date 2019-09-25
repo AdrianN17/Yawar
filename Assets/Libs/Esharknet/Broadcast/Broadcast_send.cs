@@ -17,6 +17,8 @@ namespace Assets.Libs.Esharknet.Broadcast
 
         private Dictionary<string, dynamic> broadcast_data;
 
+        private bool loop = true;
+
         public Broadcast_send(string ip_address,ushort port, ushort port_send, int timedelay, Dictionary<string,dynamic> broadcast_data)
         {
             udpServer = new UdpClient();
@@ -27,46 +29,28 @@ namespace Assets.Libs.Esharknet.Broadcast
 
             thread = new Thread(delegate ()
             {
-                while (udpServer != null && thread != null)
+                while (loop)
                 {
                     var data = new Dictionary<string, dynamic>()
                     {
                         {"broadcast", broadcast_data}
                     };
 
-                    try
-                    { 
+                    var json_data = JsonConvert.SerializeObject(data, Formatting.Indented);
 
-                        var json_data = JsonConvert.SerializeObject(data, Formatting.Indented);
+                    Debug.Log("Broadcast Send : "+ json_data);
 
-                        Debug.Log("Broadcast Send : "+ json_data);
+                    var bytes = Encoding.ASCII.GetBytes(json_data);
 
-                        var bytes = Encoding.ASCII.GetBytes(json_data);
+                    udpServer.Send(bytes, bytes.Length, "255.255.255.255", port_send);
 
-                        if(udpServer != null)
-                        {
-                            udpServer.Send(bytes, bytes.Length, "255.255.255.255", port_send);
-                        }
-                            
-                    }
-                    catch(ThreadAbortException ex)
-                    {
-                        Debug.LogWarning(ex.Message);
-                        Thread.ResetAbort(); 
-                    }
-
-
+                    Thread.Sleep(timedelay);
 
                 }
             });
 
             thread.Start();
-            Thread.Sleep(timedelay);
 
-            /*
-             *  {ip=192.168.0.3,port=22122,players=1,max_players=5,name_server=room1}
-             * 
-             */
         }
 
         public void UpdateDictionary(string key, dynamic value)
@@ -80,11 +64,10 @@ namespace Assets.Libs.Esharknet.Broadcast
         public void Destroy()
         {
             Debug.LogWarning("Broadcast send finish");
-            thread.Abort();
-            udpServer.Close();
 
-            udpServer = null;
-            thread = null;
+            loop = false;
+
+            udpServer.Close();
 
         }
     }
