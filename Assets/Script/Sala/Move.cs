@@ -58,7 +58,7 @@ public class Move : MonoBehaviour
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
-                y = disminuir_mov(y,dt);
+                x = disminuir_mov(x,dt);
 
             }
             else if (mover_player_horizontal == movimiento_Horizontal.D)
@@ -67,7 +67,7 @@ public class Move : MonoBehaviour
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
-                y = aumentar_mov(y, dt);
+                x = aumentar_mov(x, dt);
             }
         }
 
@@ -75,27 +75,27 @@ public class Move : MonoBehaviour
         {
             rb.AddForce(transform.forward* velocidad * dt);
 
-            x = aumentar_mov(x, dt);
+            y = aumentar_mov(y, dt);
         }
         else if (mover_player_vertical == movimiento_Vertical.S)
         {
             rb.AddForce(transform.forward * -velocidad * dt);
 
-            x = disminuir_mov(x, dt);
+            y = disminuir_mov(y, dt);
         }
 
-        if(mover_player_horizontal == movimiento_Horizontal.Ninguno && y!=0)
+        if(mover_player_horizontal == movimiento_Horizontal.Ninguno && x != 0)
         {
-            y= desacelerar_mov(y, dt);
+            x= desacelerar_mov(x, dt);
         }
 
-        if(mover_player_vertical == movimiento_Vertical.Ninguno && x != 0)
+        if(mover_player_vertical == movimiento_Vertical.Ninguno && y != 0)
         {
-            x = desacelerar_mov(x, dt);
+            y = desacelerar_mov(y, dt);
         }
 
-        anim.SetFloat("VelX", y);
-        anim.SetFloat("VelY", x);
+        anim.SetFloat("VelX", x);
+        anim.SetFloat("VelY", y);
 
 
     }

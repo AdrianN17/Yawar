@@ -3,6 +3,7 @@ using Assets.Libs.Esharknet.IP;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Server_script : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Server_script : MonoBehaviour
     public int timeout;
     public Server server;
     public string ip;
+
+    public Text fps_text;
 
     void Start()
     {
@@ -29,6 +32,8 @@ public class Server_script : MonoBehaviour
         }*/
 
         server.update();
+
+        fps_text.text = "FPS : " + (int)(1.0f / Time.smoothDeltaTime); 
     }
 
     void OnDestroy()
