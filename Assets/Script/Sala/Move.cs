@@ -11,6 +11,7 @@ public class Move : MonoBehaviour
     public float x, y;
     public float velocidad;
     public float salto;
+    public float giro;
     public bool es_controlable;
 
     private int id;
@@ -54,7 +55,7 @@ public class Move : MonoBehaviour
 
             if (mover_player_horizontal == movimiento_Horizontal.A)
             {
-                vec = new Vector3(0, velocidad * dt * -1, 0);
+                vec = new Vector3(0,  dt * -1* giro, 0);
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
@@ -63,7 +64,7 @@ public class Move : MonoBehaviour
             }
             else if (mover_player_horizontal == movimiento_Horizontal.D)
             {
-                vec = new Vector3(0, velocidad * dt * 1, 0);
+                vec = new Vector3(0,  dt * 1* giro, 0);
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
@@ -73,13 +74,13 @@ public class Move : MonoBehaviour
 
         if (mover_player_vertical == movimiento_Vertical.W)
         {
-            rb.AddForce(transform.forward* velocidad * dt);
+            rb.AddForce(transform.forward* velocidad * rb.mass * dt);
 
             y = aumentar_mov(y, dt);
         }
         else if (mover_player_vertical == movimiento_Vertical.S)
         {
-            rb.AddForce(transform.forward * -velocidad * dt);
+            rb.AddForce(transform.forward * -velocidad * rb.mass * dt);
 
             y = disminuir_mov(y, dt);
         }
@@ -92,6 +93,11 @@ public class Move : MonoBehaviour
         if(mover_player_vertical == movimiento_Vertical.Ninguno && y != 0)
         {
             y = desacelerar_mov(y, dt);
+        }
+
+        if(!pisando_tierra)
+        {
+            Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
         }
 
         anim.SetFloat("VelX", x);
@@ -143,7 +149,7 @@ public class Move : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space) && pisando_tierra)
         {
-            rb.AddForce(Vector3.up*salto);
+            rb.AddForce(Vector3.up*salto* rb.mass );
 
             script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
                 { { "id" , id},{"tecla" , "S" }
@@ -285,6 +291,11 @@ public class Move : MonoBehaviour
         {
             pisando_tierra = true;
         }
+    }
+
+    public float Remap( float value, float from1, float to1, float from2, float to2)
+    {
+        return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
 
