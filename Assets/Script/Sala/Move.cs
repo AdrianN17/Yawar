@@ -97,7 +97,10 @@ public class Move : MonoBehaviour
 
         if(!pisando_tierra)
         {
-            Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
+            //Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
+
+            var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
+
         }
 
         anim.SetFloat("VelX", x);
