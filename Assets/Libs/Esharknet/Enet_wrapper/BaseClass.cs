@@ -17,12 +17,6 @@ namespace Assets.Libs.Esharknet
             this.TriggerFunctions = new Dictionary<string, Action<ENet.Event>>();
         }
 
-        public void Send(string event_name, dynamic data_value, Peer peer)
-        {
-            var packet = JSONEncode(new Data(event_name,data_value));
-            peer.Send(0, ref packet);
-        }
-
         public ENet.Packet JSONEncode(Data data)
         {
             ENet.Packet packet = default(ENet.Packet);
@@ -55,7 +49,7 @@ namespace Assets.Libs.Esharknet
             }
             else
             {
-                Debug.LogWarning(key + " function not defined in dictionary");
+                Debug.LogError(key + " function not defined in dictionary");
             }
         }
 
@@ -63,7 +57,15 @@ namespace Assets.Libs.Esharknet
         {
             Data data = JSONDecode(netEvent.Packet);
 
-            TriggerFunctions[data.key](netEvent);
+            if (TriggerFunctions.ContainsKey(data.key))
+            {
+                TriggerFunctions[data.key](netEvent);
+            }
+            else
+            {
+                Debug.LogError(data.key + " function not defined in dictionary");
+            }
+            
 
         }
 

@@ -18,6 +18,7 @@ public class UIManager : MonoBehaviour
     private string ip;
     public GameObject item;
     public GameObject contexto;
+    public int posicion_y;
     // Start is called before the first frame update
     void Start()
     {
@@ -86,16 +87,11 @@ public class UIManager : MonoBehaviour
      private void crear_gameobjects(List <Data> lista_servidores)
     {
         int i = 0;
-        int posicion_y = 80;
-
-
-
+        
         foreach (var sdatos in lista_servidores)
         {
-            GameObject go = (GameObject)Instantiate(item, new Vector3(0, 0, 0), Quaternion.identity);
-            go.transform.SetParent(contexto.transform);
-
-            go.transform.position = new Vector3(385, posicion_y + 75, 0);
+            GameObject go = (GameObject)Instantiate(item);
+            go.transform.SetParent(contexto.transform, false);
 
             var valores = go.GetComponent<servidor_datos>();
 

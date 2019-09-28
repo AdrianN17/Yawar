@@ -22,17 +22,21 @@ public class Move : MonoBehaviour
     public movimiento_Horizontal mover_player_horizontal = movimiento_Horizontal.Ninguno;
     public movimiento_Vertical mover_player_vertical = movimiento_Vertical.Ninguno;
 
-
-    public GameObject objeto_host;
-    private Server_script script;
+    public GameObject client_manager;
+    public Client_script client;
 
     void Start()
     {
-        
+
+        if (es_controlable)
+        { 
+            client = client_manager.GetComponent<Client_script>();
+        }
+
         Debug.Log(id);
         rb.freezeRotation = true;
 
-        script = objeto_host.GetComponent<Server_script>();
+        
     }
 
     void Update()
@@ -115,8 +119,8 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.A;
 
-            script.server.SendToAll("movimiento_horizontal",new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "A" }
+            client.client.Send("movimiento",new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "A" },{"orientacion","horizontal"}
             });
 
 
@@ -125,8 +129,8 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.D;
 
-            script.server.SendToAll("movimiento_horizontal", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "D" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "D" },{"orientacion","horizontal"}
             });
 
         }
@@ -135,8 +139,8 @@ public class Move : MonoBehaviour
         {
             mover_player_vertical = movimiento_Vertical.W;
 
-            script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "W" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "W" },{"orientacion","vertical"}
             });
 
         }
@@ -144,8 +148,8 @@ public class Move : MonoBehaviour
         {
             mover_player_vertical = movimiento_Vertical.S;
 
-            script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "S" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "S" },{"orientacion","vertical"}
             });
 
         }
@@ -154,14 +158,12 @@ public class Move : MonoBehaviour
         {
             rb.AddForce(Vector3.up*salto* rb.mass );
 
-            script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
+            client.client.Send("salto", new Dictionary<string, dynamic>()
                 { { "id" , id},{"tecla" , "S" }
             });
 
             pisando_tierra = false;
         }
-
-
     }
     private void tecla_soltada(float dt)
     {
@@ -169,8 +171,8 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
-            script.server.SendToAll("movimiento_horizontal", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","horizontal"}
             });
         }
 
@@ -178,8 +180,8 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
-            script.server.SendToAll("movimiento_horizontal", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","horizontal"}
             });
         }
 
@@ -187,8 +189,8 @@ public class Move : MonoBehaviour
         {
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
-            script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","vertical"}
             });
         }
 
@@ -196,47 +198,49 @@ public class Move : MonoBehaviour
         {
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
-            script.server.SendToAll("movimiento_vertical", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" }
+            client.client.Send("movimiento", new Dictionary<string, dynamic>()
+                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","vertical"}
             });
         }
     }
-    public void movimiento_horizontal_cambio(string enu)
-    {
-        if (enu.Equals("Ninguno"))
-        {
-            mover_player_horizontal = movimiento_Horizontal.Ninguno;
-        }
-        else if (enu.Equals("A"))
-        {
-            mover_player_horizontal = movimiento_Horizontal.A;
-        }
-        else if (enu.Equals("D"))
-        {
-            mover_player_horizontal = movimiento_Horizontal.D;
-        }
-    }
-    public void movimiento_vertical_cambio(string enu)
-    {
-        if (enu.Equals("Ninguno"))
-        {
-            mover_player_vertical = movimiento_Vertical.Ninguno;
-        }
-        else if (enu.Equals("W"))
-        {
-            mover_player_vertical = movimiento_Vertical.W;
-        }
-        else if (enu.Equals("S"))
-        {
-            mover_player_vertical = movimiento_Vertical.S;
-        }
-    }
 
-    
-
-    public void mover_bola_posicion(string vec)
+    public void movimiento_cambio(string enu,string orientacion)
     {
-        //rb.MovePosition(StringToVector3(vec));
+        switch(orientacion)
+        {
+            case "horizontal":
+
+                switch(enu)
+                {
+                    case "A":
+                        mover_player_horizontal = movimiento_Horizontal.A;
+                        break;
+                    case "D":
+                        mover_player_horizontal = movimiento_Horizontal.D;
+                        break;
+                    case "Ninguno":
+                        mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                        break;
+                }
+
+                break;
+            case "vertical":
+
+                switch (enu)
+                {
+                    case "W":
+                        mover_player_vertical = movimiento_Vertical.W;
+                        break;
+                    case "S":
+                        mover_player_vertical = movimiento_Vertical.S;
+                        break;
+                    case "Ninguno":
+                        mover_player_vertical = movimiento_Vertical.Ninguno;
+                        break;
+                }
+
+                break;
+        }
     }
 
     public int GetID()
@@ -299,6 +303,12 @@ public class Move : MonoBehaviour
     public float Remap( float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
+    }
+
+    public void salto_improvisado()
+    {
+        rb.AddForce(Vector3.up * salto * rb.mass);
+        pisando_tierra = false;
     }
 
 

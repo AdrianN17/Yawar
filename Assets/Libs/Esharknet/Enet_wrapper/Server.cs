@@ -34,9 +34,9 @@ namespace Assets.Libs.Esharknet
 
             Debug.Log("Create server IP : " + ip_address);
 
-            TriggerFunctions.Add("Connect", delegate(ENet.Event net_event) {
+            /*TriggerFunctions.Add("Connect", delegate(ENet.Event net_event) {
                 AddPeer(net_event);
-            });
+            });*/
 
             TriggerFunctions.Add("Disconnect", delegate (ENet.Event net_event) {
                 RemovePeer(net_event);
@@ -82,42 +82,100 @@ namespace Assets.Libs.Esharknet
 
                 case ENet.EventType.Receive:
                     Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
-
                     ExecuteTriggerBytes(netEvent);
                     netEvent.Packet.Dispose();
                     break;
             }
         }
 
-        
-
-        public void SendToAllBut(string event_name, dynamic data_value, Peer peer)
+        public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true)
         {
-            var packet = JSONEncode(new Data(event_name, data_value));
-            foreach(var client in clients)
+            ENet.Packet packet;
+
+            if (Encode)
             {
-                if (!clients.Equals(peer))
+                packet = JSONEncode(new Data(event_name, data_value));
+            }
+            else
+            {
+                packet = data_value;
+            }
+
+            peer.Send(0, ref packet);
+        }
+
+        public void SendToAllBut(string event_name, dynamic data_value, Peer peer, bool Encode=true)
+        {
+            ENet.Packet packet;
+
+            if (Encode)
+            { 
+                packet = JSONEncode(new Data(event_name, data_value));
+            }
+            else
+            {
+                packet = data_value;
+            }
+
+
+            foreach (var client in clients)
+            {
+                if (client.Equals(peer))
+                {
+                    
+                }
+                else
                 {
                     client.Send(0, ref packet);
                 }
             }
         }
 
-        public void SendToAll(string event_name, dynamic data_value)
+        public void SendToAll(string event_name, dynamic data_value, bool Encode = true)
         {
-            var packet = JSONEncode(new Data(event_name,data_value));
+            ENet.Packet packet;
+
+            if (Encode)
+            { 
+                packet = JSONEncode(new Data(event_name, data_value));
+            }
+            else
+            {
+                packet = data_value;
+            }
+
             server.Broadcast(0, ref packet);
         }
 
-        public void SendToPeer(string event_name, dynamic data_value, Peer peer)
+        public void SendToPeer(string event_name, dynamic data_value, Peer peer, bool Encode = true)
         {
-            var packet = JSONEncode(new Data(event_name, data_value));
+            ENet.Packet packet;
+
+            if (Encode)
+            {
+                packet = JSONEncode(new Data(event_name, data_value));
+            }
+            else
+            {
+                packet = data_value;
+            }
+
             peer.Send(0,ref packet);
         }
 
-        public void SendToPeerIndex(string event_name, dynamic data_value, int index)
+        public void SendToPeerIndex(string event_name, dynamic data_value, int index, bool Encode = true)
         {
-            var packet = JSONEncode(new Data(event_name, data_value));
+            ENet.Packet packet;
+
+            if (Encode)
+            {
+                packet = JSONEncode(new Data(event_name, data_value));
+            }
+            else
+            {
+                packet = data_value;
+            }
+
             clients[index].Send(0, ref packet);
         }
 
@@ -131,14 +189,18 @@ namespace Assets.Libs.Esharknet
             return clients.Count;
         }
 
-        public void AddPeer(ENet.Event net_event)
+        public int AddPeer(ENet.Event net_event)
         {
             clients.Add(net_event.Peer);
+            int index = clients.IndexOf(net_event.Peer);
+            return index;
         }
 
-        public void RemovePeer(ENet.Event net_event)
+        public int RemovePeer(ENet.Event net_event)
         {
             clients.Remove(net_event.Peer);
+            int index = clients.IndexOf(net_event.Peer);
+            return index;
         }
 
         public void Destroy()
