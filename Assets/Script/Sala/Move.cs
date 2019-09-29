@@ -41,7 +41,8 @@ public class Move : MonoBehaviour
 
     void Update()
     {
-        float dt = Time.deltaTime;
+        float dt = Math.Min( 1/60,Time.deltaTime);
+
 
         if (es_controlable)
         {
