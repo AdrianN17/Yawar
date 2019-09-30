@@ -15,7 +15,7 @@ public class Server_script : MonoBehaviour
     public Server server;
     public string ip;
 
-    public Text fps_text;
+    
 
     public GameObject punto_creacion;
     public int id_ignorar;
@@ -118,8 +118,6 @@ public class Server_script : MonoBehaviour
         float dt = Time.deltaTime;
 
         server.update();
-
-        fps_text.text = "FPS : " + (int)(1.0f / Time.smoothDeltaTime);
 
         counter_send = counter_send + dt;
 
