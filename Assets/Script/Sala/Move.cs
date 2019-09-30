@@ -100,17 +100,16 @@ public class Move : MonoBehaviour
             y = desacelerar_mov(y, dt);
         }
 
-        if(!pisando_tierra)
+        if (!pisando_tierra)
         {
             //Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
 
             var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
-
+            anim.SetBool("Pisando_tierra", pisando_tierra);
         }
-
+        anim.SetBool("Pisando_tierra", pisando_tierra);
         anim.SetFloat("VelX", x);
         anim.SetFloat("VelY", y);
-
 
     }
 
