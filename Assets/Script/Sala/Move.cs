@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Script.Modelos;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,6 @@ public class Move : MonoBehaviour
 
         Debug.Log(id);
         rb.freezeRotation = true;
-
         
     }
 
@@ -119,9 +119,7 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.A;
 
-            client.client.Send("movimiento",new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "A" },{"orientacion","horizontal"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "A", "horizontal"));
 
 
         }
@@ -129,9 +127,7 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.D;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "D" },{"orientacion","horizontal"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "D", "horizontal"));
 
         }
 
@@ -139,28 +135,22 @@ public class Move : MonoBehaviour
         {
             mover_player_vertical = movimiento_Vertical.W;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "W" },{"orientacion","vertical"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "W", "vertical"));
 
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             mover_player_vertical = movimiento_Vertical.S;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "S" },{"orientacion","vertical"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "S", "vertical"));
 
         }
 
-        if(Input.GetKeyDown(KeyCode.Space) && pisando_tierra)
+        if (Input.GetKeyDown(KeyCode.Space) && pisando_tierra)
         {
-            rb.AddForce(Vector3.up*salto* rb.mass );
+            rb.AddForce(Vector3.up * salto * rb.mass);
 
-            client.client.Send("salto", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "S" }
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
 
             pisando_tierra = false;
         }
@@ -171,46 +161,38 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","horizontal"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "horizontal"));
         }
 
         if (Input.GetKeyUp(KeyCode.D))
         {
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","horizontal"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "horizontal"));
         }
 
         if (Input.GetKeyUp(KeyCode.W))
         {
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","vertical"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "vertical"));
         }
 
         if (Input.GetKeyUp(KeyCode.S))
         {
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
-            client.client.Send("movimiento", new Dictionary<string, dynamic>()
-                { { "id" , id},{"tecla" , "Ninguno" },{"orientacion","vertical"}
-            });
+            client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "vertical"));
         }
     }
 
-    public void movimiento_cambio(string enu,string orientacion)
+    public void movimiento_cambio(string enu, string orientacion)
     {
-        switch(orientacion)
+        switch (orientacion)
         {
             case "horizontal":
 
-                switch(enu)
+                switch (enu)
                 {
                     case "A":
                         mover_player_horizontal = movimiento_Horizontal.A;
@@ -240,6 +222,13 @@ public class Move : MonoBehaviour
                 }
 
                 break;
+
+            case "salto":
+
+                rb.AddForce(Vector3.up * salto * rb.mass);
+                pisando_tierra = false;
+
+                break;
         }
     }
 
@@ -253,11 +242,11 @@ public class Move : MonoBehaviour
         this.id = id;
     }
 
-    private float aumentar_mov(float value,float dt)
+    private float aumentar_mov(float value, float dt)
     {
-        if(value<1)
+        if (value < 1)
         {
-            value = value + dt*2;
+            value = value + dt * 2;
         }
 
         return value;
@@ -267,7 +256,7 @@ public class Move : MonoBehaviour
     {
         if (value > -1)
         {
-            value = value - dt*2;
+            value = value - dt * 2;
         }
 
         return value;
@@ -275,13 +264,13 @@ public class Move : MonoBehaviour
 
     private float desacelerar_mov(float value, float dt)
     {
-        
+
         int signo = Math.Sign(value);
         float resultado = Math.Abs(value);
 
         resultado = resultado - dt * 2;
 
-        if(resultado>0.01)
+        if (resultado > 0.01)
         {
             return resultado * signo;
         }
@@ -294,21 +283,21 @@ public class Move : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        if(col.gameObject.layer == LayerMask.NameToLayer("Terreno"))
+        if (col.gameObject.layer == LayerMask.NameToLayer("Terreno"))
         {
             pisando_tierra = true;
         }
     }
 
-    public float Remap( float value, float from1, float to1, float from2, float to2)
+    public float Remap(float value, float from1, float to1, float from2, float to2)
     {
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
-    public void salto_improvisado()
+    public void normalizado(Vector3 posicion)
     {
-        rb.AddForce(Vector3.up * salto * rb.mass);
-        pisando_tierra = false;
+        transform.position = posicion;
+        
     }
 
 

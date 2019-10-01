@@ -15,101 +15,100 @@ public class Server_script : MonoBehaviour
     public Server server;
     public string ip;
 
-    
-
     public GameObject punto_creacion;
-    public int id_ignorar;
 
     public GameObject prefab_personaje;
     public GameObject padre;
 
-    public GameObject personaje_id_ignorar;
-
     private List<GameObject> lista_personajes;
 
-    private float counter_send=0;
+    public GameObject player_inicial_servidor;
+    public Move_server player_inicial_servidor_script;
+
+    private float counter_send = 0;
     public float max_counter;
 
     void Start()
     {
         ip = new LocalIP().SetLocalIP();
 
-        server = new Server(ip,port,max_clients,0,timeout);
+        server = new Server(ip, port, max_clients, 0, timeout);
 
         lista_personajes = new List<GameObject>();
 
-        lista_personajes.Add(personaje_id_ignorar);
+        lista_personajes.Add(player_inicial_servidor);
+        player_inicial_servidor_script = player_inicial_servidor.GetComponent<Move_server>();
 
-        server.AddTrigger("Connect", delegate (ENet.Event net_event) {
+        server.AddTrigger("Connect", delegate (ENet.Event net_event)
+        {
 
-            Debug.Log("Cliente Conectado");
+            int index = server.AddPeer(net_event) + 1;
 
-            int index = server.AddPeer(net_event);
+            GameObject go = (GameObject)Instantiate(prefab_personaje, punto_creacion.transform.position, Quaternion.identity);
+            go.transform.SetParent(padre.transform);
+            go.GetComponent<Move>().SetID(index);
 
-            if(index!=id_ignorar)
+            lista_personajes.Add(go);
+
+            var lista_para_enviar = new List<data_inicial>();
+
+            int i = 0;
+
+            foreach (var player in lista_personajes)
             {
-
-                GameObject go = (GameObject)Instantiate(prefab_personaje, punto_creacion.transform.position, Quaternion.identity);
-                go.transform.SetParent(padre.transform);
-                go.GetComponent<Move>().SetID(index);
-
-                lista_personajes.Add(go);
-
-                var lista_para_enviar = new List<Data_Personajes_Inicializador>();
-
-                foreach(var player in lista_personajes)
+                if(i==0)
                 {
+                    var script = player.GetComponent<Move_server>();
+                    var datos = new data_inicial(script.GetID(), player.transform.position);
+
+                    lista_para_enviar.Add(datos);
+                }
+                else
+                { 
                     var script = player.GetComponent<Move>();
-                    var datos = new Data_Personajes_Inicializador(player.transform.position,script.GetID());
+                    var datos = new data_inicial(script.GetID(),player.transform.position);
 
                     lista_para_enviar.Add(datos);
                 }
 
-                server.Send("Inicializador", new Dictionary<string, dynamic>()
+                i++;
+            }
+
+
+
+            server.Send("Inicializador", new Dictionary<string, dynamic>()
                     { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar}
                 }, net_event.Peer);
 
-                server.SendToAllBut("Nuevo_Usuario", new Dictionary<string, dynamic>()
+            server.SendToAllBut("Nuevo_Usuario", new Dictionary<string, dynamic>()
                     {{"nuevo",lista_para_enviar[index]}
                 }, net_event.Peer);
-
-                
-            }
         });
 
         server.AddTrigger("movimiento", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
-            int id = int.Parse(data.value["id"].ToString());
-            string tecla = data.value["tecla"].ToString();
-            string orientacion = data.value["orientacion"].ToString();
+            var obj = data.value.ToObject<data_tecla>();
 
-            var obj = lista_personajes[id].GetComponent<Move>();
+            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            obj.movimiento_cambio(tecla, orientacion);
+            gameobj.movimiento_cambio(obj.tecla, obj.orientacion);
 
             server.SendToAllBut("movimiento", net_event.Packet, net_event.Peer, false);
-
+            
         });
 
-        server.AddTrigger("salto", delegate (ENet.Event net_event) {
+        server.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
-            int id = int.Parse(data.value["id"].ToString());
-            string tecla = data.value["tecla"].ToString();
+            var obj = data.value.ToObject<data_por_segundos>();
 
-            var obj = lista_personajes[id].GetComponent<Move>();
+            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            if(id!=id_ignorar)
-            {
-                obj.salto_improvisado(); 
-            }
+            gameobj.normalizado(obj.posicion);
 
-            server.SendToAllBut("salto", net_event.Packet, net_event.Peer, false);
-
+            server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
         });
-
-  
     }
 
     // Update is called once per frame
@@ -119,22 +118,16 @@ public class Server_script : MonoBehaviour
 
         server.update();
 
+
         counter_send = counter_send + dt;
 
-        if(counter_send>max_counter)
+        if (counter_send > max_counter)
         {
-            var lista = new List<data_alterable>();
-
-            foreach(var personaje in lista_personajes)
-            {
-                lista.Add(new data_alterable(personaje.transform.position));
-            }
-
-
-            server.SendToAll("Ajustar_posicion", lista);
+            server.SendToAll("enviar_posicion", new data_inicial(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position));
 
             counter_send = 0;
         }
+        
     }
 
     void OnDestroy()
