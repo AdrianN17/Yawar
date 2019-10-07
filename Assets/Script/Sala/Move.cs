@@ -8,6 +8,7 @@ public class Move : MonoBehaviour
 {
     public Rigidbody rb;
     public Animator anim;
+    public Collider collider;
 
     public float x, y;
     public float velocidad;
@@ -26,6 +27,8 @@ public class Move : MonoBehaviour
     public GameObject client_manager;
     public Client_script client;
 
+    private const float distancia_raycast = 0.8f;
+
     void Start()
     {
 
@@ -43,12 +46,42 @@ public class Move : MonoBehaviour
     {
         float dt = Math.Min( 1/60,Time.deltaTime);
 
+        var center = collider.bounds.center;
+        var extends = collider.bounds.extents;
+
+        var x = center.x;
+        var y = (center.y - extends.y) + distancia_raycast;
+        var z = center.z;
+
+        Ray ray = new Ray(new Vector3(x, y, z), Vector3.down);
+
+        //int layerMask =  LayerMask.NameToLayer("Terreno");
+
+
+        Debug.DrawRay(ray.origin, ray.direction, Color.red);
+
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray.origin, ray.direction, out hit, 1))
+        {
+            pisando_tierra = true;
+            Debug.LogWarning(hit.collider.gameObject.name);
+        }
+        else
+        {
+            pisando_tierra = false;
+            //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
+            Debug.LogWarning("Did not Hit");
+        }
+
 
         if (es_controlable)
         {
             teclas_presionada(dt);
             tecla_soltada(dt);
         }
+
+
     }
 
     void FixedUpdate()
@@ -279,14 +312,6 @@ public class Move : MonoBehaviour
             return 0;
         }
 
-    }
-
-    void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.layer == LayerMask.NameToLayer("Terreno"))
-        {
-            pisando_tierra = true;
-        }
     }
 
     public float Remap(float value, float from1, float to1, float from2, float to2)
