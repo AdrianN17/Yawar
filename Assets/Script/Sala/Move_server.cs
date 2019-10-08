@@ -28,6 +28,16 @@ public class Move_server : MonoBehaviour
 
     private const float distancia_raycast= 0.8f;
 
+    void OnCollisionEnter(Collision arma)
+    {
+        if (arma.gameObject.name == "Item_Arma")
+        {
+            Destroy(arma.gameObject);
+            anim.SetBool("ConArma", true);
+            Debug.Log("arma encontrada");
+        }
+    }
+
     void Start()
     {
         server = server_manager.GetComponent<Server_script>();
@@ -177,7 +187,7 @@ public class Move_server : MonoBehaviour
             rb.AddForce(Vector3.up*salto* rb.mass );
 
             server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
-
+            anim.SetTrigger("Saltar");
             pisando_tierra = false;
         }
     }

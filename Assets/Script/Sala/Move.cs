@@ -139,6 +139,7 @@ public class Move : MonoBehaviour
 
             var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
             anim.SetBool("Pisando_tierra", pisando_tierra);
+            
         }
         anim.SetBool("Pisando_tierra", pisando_tierra);
         anim.SetFloat("VelX", x);
@@ -184,6 +185,7 @@ public class Move : MonoBehaviour
             rb.AddForce(Vector3.up * salto * rb.mass);
 
             client.client.Send("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
+            
 
             pisando_tierra = false;
         }
@@ -260,7 +262,6 @@ public class Move : MonoBehaviour
 
                 rb.AddForce(Vector3.up * salto * rb.mass);
                 pisando_tierra = false;
-
                 break;
         }
     }
