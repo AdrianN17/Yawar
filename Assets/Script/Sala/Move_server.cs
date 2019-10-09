@@ -188,6 +188,7 @@ public class Move_server : MonoBehaviour
 
             server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
             anim.SetTrigger("Saltar");
+            
             pisando_tierra = false;
         }
     }
