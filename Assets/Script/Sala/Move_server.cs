@@ -30,11 +30,14 @@ public class Move_server : MonoBehaviour
 
     void OnCollisionEnter(Collision arma)
     {
-        if (arma.gameObject.name == "Item_Arma")
+        if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
         {
             Destroy(arma.gameObject);
             anim.SetBool("ConArma", true);
-            Debug.Log("arma encontrada");
+
+            GameObject go = transform.GetChild(3).gameObject;
+            go.SetActive(true);
+
         }
     }
 
@@ -139,7 +142,7 @@ public class Move_server : MonoBehaviour
         {
             //Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
 
-            var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
+            //var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
             //anim.SetBool("Pisando_tierra", pisando_tierra);
         }
 
@@ -187,9 +190,11 @@ public class Move_server : MonoBehaviour
             rb.AddForce(Vector3.up*salto* rb.mass );
 
             server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
+            pisando_tierra = false;
+
             anim.SetTrigger("Saltar");
             
-            pisando_tierra = false;
+            
         }
     }
     private void tecla_soltada(float dt)
