@@ -40,6 +40,11 @@ public class Move_server : MonoBehaviour
 
         }
     }
+    //ataque
+    void OnMouseDown()
+    {
+        anim.SetTrigger("Ataque01");
+    }
 
     void Start()
     {
