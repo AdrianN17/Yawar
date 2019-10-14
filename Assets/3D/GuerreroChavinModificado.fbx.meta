@@ -10,18 +10,58 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Eye_brown.002
+    second: {fileID: 2100000, guid: db7ea537300b16144ae8c0f569b64b2e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 8ac7f1669904238468da39ba2d6ef41e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 7ededb12b4953d24b9f009f385451696, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: borde_cinturon
-    second: {fileID: 2100000, guid: 58ee888365655b849a509fc04dbb6a67, type: 2}
+    second: {fileID: 2100000, guid: f3642a824086eb944b1c59561e4c0ca4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: brasalete
+    second: {fileID: 2100000, guid: be53f9ee9e27e4746857591b341a05db, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: cabello
-    second: {fileID: 2100000, guid: e69bc1594174d1c4ca44baac08671037, type: 2}
+    second: {fileID: 2100000, guid: 38ba4565968513741b9e8108a596589d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: chompa4
+    second: {fileID: 2100000, guid: 30c59b1686466cd4ca47417701231d0a, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: cuello_chompa
-    second: {fileID: 2100000, guid: 58ee888365655b849a509fc04dbb6a67, type: 2}
+    second: {fileID: 2100000, guid: c5e8b2ca7ed8370458f3bddb8e87599d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: falda
+    second: {fileID: 2100000, guid: 42a909c46c5ff134ab3bd9ea7f852bb0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "mu\xF1equera"
+    second: {fileID: 2100000, guid: 89d32027a408f1942b8eee8fbdb29142, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: piel_
+    second: {fileID: 2100000, guid: d177ccf15731b5c4fb845735e6c504d6, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
