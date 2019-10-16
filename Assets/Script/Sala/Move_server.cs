@@ -34,8 +34,8 @@ public class Move_server : MonoBehaviour
         {
             Destroy(arma.gameObject);
             anim.SetBool("ConArma", true);
-
-            GameObject go = transform.GetChild(3).gameObject;
+            
+            GameObject go = transform.GetChild(1).gameObject;
             go.SetActive(true);
 
         }
