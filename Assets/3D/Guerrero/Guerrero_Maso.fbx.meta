@@ -44,7 +44,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: brasalete.001
-    second: {fileID: 2100000, guid: f3642a824086eb944b1c59561e4c0ca4, type: 2}
+    second: {fileID: 2100000, guid: be53f9ee9e27e4746857591b341a05db, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
