@@ -29,6 +29,9 @@ public class Move : MonoBehaviour
 
     private const float distancia_raycast = 0.8f;
 
+    private enum tipo_arma { ninguna, mazo, lanza }
+    private tipo_arma arma_actual = tipo_arma.ninguna;
+
     void Start()
     {
 
@@ -40,6 +43,28 @@ public class Move : MonoBehaviour
         Debug.Log(id);
         rb.freezeRotation = true;
         
+    }
+
+    void OnCollisionEnter(Collision arma)
+    {
+        if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
+        {
+            Destroy(arma.gameObject);
+            anim.SetBool("ConArma", true);
+
+            GameObject go = transform.GetChild(1).gameObject;
+            go.SetActive(true);
+            arma_actual = tipo_arma.mazo;
+
+        }
+    }
+
+    void OnMouseDown()
+    {
+        if (arma_actual == tipo_arma.mazo && !anim.GetBool("Ataque01"))
+        {
+            anim.SetTrigger("Ataque01");
+        }
     }
 
     void Update()

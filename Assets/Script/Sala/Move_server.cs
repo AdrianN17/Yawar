@@ -28,6 +28,9 @@ public class Move_server : MonoBehaviour
 
     private const float distancia_raycast= 0.8f;
 
+    private enum tipo_arma { ninguna, mazo, lanza}
+    private tipo_arma arma_actual = tipo_arma.ninguna;
+
     void OnCollisionEnter(Collision arma)
     {
         if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
@@ -37,13 +40,17 @@ public class Move_server : MonoBehaviour
             
             GameObject go = transform.GetChild(1).gameObject;
             go.SetActive(true);
+            arma_actual = tipo_arma.mazo;
 
         }
     }
     //ataque
     void OnMouseDown()
     {
-        anim.SetTrigger("Ataque01");
+        if (arma_actual == tipo_arma.mazo && !anim.GetBool("Ataque01"))
+        { 
+            anim.SetTrigger("Ataque01");
+        }
     }
 
     void Start()

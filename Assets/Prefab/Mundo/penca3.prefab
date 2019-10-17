@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1636840103671001265}
   - component: {fileID: 7776660861890022023}
   - component: {fileID: 4093972940111525502}
+  - component: {fileID: 4681800185484530179}
   m_Layer: 0
   m_Name: penca3
   m_TagString: Untagged
@@ -80,3 +81,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &4681800185484530179
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2372377473061651106}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.059233177, y: 0.020331934, z: 0.07436865}
+  m_Center: {x: 0.054109395, y: 0.0007098684, z: 0.036329884}
