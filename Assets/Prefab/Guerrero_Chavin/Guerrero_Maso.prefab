@@ -690,6 +690,7 @@ GameObject:
   - component: {fileID: 7410864261090663231}
   - component: {fileID: 3628217914796192123}
   - component: {fileID: 6215243232238203701}
+  - component: {fileID: 4689617474462881816}
   m_Layer: 9
   m_Name: Guerrero_Maso
   m_TagString: Untagged
@@ -802,6 +803,20 @@ MonoBehaviour:
   mover_player_vertical: 2
   client_manager: {fileID: 0}
   client: {fileID: 0}
+--- !u!114 &4689617474462881816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583368013057163827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ea7912140a22d479fa9a5f57f94b40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 7410864261090663216}
+  collider: {fileID: 7410864261090663231}
 --- !u!1 &1631329120749789866
 GameObject:
   m_ObjectHideFlags: 0

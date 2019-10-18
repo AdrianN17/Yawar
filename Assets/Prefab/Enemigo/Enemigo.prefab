@@ -1367,8 +1367,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2746722129337502555}
-  - component: {fileID: 8814130314427539408}
   - component: {fileID: 6834510178146978656}
+  - component: {fileID: 4147490245078929752}
   m_Layer: 0
   m_Name: Sensor
   m_TagString: Untagged
@@ -1384,25 +1384,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3100655431856471776}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10.9, y: 5.4, z: 23.9}
+  m_LocalPosition: {x: 0, y: 13.7, z: 19.7}
   m_LocalScale: {x: 5, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1170474285752023043}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &8814130314427539408
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3100655431856471776}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 4.6997538
-  m_Center: {x: 2.1585226, y: 8.358841, z: 0}
 --- !u!114 &6834510178146978656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1417,6 +1404,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemigo: {fileID: 2766624081878747664}
   script: {fileID: 0}
+--- !u!135 &4147490245078929752
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3100655431856471776}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 6
+  m_Center: {x: 0, y: 0, z: 11.035919}
 --- !u!1 &3176500963937624453
 GameObject:
   m_ObjectHideFlags: 0

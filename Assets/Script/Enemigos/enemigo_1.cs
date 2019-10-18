@@ -22,8 +22,6 @@ public class enemigo_1 : MonoBehaviour
 
         rb.freezeRotation = true;
         angulo = 0f;
-
-        anim.SetBool("ConArma", true);
     }
 
     // Update is called once per frame
@@ -35,13 +33,14 @@ public class enemigo_1 : MonoBehaviour
         {
             direccionar_angulo(limitar_distancia(), dt);
         }
+
     }
 
     void FixedUpdate()
     {
         float dt = Time.deltaTime;
 
-        if (lista_usuarios.Count != 0)
+        if (lista_usuarios.Count != 0 && anim.GetCurrentAnimatorStateInfo(0).IsName("Correr"))
         {
             rb.AddForce(transform.forward * velocidad * rb.mass * dt);
         }
@@ -52,6 +51,9 @@ public class enemigo_1 : MonoBehaviour
         if(lista_usuarios.Count==0)
         {
             lista_usuarios.Add(obj);
+
+            anim.SetBool("Perseguir", true);
+
         }
         else
         {
@@ -65,16 +67,21 @@ public class enemigo_1 : MonoBehaviour
 
             lista_usuarios.Add(obj);
         }
+
+
     }
 
     public void eliminar_usuario(get_center obj)
     {
-        if (lista_usuarios.Count == 0)
-        {
-        }
-        else
+        if (lista_usuarios.Count != 0)
         {
             lista_usuarios.Remove(obj);
+
+            if (lista_usuarios.Count == 0)
+            {
+                anim.SetBool("Perseguir", false);
+            }
+
         }
     }
 
@@ -118,9 +125,12 @@ public class enemigo_1 : MonoBehaviour
 
     public void OnCollisionStay(Collision collision)
     {
-        if (!anim.GetBool("Ataque01") && collision.gameObject.layer == LayerMask.NameToLayer("Personaje"))
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque") && collision.gameObject.layer == LayerMask.NameToLayer("Personaje"))
         {
-            anim.SetTrigger("Ataque01");
+            anim.SetTrigger("Atacar");
+
+
+            collision.gameObject.GetComponent<acciones_compartidas>().empujon(collider.bounds.center);
         }
     }
 

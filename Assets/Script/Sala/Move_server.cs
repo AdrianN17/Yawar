@@ -47,7 +47,7 @@ public class Move_server : MonoBehaviour
     //ataque
     void OnMouseDown()
     {
-        if (arma_actual == tipo_arma.mazo && !anim.GetBool("Ataque01"))
+        if (arma_actual == tipo_arma.mazo && !anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
         { 
             anim.SetTrigger("Ataque01");
         }
@@ -344,6 +344,8 @@ public class Move_server : MonoBehaviour
     {
         transform.position = posicion;
     }
+
+    
 
 
 }
