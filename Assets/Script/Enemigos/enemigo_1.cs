@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class enemigo_1 : MonoBehaviour
 {
@@ -12,7 +11,7 @@ public class enemigo_1 : MonoBehaviour
     public float velocidad;
     public float angulo;
     public int id;
-    public int id_creador;
+    public GameObject padre;
 
     private List<get_center> lista_usuarios;
 
@@ -29,7 +28,7 @@ public class enemigo_1 : MonoBehaviour
     {
         float dt = Time.deltaTime;
 
-        if (lista_usuarios.Count!=0)
+        if (lista_usuarios.Count != 0)
         {
             direccionar_angulo(limitar_distancia(), dt);
         }
@@ -48,7 +47,7 @@ public class enemigo_1 : MonoBehaviour
 
     public void nuevo_usuario(get_center obj)
     {
-        if(lista_usuarios.Count==0)
+        if (lista_usuarios.Count == 0)
         {
             lista_usuarios.Add(obj);
 
@@ -57,9 +56,9 @@ public class enemigo_1 : MonoBehaviour
         }
         else
         {
-            foreach(var player in lista_usuarios)
+            foreach (var player in lista_usuarios)
             {
-                if(player==obj)
+                if (player == obj)
                 {
                     return;
                 }
@@ -87,7 +86,7 @@ public class enemigo_1 : MonoBehaviour
 
     public Vector3 limitar_distancia()
     {
-        Vector3 direccion = new Vector3(0,0);
+        Vector3 direccion = new Vector3(0, 0);
 
         var center = collider.bounds.center;
 
@@ -95,13 +94,13 @@ public class enemigo_1 : MonoBehaviour
 
 
 
-        foreach(var player in lista_usuarios)
+        foreach (var player in lista_usuarios)
         {
             var vector = player.get_center_position();
 
             var distance = Vector3.Distance(collider.bounds.center, vector);
 
-            if(distance< distancia_min)
+            if (distance < distancia_min)
             {
                 distancia_min = distance;
 
@@ -130,8 +129,13 @@ public class enemigo_1 : MonoBehaviour
             anim.SetTrigger("Atacar");
 
 
-            collision.gameObject.GetComponent<acciones_compartidas>().empujon(collider.bounds.center);
+            //collision.gameObject.GetComponent<acciones_compartidas>().empujon(collider.bounds.center);
         }
+    }
+
+    public void OnDestroy()
+    {
+        padre.GetComponent<creacion>().saber_muertes();
     }
 
 

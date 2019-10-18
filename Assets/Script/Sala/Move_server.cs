@@ -47,10 +47,7 @@ public class Move_server : MonoBehaviour
     //ataque
     void OnMouseDown()
     {
-        if (arma_actual == tipo_arma.mazo && !anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
-        { 
-            anim.SetTrigger("Ataque01");
-        }
+        
     }
 
     void Start()
@@ -84,21 +81,33 @@ public class Move_server : MonoBehaviour
         if (Physics.Raycast(ray.origin,ray.direction, out hit,1))
         {
             pisando_tierra = true;
-            Debug.LogWarning(hit.collider.gameObject.name);
+            //Debug.LogWarning(hit.collider.gameObject.name);
         }
         else
         {
             pisando_tierra = false;
             //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-            Debug.LogWarning("Did not Hit");
+            //Debug.LogWarning("Did not Hit");
         }
 
 
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+        { 
+            teclas_presionada(dt);
+            tecla_soltada(dt);
+        }
 
-        teclas_presionada(dt);
-        tecla_soltada(dt);
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            if (arma_actual == tipo_arma.mazo && !anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && pisando_tierra)
+            {
+                anim.SetTrigger("Ataque01");
 
-  
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
+            }
+        }
+
     }
 
     void FixedUpdate()
@@ -110,16 +119,16 @@ public class Move_server : MonoBehaviour
 
             if (mover_player_horizontal == movimiento_Horizontal.A)
             {
-                vec = new Vector3(0,  dt * -1* giro, 0);
+                vec = new Vector3(0, dt * -1 * giro, 0);
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
-                x = disminuir_mov(x,dt);
+                x = disminuir_mov(x, dt);
 
             }
             else if (mover_player_horizontal == movimiento_Horizontal.D)
             {
-                vec = new Vector3(0,  dt * 1* giro, 0);
+                vec = new Vector3(0, dt * 1 * giro, 0);
                 transform.Rotate(vec);
                 rb.MoveRotation(transform.rotation);
 
@@ -129,7 +138,7 @@ public class Move_server : MonoBehaviour
 
         if (mover_player_vertical == movimiento_Vertical.W)
         {
-            rb.AddForce(transform.forward* velocidad * rb.mass * dt);
+            rb.AddForce(transform.forward * velocidad * rb.mass * dt);
 
             y = aumentar_mov(y, dt);
         }
@@ -140,23 +149,16 @@ public class Move_server : MonoBehaviour
             y = disminuir_mov(y, dt);
         }
 
-        if(mover_player_horizontal == movimiento_Horizontal.Ninguno && x != 0)
+        if (mover_player_horizontal == movimiento_Horizontal.Ninguno && x != 0)
         {
-            x= desacelerar_mov(x, dt);
+            x = desacelerar_mov(x, dt);
         }
 
-        if(mover_player_vertical == movimiento_Vertical.Ninguno && y != 0)
+        if (mover_player_vertical == movimiento_Vertical.Ninguno && y != 0)
         {
             y = desacelerar_mov(y, dt);
         }
-
-        if (!pisando_tierra)
-        {
-            //Debug.Log(Remap(rb.velocity.y,6,-4,-1,1));
-
-            //var mov_salto = Remap(rb.velocity.y, 6, -4, -1, 1);
-            //anim.SetBool("Pisando_tierra", pisando_tierra);
-        }
+        
 
         anim.SetBool("Pisando_tierra", pisando_tierra);
         anim.SetFloat("VelX", x);

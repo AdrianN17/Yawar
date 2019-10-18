@@ -10,10 +10,12 @@ public class creacion : MonoBehaviour
     public int enemigos_count;
     public float max_time_creacion;
     public float time_creacion;
-    public int id_creador;
+
+    private int id;
+
     void Start()
     {
-        
+        id = 0;
     }
 
     // Update is called once per frame
@@ -25,13 +27,23 @@ public class creacion : MonoBehaviour
 
         if(time_creacion>max_time_creacion && enemigos_count<max_enemigos)
         {
-            enemigos_count = enemigos_count + 1;
+            enemigos_count++;
 
             GameObject go = (GameObject)Instantiate(prefab_enemigo, this.transform.position, Quaternion.identity);
             go.transform.SetParent(this.transform);
+            var script = go.GetComponent<enemigo_1>();
+            script.id = id;
+            script.padre = this.gameObject;
+
+            id++;
 
 
             time_creacion = 0;
         }
+    }
+
+    public void saber_muertes()
+    {
+        enemigos_count--;
     }
 }

@@ -9,7 +9,7 @@ public class sensor_script : MonoBehaviour
     public enemigo_1 script;
     void Start()
     {
-        script = enemigo.GetComponent<enemigo_1>();
+
     }
 
     // Update is called once per frame

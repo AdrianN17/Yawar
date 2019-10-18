@@ -90,13 +90,13 @@ public class Move : MonoBehaviour
         if (Physics.Raycast(ray.origin, ray.direction, out hit, 1))
         {
             pisando_tierra = true;
-            Debug.LogWarning(hit.collider.gameObject.name);
+           // Debug.LogWarning(hit.collider.gameObject.name);
         }
         else
         {
             pisando_tierra = false;
             //Debug.DrawRay(ray.origin, ray.direction * 1000, Color.red);
-            Debug.LogWarning("Did not Hit");
+            //Debug.LogWarning("Did not Hit");
         }
 
 
