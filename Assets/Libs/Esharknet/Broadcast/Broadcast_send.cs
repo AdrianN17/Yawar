@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using Assets.Libs.Esharknet.Model;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -15,11 +16,11 @@ namespace Assets.Libs.Esharknet.Broadcast
         public UdpClient udpServer;
         public Thread thread;
 
-        private Dictionary<string, dynamic> broadcast_data;
+        private Data_broadcast broadcast_data;
 
         private bool loop = true;
 
-        public Broadcast_send(string ip_address,ushort port, ushort port_send, int timedelay, Dictionary<string,dynamic> broadcast_data)
+        public Broadcast_send(string ip_address,ushort port, ushort port_send, int timedelay, Data_broadcast broadcast_data)
         {
             udpServer = new UdpClient();
 
@@ -49,14 +50,6 @@ namespace Assets.Libs.Esharknet.Broadcast
 
             thread.Start();
 
-        }
-
-        public void UpdateDictionary(string key, dynamic value)
-        {
-            if(broadcast_data.ContainsKey(key))
-            {
-                broadcast_data[key] = value;
-            }
         }
 
         public void Destroy()

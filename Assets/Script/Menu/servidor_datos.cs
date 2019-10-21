@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Libs.Esharknet.Model;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,5 +20,14 @@ public class servidor_datos : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void set_values(Data_broadcast data)
+    {
+        this.ip = data.ip;
+        this.port = data.port;
+        this.max_players = data.max_players;
+        this.players = data.players;
+        this.name_server = data.name_server;
     }
 }

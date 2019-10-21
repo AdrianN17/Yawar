@@ -79,4 +79,9 @@ public class acciones_compartidas : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
+
+    public void personaje_principal()
+    {
+        mitipo = tipo.personaje_principal;
+    }
 }

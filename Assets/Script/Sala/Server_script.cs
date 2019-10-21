@@ -28,8 +28,11 @@ public class Server_script : MonoBehaviour
     private float counter_send = 0;
     public float max_counter;
 
+    public creacion creador_enemigos;
+
     void Start()
     {
+
         ip = new LocalIP().SetLocalIP();
 
         server = new Server(ip, port, max_clients, 0, timeout);
@@ -77,7 +80,7 @@ public class Server_script : MonoBehaviour
 
 
             server.Send("Inicializador", new Dictionary<string, dynamic>()
-                    { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar}
+                    { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar},{ "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
                 }, net_event.Peer);
 
             server.SendToAllBut("Nuevo_Usuario", new Dictionary<string, dynamic>()
@@ -105,7 +108,7 @@ public class Server_script : MonoBehaviour
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            gameobj.normalizado(obj.posicion);
+            gameobj.normalizado(obj.posicion,Quaternion.Euler(obj.radio));
 
             server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
         });
@@ -123,7 +126,7 @@ public class Server_script : MonoBehaviour
 
         if (counter_send > max_counter)
         {
-            server.SendToAll("enviar_posicion", new data_inicial(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position));
+            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position,player_inicial_servidor.transform.rotation.eulerAngles));
 
             counter_send = 0;
         }

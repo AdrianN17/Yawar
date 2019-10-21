@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Assets.Libs.Esharknet.Model;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -14,7 +15,7 @@ namespace Assets.Libs.Esharknet.Broadcast
         public UdpClient udpClient;
         private IPEndPoint ip_point;
         private Thread thread;
-        private Dictionary<string, Data> servers_list;
+        private List<Data_broadcast> servers_list;
 
         private bool loop = true;
 
@@ -24,7 +25,7 @@ namespace Assets.Libs.Esharknet.Broadcast
             ip_point = new IPEndPoint(IPAddress.Parse(ip_address), port_send);
             udpClient.Client.Bind(ip_point);
 
-            servers_list = new Dictionary<string, Data>();
+            servers_list = new List<Data_broadcast>();
 
             thread = new Thread(delegate ()
             {
@@ -42,20 +43,22 @@ namespace Assets.Libs.Esharknet.Broadcast
 
                             Debug.Log("Broadcast receive : " + json_data);
 
-                            if(data.key== "broadcast")
+                            if (data.key== "broadcast")
                             {
-                                Debug.Log("Broadcast receive key : " + data.value["ip"]);
+                                
+                                var data_value = data.value.ToObject<Data_broadcast>();
+                                Debug.Log(data.value);
+                                var data_existence = validate_ip_existence(data_value.ip);
 
-                                var ip = data.value["ip"].ToString();
+                                Debug.Log("Broadcast receive ip is : " + data_value.ip);
 
-
-                                if (servers_list.ContainsKey(ip))
+                                if (data_existence==null)
                                 {
-                                    servers_list[ip] = data;
+                                    servers_list.Add(data_value);
                                 }
                                 else
                                 {
-                                    servers_list.Add(ip, data);
+                                    servers_list[servers_list.IndexOf(data_existence)] = data_value;
                                 }
                             }
                             
@@ -77,16 +80,22 @@ namespace Assets.Libs.Esharknet.Broadcast
 
         }
 
-        public List<Data> GetListObtained()
+        public Data_broadcast validate_ip_existence(string ip)
         {
-            var List_server_data = new List<Data>();
-
-            foreach (var item in servers_list)
+            foreach(var data in servers_list)
             {
-                List_server_data.Add(item.Value);
+                if(data.ip==ip)
+                {
+                    return data;
+                }
             }
 
-            return List_server_data;
+            return null;
+        }
+
+        public List<Data_broadcast> GetListObtained()
+        {
+            return servers_list;
         }
 
         public void Destroy()

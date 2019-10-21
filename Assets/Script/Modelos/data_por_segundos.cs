@@ -12,10 +12,13 @@ namespace Assets.Script.Modelos
         public int id;
         public Vector3 posicion;
 
-        public data_por_segundos(int id, Vector3 posicion)
+        public Vector3 radio;
+
+        public data_por_segundos(int id, Vector3 posicion, Vector3 radio)
         {
             this.id = id;
             this.posicion = posicion;
+            this.radio = radio;
         }
     }
 }

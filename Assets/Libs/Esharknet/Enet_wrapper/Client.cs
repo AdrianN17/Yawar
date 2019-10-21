@@ -75,7 +75,7 @@ namespace Assets.Libs.Esharknet
             }
         }
 
-        public void Send(string event_name, dynamic data_value, bool Encode = true)
+        public void Send(string event_name, dynamic data_value, bool Encode = true, int channel = 0)
         {
             ENet.Packet packet;
 
@@ -88,7 +88,7 @@ namespace Assets.Libs.Esharknet
                 packet = data_value;
             }
 
-            peer.Send(0, ref packet);
+            peer.Send((byte)channel, ref packet);
         }
 
         public void Destroy()

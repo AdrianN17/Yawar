@@ -29,6 +29,8 @@ public class Client_script : MonoBehaviour
 
     private bool start_send = false;
 
+    public crear_enemigo_cliente script_crearenemigo;
+
     void Start()
     {
 
@@ -90,8 +92,19 @@ public class Client_script : MonoBehaviour
                     camaras.transform.localScale = new Vector3(1, 1, 1);
 
                     start_send = true;
+
+
+                    var script_compartido = go.GetComponent<acciones_compartidas>();
+                    script_compartido.personaje_principal();
+
+
                 }
             }
+
+            var enemigos = data.value["lista_enemigos_actuales"].ToObject<List<data_enemigo_por_segundos>>();
+
+            script_crearenemigo.crear_enemigo_creacion_player(enemigos);
+
         });
 
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)
@@ -127,7 +140,35 @@ public class Client_script : MonoBehaviour
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            gameobj.normalizado(obj.posicion);
+            gameobj.normalizado(obj.posicion, Quaternion.Euler(obj.radio));
+        });
+
+        client.AddTrigger("Creacion_enemigo", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            var obj = data.value.ToObject<List<data_enemigo_inicial>>();
+
+            script_crearenemigo.crear_enemigos_lista(obj);
+        });
+
+
+        client.AddTrigger("Eliminar_enemigo", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            var obj = data.value.ToObject<List<int>>();
+
+            script_crearenemigo.eliminar_enemigos(obj);
+        });
+
+        client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            var obj = data.value.ToObject<List<data_enemigo_por_segundos>>();
+
+            script_crearenemigo.actualizar_enemigos(obj);
         });
 
     }
@@ -145,7 +186,7 @@ public class Client_script : MonoBehaviour
 
             if (counter_send > max_counter)
             {
-                client.Send("enviar_posicion", new data_inicial(player_object_script.GetID(), player_object_script.transform.position));
+                client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), player_object_script.transform.position,player_object_script.transform.rotation.eulerAngles));
 
                 counter_send = 0;
             }

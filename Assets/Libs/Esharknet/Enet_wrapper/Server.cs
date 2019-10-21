@@ -14,7 +14,7 @@ namespace Assets.Libs.Esharknet
         private List<Peer> clients;
 
         
-        public Server(string ip_address, ushort port, int max_clients, int chanel, int timeout)
+        public Server(string ip_address, ushort port, int max_clients, int max_channel, int timeout)
         {
             ENet.Library.Initialize();
 
@@ -27,7 +27,7 @@ namespace Assets.Libs.Esharknet
             address.Port = port;
 
             server = new Host();
-            server.Create(address, max_clients, 0);
+            server.Create(address, max_clients, max_channel);
             server.EnableCompression();
 
             this.timeout = timeout;
@@ -82,13 +82,14 @@ namespace Assets.Libs.Esharknet
 
                 case ENet.EventType.Receive:
                     Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
+                    byte[] buffer = new byte[1024];
                     ExecuteTriggerBytes(netEvent);
                     netEvent.Packet.Dispose();
                     break;
             }
         }
 
-        public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true)
+        public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true,int channel=0)
         {
             ENet.Packet packet;
 
@@ -101,10 +102,10 @@ namespace Assets.Libs.Esharknet
                 packet = data_value;
             }
 
-            peer.Send(0, ref packet);
+            peer.Send((byte)channel, ref packet);
         }
 
-        public void SendToAllBut(string event_name, dynamic data_value, Peer peer, bool Encode=true)
+        public void SendToAllBut(string event_name, dynamic data_value, Peer peer, bool Encode=true, int channel = 0)
         {
             ENet.Packet packet;
 
@@ -126,12 +127,12 @@ namespace Assets.Libs.Esharknet
                 }
                 else
                 {
-                    client.Send(0, ref packet);
+                    client.Send((byte)channel, ref packet);
                 }
             }
         }
 
-        public void SendToAll(string event_name, dynamic data_value, bool Encode = true)
+        public void SendToAll(string event_name, dynamic data_value, bool Encode = true, int channel = 0)
         {
             ENet.Packet packet;
 
@@ -144,10 +145,10 @@ namespace Assets.Libs.Esharknet
                 packet = data_value;
             }
 
-            server.Broadcast(0, ref packet);
+            server.Broadcast((byte)channel, ref packet);
         }
 
-        public void SendToPeer(string event_name, dynamic data_value, Peer peer, bool Encode = true)
+        public void SendToPeer(string event_name, dynamic data_value, Peer peer, bool Encode = true,int channel=0)
         {
             ENet.Packet packet;
 
@@ -160,10 +161,10 @@ namespace Assets.Libs.Esharknet
                 packet = data_value;
             }
 
-            peer.Send(0,ref packet);
+            peer.Send((byte)channel, ref packet);
         }
 
-        public void SendToPeerIndex(string event_name, dynamic data_value, int index, bool Encode = true)
+        public void SendToPeerIndex(string event_name, dynamic data_value, int index, bool Encode = true, int channel = 0)
         {
             ENet.Packet packet;
 
@@ -176,7 +177,7 @@ namespace Assets.Libs.Esharknet
                 packet = data_value;
             }
 
-            clients[index].Send(0, ref packet);
+            clients[index].Send((byte)channel, ref packet);
         }
 
         public List<Peer> GetListClients()

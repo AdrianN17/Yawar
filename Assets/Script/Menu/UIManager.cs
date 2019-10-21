@@ -1,6 +1,7 @@
 ﻿using Assets.Libs.Esharknet;
 using Assets.Libs.Esharknet.Broadcast;
 using Assets.Libs.Esharknet.IP;
+using Assets.Libs.Esharknet.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -67,15 +68,15 @@ public class UIManager : MonoBehaviour
         {
             Btn_Buscar.GetComponent<Button>().interactable = true;
 
-            var Lista_diccionario = broadcast.GetListObtained();
+            var lista_servidores = broadcast.GetListObtained();
 
-            var json_data = Newtonsoft.Json.JsonConvert.SerializeObject(Lista_diccionario, Newtonsoft.Json.Formatting.Indented);
+            var json_data = Newtonsoft.Json.JsonConvert.SerializeObject(lista_servidores, Newtonsoft.Json.Formatting.Indented);
 
             Debug.Log(json_data);
 
 
-            crear_gameobjects(Lista_diccionario)
-                ;
+            crear_gameobjects(lista_servidores);
+
             broadcast.Destroy();
             broadcast = null;
 
@@ -84,7 +85,7 @@ public class UIManager : MonoBehaviour
     }
 
     
-     private void crear_gameobjects(List <Data> lista_servidores)
+     private void crear_gameobjects(List<Data_broadcast> lista_servidores)
     {
         int i = 0;
         
@@ -95,13 +96,7 @@ public class UIManager : MonoBehaviour
 
             var valores = go.GetComponent<servidor_datos>();
 
-            valores.ip = sdatos.value["ip"].ToString();
-            valores.players = int.Parse(sdatos.value["players"].ToString());
-            valores.max_players = int.Parse(sdatos.value["max_players"].ToString());
-            valores.name_server = sdatos.value["name_server"].ToString();
-            valores.port = int.Parse(sdatos.value["port"].ToString());
-
-
+            valores.set_values(sdatos);
 
             go.transform.GetChild(0).GetComponent<Text>().text = "" + (i + 1) + ". Sala " + valores.name_server+ " " +
             valores.max_players + " de " + valores.players;

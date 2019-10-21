@@ -37,6 +37,9 @@ namespace Assets.Libs.Esharknet
 
             packet_data.CopyTo(buffer);
             string json_value = Encoding.ASCII.GetString(buffer);
+
+            Debug.Log("Received : " + json_value);
+
             Data data = JsonConvert.DeserializeObject<Data>(json_value);
             return data;
         }
@@ -65,8 +68,6 @@ namespace Assets.Libs.Esharknet
             {
                 Debug.LogError(data.key + " function not defined in dictionary");
             }
-            
-
         }
 
         public void AddTrigger(string key, Action<ENet.Event> function_calback)

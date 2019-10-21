@@ -31,31 +31,25 @@ public class Move_server : MonoBehaviour
     private enum tipo_arma { ninguna, mazo, lanza}
     private tipo_arma arma_actual = tipo_arma.ninguna;
 
-    void OnCollisionEnter(Collision arma)
+   
+    void Start()
+    {
+        Debug.Log(id);
+        rb.freezeRotation = true;
+        
+    }
+
+    void OnTriggerEnter(Collider arma)
     {
         if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
         {
-            Destroy(arma.gameObject);
             anim.SetBool("ConArma", true);
-            
+
             GameObject go = transform.GetChild(1).gameObject;
             go.SetActive(true);
             arma_actual = tipo_arma.mazo;
 
         }
-    }
-    //ataque
-    void OnMouseDown()
-    {
-        
-    }
-
-    void Start()
-    {
-        server = server_manager.GetComponent<Server_script>();
-        Debug.Log(id);
-        rb.freezeRotation = true;
-        
     }
 
     void Update()
@@ -95,19 +89,11 @@ public class Move_server : MonoBehaviour
         { 
             teclas_presionada(dt);
             tecla_soltada(dt);
+
+            atacar();
         }
 
-        if(Input.GetKeyDown(KeyCode.X))
-        {
-            if (arma_actual == tipo_arma.mazo && !anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && pisando_tierra)
-            {
-                anim.SetTrigger("Ataque01");
-
-                mover_player_horizontal = movimiento_Horizontal.Ninguno;
-                mover_player_vertical = movimiento_Vertical.Ninguno;
-            }
-        }
-
+        
     }
 
     void FixedUpdate()
@@ -285,6 +271,9 @@ public class Move_server : MonoBehaviour
                 pisando_tierra = false;
 
                 break;
+            case "atacar":
+                atacar();
+                break;
         }
     }
 
@@ -342,9 +331,27 @@ public class Move_server : MonoBehaviour
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
-    public void normalizado(Vector3 posicion)
+    public void normalizado(Vector3 posicion, Quaternion radio)
     {
         transform.position = posicion;
+        transform.rotation = radio;
+        rb.MoveRotation(transform.rotation);
+    }
+
+    public void atacar()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (arma_actual == tipo_arma.mazo && pisando_tierra)
+            {
+                anim.SetTrigger("Ataque01");
+
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                server.server.SendToAll("movimiento", new data_tecla(GetID(), "X", "atacar"));
+            }
+        }
     }
 
     

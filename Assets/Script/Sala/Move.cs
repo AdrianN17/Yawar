@@ -44,12 +44,11 @@ public class Move : MonoBehaviour
         rb.freezeRotation = true;
         
     }
-
-    void OnCollisionEnter(Collision arma)
+ 
+    public void OnTriggerEnter(Collider arma)
     {
         if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
         {
-            Destroy(arma.gameObject);
             anim.SetBool("ConArma", true);
 
             GameObject go = transform.GetChild(1).gameObject;
@@ -59,13 +58,6 @@ public class Move : MonoBehaviour
         }
     }
 
-    void OnMouseDown()
-    {
-        if (arma_actual == tipo_arma.mazo && !anim.GetBool("Ataque01"))
-        {
-            anim.SetTrigger("Ataque01");
-        }
-    }
 
     void Update()
     {
@@ -99,13 +91,20 @@ public class Move : MonoBehaviour
             //Debug.LogWarning("Did not Hit");
         }
 
-
         if (es_controlable)
         {
-            teclas_presionada(dt);
-            tecla_soltada(dt);
+
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+            {
+                teclas_presionada(dt);
+                tecla_soltada(dt);
+
+                client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                atacar();
+            }
         }
 
+        
 
     }
 
@@ -178,8 +177,8 @@ public class Move : MonoBehaviour
         {
             mover_player_horizontal = movimiento_Horizontal.A;
 
-            client.client.Send("movimiento", new data_tecla(GetID(), "A", "horizontal"));
 
+            client.client.Send("movimiento", new data_tecla(GetID(), "A", "horizontal"));
 
         }
         else if (Input.GetKeyDown(KeyCode.D))
@@ -187,7 +186,7 @@ public class Move : MonoBehaviour
             mover_player_horizontal = movimiento_Horizontal.D;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "D", "horizontal"));
-
+            
         }
 
         if (Input.GetKeyDown(KeyCode.W))
@@ -195,13 +194,14 @@ public class Move : MonoBehaviour
             mover_player_vertical = movimiento_Vertical.W;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "W", "vertical"));
-
+            
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
             mover_player_vertical = movimiento_Vertical.S;
 
-            client.client.Send("movimiento", new data_tecla(GetID(), "S", "vertical"));
+            client.client.Send("movimiento", new data_tecla(GetID(), "S", "vertical")); 
+            
 
         }
 
@@ -210,6 +210,8 @@ public class Move : MonoBehaviour
             rb.AddForce(Vector3.up * salto * rb.mass);
 
             client.client.Send("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
+            
+
             pisando_tierra = false;
             anim.SetTrigger("Saltar");
 
@@ -223,6 +225,7 @@ public class Move : MonoBehaviour
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "horizontal"));
+            
         }
 
         if (Input.GetKeyUp(KeyCode.D))
@@ -230,6 +233,7 @@ public class Move : MonoBehaviour
             mover_player_horizontal = movimiento_Horizontal.Ninguno;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "horizontal"));
+            
         }
 
         if (Input.GetKeyUp(KeyCode.W))
@@ -237,6 +241,7 @@ public class Move : MonoBehaviour
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "vertical"));
+            
         }
 
         if (Input.GetKeyUp(KeyCode.S))
@@ -244,6 +249,7 @@ public class Move : MonoBehaviour
             mover_player_vertical = movimiento_Vertical.Ninguno;
 
             client.client.Send("movimiento", new data_tecla(GetID(), "Ninguno", "vertical"));
+            
         }
     }
 
@@ -291,6 +297,9 @@ public class Move : MonoBehaviour
                 anim.SetTrigger("Saltar");
                 
                 break;
+            case "atacar":
+                atacar();
+            break;
         }
     }
 
@@ -348,10 +357,25 @@ public class Move : MonoBehaviour
         return (value - from1) / (to1 - from1) * (to2 - from2) + from2;
     }
 
-    public void normalizado(Vector3 posicion)
+    public void normalizado(Vector3 posicion, Quaternion radio)
     {
         transform.position = posicion;
-        
+        transform.rotation = radio;
+        rb.MoveRotation(transform.rotation);
+    }
+
+    public void atacar()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            if (arma_actual == tipo_arma.mazo && pisando_tierra)
+            {
+                anim.SetTrigger("Ataque01");
+
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
+            }
+        }
     }
 
 

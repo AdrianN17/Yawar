@@ -1,5 +1,6 @@
 ﻿using Assets.Libs.Esharknet.Broadcast;
 using Assets.Libs.Esharknet.IP;
+using Assets.Libs.Esharknet.Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,18 +16,15 @@ public class Broadcasting_send : MonoBehaviour
 
     private Server_script server_script;
 
+
     void Start()
     {
         string ip = new LocalIP().SetLocalIP();
 
         server_script = server_manager.GetComponent<Server_script>();
 
-        var server_details = new Dictionary<string, dynamic>();
-        server_details.Add("ip", server_script.ip);
-        server_details.Add("port", server_script.port);
-        server_details.Add("players", server_script.server.GetListClientsCount());
-        server_details.Add("max_players", server_script.max_clients);
-        server_details.Add("name_server", "room1");
+        Data_broadcast server_details = new Data_broadcast(server_script.ip, server_script.port, server_script.server.GetListClientsCount(), server_script.max_clients, "room1");
+
 
         broadcast = new Broadcast_send(ip,port,port_send, timedelay, server_details);
     }

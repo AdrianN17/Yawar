@@ -135,7 +135,7 @@ public class enemigo_1 : MonoBehaviour
 
     public void OnDestroy()
     {
-        padre.GetComponent<creacion>().saber_muertes();
+        padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject);
     }
 
 
