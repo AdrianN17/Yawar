@@ -31,6 +31,8 @@ public class Client_script : MonoBehaviour
 
     public crear_enemigo_cliente script_crearenemigo;
 
+    public Text texto;
+
     void Start()
     {
 
@@ -141,6 +143,8 @@ public class Client_script : MonoBehaviour
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
             gameobj.normalizado(obj.posicion, Quaternion.Euler(obj.radio));
+
+            gameobj.set_arma_actual(obj.arma);
         });
 
         client.AddTrigger("Creacion_enemigo", delegate (ENet.Event net_event)
@@ -171,6 +175,17 @@ public class Client_script : MonoBehaviour
             script_crearenemigo.actualizar_enemigos(obj);
         });
 
+        client.AddTrigger("chat", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            var obj = data.value.ToObject<data_chat>();
+
+            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+
+            gameobj.texto.text = obj.texto;
+        });
+
     }
 
     // Update is called once per frame
@@ -186,10 +201,47 @@ public class Client_script : MonoBehaviour
 
             if (counter_send > max_counter)
             {
-                client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), player_object_script.transform.position,player_object_script.transform.rotation.eulerAngles));
+                client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), player_object_script.transform.position,player_object_script.transform.rotation.eulerAngles,player_object_script.get_arma_actual()));
 
                 counter_send = 0;
             }
+        }
+
+        if (player_object_script.escribiendo)
+        {
+            foreach (char c in Input.inputString)
+            {
+                if (c == '\b')
+                {
+                    if (texto.text.Length != 0)
+                    {
+                        texto.text = texto.text.Substring(0, texto.text.Length - 1);
+                    }
+                }
+                else if ((c == '\n') || (c == '\r'))
+                {
+
+                }
+                else
+                {
+                    texto.text += c;
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+
+            if (!string.IsNullOrWhiteSpace(texto.text))
+            {
+                player_object_script.texto.text = texto.text;
+
+                client.Send("chat", new data_chat(player_object_script.GetID(), texto.text));
+
+                texto.text = "";
+            }
+            player_object_script.escribiendo = !player_object_script.escribiendo;
+
         }
     }
 

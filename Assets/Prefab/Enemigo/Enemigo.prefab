@@ -1328,7 +1328,7 @@ MonoBehaviour:
   velocidad: 2500
   angulo: 0
   id: 0
-  id_creador: 0
+  padre: {fileID: 0}
 --- !u!114 &2157390092756962793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4886,12 +4886,12 @@ PrefabInstance:
     - target: {fileID: 3955943502006002104, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.39
+      value: -0.03
       objectReference: {fileID: 0}
     - target: {fileID: 3955943502006002104, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 22.67
+      value: 23.91
       objectReference: {fileID: 0}
     - target: {fileID: 3955943502006002104, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}
@@ -4937,6 +4937,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6767624064812816991, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6767624064812816991, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Alignment
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6767624064812816991, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Anchor
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0075b8b70a632594b9dfbaf099302473, type: 3}

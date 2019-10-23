@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuGame : MonoBehaviour
 {
@@ -25,5 +26,10 @@ public class MenuGame : MonoBehaviour
     void Update()
     {
         pause();
+    }
+
+    public void Volver_Menu()
+    {
+        SceneManager.LoadScene("Menu");
     }
 }

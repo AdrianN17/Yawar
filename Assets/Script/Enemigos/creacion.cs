@@ -72,13 +72,13 @@ public class creacion : MonoBehaviour
     {
         if (data_pendiente.Count != 0) 
         { 
-            server_script.server.SendToAll("Creacion_enemigo", data_pendiente);
+            server_script.server.SendToAll("Creacion_enemigo", data_pendiente,true,1);
             data_pendiente.Clear();
         }
 
         if (ids_por_eliminar.Count != 0)
         {
-            server_script.server.SendToAll("Eliminar_enemigo", ids_por_eliminar);
+            server_script.server.SendToAll("Eliminar_enemigo", ids_por_eliminar,true,1);
             ids_por_eliminar.Clear();
         }
 
@@ -93,7 +93,7 @@ public class creacion : MonoBehaviour
 
         }
 
-        server_script.server.SendToAll("Actualizar_enemigos", data_enviar);
+        server_script.server.SendToAll("Actualizar_enemigos", data_enviar,true,1);
 
     }
 

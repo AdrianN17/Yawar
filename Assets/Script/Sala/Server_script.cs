@@ -29,13 +29,14 @@ public class Server_script : MonoBehaviour
     public float max_counter;
 
     public creacion creador_enemigos;
+    public Text texto;
 
     void Start()
     {
 
         ip = new LocalIP().SetLocalIP();
 
-        server = new Server(ip, port, max_clients, 0, timeout);
+        server = new Server(ip, port, max_clients, 3, timeout);
 
         lista_personajes = new List<GameObject>();
 
@@ -109,9 +110,22 @@ public class Server_script : MonoBehaviour
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
             gameobj.normalizado(obj.posicion,Quaternion.Euler(obj.radio));
+            gameobj.set_arma_actual(obj.arma);
 
             server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
         });
+
+        server.AddTrigger("chat", delegate (ENet.Event net_event)
+        {
+            var data = server.JSONDecode(net_event.Packet);
+
+            var obj = data.value.ToObject<data_chat>();
+
+            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+
+            gameobj.texto.text = obj.texto;
+        });
+
     }
 
     // Update is called once per frame
@@ -126,11 +140,48 @@ public class Server_script : MonoBehaviour
 
         if (counter_send > max_counter)
         {
-            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position,player_inicial_servidor.transform.rotation.eulerAngles));
+            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position, player_inicial_servidor.transform.rotation.eulerAngles, player_inicial_servidor_script.get_arma_actual()));
 
             counter_send = 0;
         }
-        
+
+        if (player_inicial_servidor_script.escribiendo)
+        {
+            foreach (char c in Input.inputString)
+            {
+                if (c == '\b') 
+                {
+                    if (texto.text.Length != 0)
+                    {
+                        texto.text = texto.text.Substring(0, texto.text.Length - 1);
+                    }
+                }
+                else if ((c == '\n') || (c == '\r')) 
+                {
+                    
+                }
+                else
+                {
+                    texto.text += c;
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+
+            if(!string.IsNullOrWhiteSpace(texto.text))
+            {
+                player_inicial_servidor_script.texto.text = texto.text;
+
+                server.SendToAll("chat", new data_chat(player_inicial_servidor_script.GetID(), texto.text));
+
+                texto.text = "";
+            }
+            player_inicial_servidor_script.escribiendo = !player_inicial_servidor_script.escribiendo;
+
+        }
+
     }
 
     void OnDestroy()

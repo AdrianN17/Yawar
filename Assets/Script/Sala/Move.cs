@@ -32,6 +32,10 @@ public class Move : MonoBehaviour
     private enum tipo_arma { ninguna, mazo, lanza }
     private tipo_arma arma_actual = tipo_arma.ninguna;
 
+    public bool escribiendo;
+
+    public TextMesh texto;
+
     void Start()
     {
 
@@ -42,18 +46,41 @@ public class Move : MonoBehaviour
 
         Debug.Log(id);
         rb.freezeRotation = true;
-        
+
+        escribiendo = false;
+
     }
  
     public void OnTriggerEnter(Collider arma)
     {
-        if (arma.gameObject.layer == LayerMask.NameToLayer("Arma"))
+        if (arma.gameObject.layer == LayerMask.NameToLayer("Arma") && arma_actual == tipo_arma.ninguna)
         {
-            anim.SetBool("ConArma", true);
+            switch (arma.gameObject.tag)
+            {
+                case "Mazo":
+                { 
+                    anim.SetBool("ConArma", true);
 
-            GameObject go = transform.GetChild(1).gameObject;
-            go.SetActive(true);
-            arma_actual = tipo_arma.mazo;
+                    GameObject go = transform.GetChild(2).gameObject;
+                    go.SetActive(true);
+
+                    arma_actual = tipo_arma.mazo;
+
+                    break;
+                }
+                case "Lanza":
+                { 
+                    anim.SetBool("ConArma", true);
+
+                    GameObject go = transform.GetChild(1).gameObject;
+                    go.SetActive(true);
+
+                    arma_actual = tipo_arma.lanza;
+
+                    break;
+                }
+
+            }
 
         }
     }
@@ -93,14 +120,18 @@ public class Move : MonoBehaviour
 
         if (es_controlable)
         {
-
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+            if (!escribiendo)
             {
-                teclas_presionada(dt);
-                tecla_soltada(dt);
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+                {
+                    teclas_presionada(dt);
+                    tecla_soltada(dt);
 
-                client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
-                atacar();
+                    client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                    atacar();
+
+                    no_arma();
+                }
             }
         }
 
@@ -376,6 +407,45 @@ public class Move : MonoBehaviour
                 mover_player_vertical = movimiento_Vertical.Ninguno;
             }
         }
+    }
+
+    public void no_arma()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            switch (arma_actual)
+            {
+                case tipo_arma.mazo:
+                    {
+                        GameObject go = transform.GetChild(2).gameObject;
+                        go.SetActive(false);
+                        break;
+                    }
+
+                case tipo_arma.lanza:
+                    {
+                        GameObject go = transform.GetChild(1).gameObject;
+                        go.SetActive(false);
+                        break;
+                    }
+
+
+            }
+
+            arma_actual = tipo_arma.ninguna;
+            anim.SetBool("ConArma", false);
+
+        }
+    }
+
+    public int get_arma_actual()
+    {
+        return (int)arma_actual;
+    }
+
+    public void set_arma_actual(int arma)
+    {
+        this.arma_actual = (tipo_arma)arma;
     }
 
 
