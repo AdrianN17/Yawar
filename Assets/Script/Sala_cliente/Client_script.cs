@@ -205,44 +205,44 @@ public class Client_script : MonoBehaviour
 
                 counter_send = 0;
             }
-        }
 
-        if (player_object_script.escribiendo)
-        {
-            foreach (char c in Input.inputString)
+            if (player_object_script.escribiendo)
             {
-                if (c == '\b')
+                foreach (char c in Input.inputString)
                 {
-                    if (texto.text.Length != 0)
+                    if (c == '\b')
                     {
-                        texto.text = texto.text.Substring(0, texto.text.Length - 1);
+                        if (texto.text.Length != 0)
+                        {
+                            texto.text = texto.text.Substring(0, texto.text.Length - 1);
+                        }
+                    }
+                    else if ((c == '\n') || (c == '\r'))
+                    {
+
+                    }
+                    else
+                    {
+                        texto.text += c;
                     }
                 }
-                else if ((c == '\n') || (c == '\r'))
-                {
-
-                }
-                else
-                {
-                    texto.text += c;
-                }
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.Return))
-        {
-
-            if (!string.IsNullOrWhiteSpace(texto.text))
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                player_object_script.texto.text = texto.text;
 
-                client.Send("chat", new data_chat(player_object_script.GetID(), texto.text));
+                if (!string.IsNullOrWhiteSpace(texto.text))
+                {
+                    player_object_script.texto.text = texto.text;
 
-                texto.text = "";
+                    client.Send("chat", new data_chat(player_object_script.GetID(), texto.text));
+
+                    texto.text = "";
+                }
+                player_object_script.escribiendo = !player_object_script.escribiendo;
+
             }
-            player_object_script.escribiendo = !player_object_script.escribiendo;
-
-        }
+        } 
     }
 
     void OnDestroy()
