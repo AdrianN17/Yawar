@@ -10,10 +10,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public GameObject Buttons;
+    public GameObject Partida;
     public GameObject Panel_Servidores;
     public GameObject Btn_Atras;
     public GameObject Btn_Buscar;
+    public GameObject Culturas;
     public int timedelay;
     private Broadcast_receive broadcast;
     private string ip;
@@ -40,7 +41,7 @@ public class UIManager : MonoBehaviour
     public void On_Unirse()
     {
         //SceneManager.LoadScene("Sala_cliente");
-        Buttons.SetActive(false);
+        Partida.SetActive(false);
         Panel_Servidores.SetActive(true);
     }
 
@@ -54,13 +55,20 @@ public class UIManager : MonoBehaviour
     public void On_Atras()
     {
         Panel_Servidores.SetActive(false);
-        Buttons.SetActive(true);
+        Partida.SetActive(true);
     }
 
     public void On_Configuracion()
     {
 
     }
+
+    public void On_Culturas()
+    {
+        Partida.SetActive(false);
+        Culturas.SetActive(true);
+    }
+
 
     private void finalizar_listado()
     {

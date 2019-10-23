@@ -18,7 +18,7 @@ public class MenuGame : MonoBehaviour
         {
             activar = !activar;
             Pause.SetActive(activar);
-            Time.timeScale = (activar) ? 0 : 1f;
+            //Time.timeScale = (activar) ? 0 : 1f;
         }
     }
 
