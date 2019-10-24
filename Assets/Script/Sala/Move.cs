@@ -405,6 +405,8 @@ public class Move : MonoBehaviour
 
                 mover_player_horizontal = movimiento_Horizontal.Ninguno;
                 mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
             }
         }
     }
