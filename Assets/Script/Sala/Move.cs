@@ -446,6 +446,11 @@ public class Move : MonoBehaviour
     public void set_arma_actual(int arma)
     {
         this.arma_actual = (tipo_arma)arma;
+
+        if (arma_actual != tipo_arma.ninguna)
+        {
+            anim.SetBool("ConArma", true);
+        }
     }
 
 
