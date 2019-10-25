@@ -12,6 +12,7 @@ public class enemigo_1 : MonoBehaviour
     public float angulo;
     public int id;
     public GameObject padre;
+    public int punto_id;
 
     private List<get_center> lista_usuarios;
 
@@ -135,7 +136,7 @@ public class enemigo_1 : MonoBehaviour
 
     public void OnDestroy()
     {
-        padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject);
+        padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject,this.punto_id);
     }
 
 

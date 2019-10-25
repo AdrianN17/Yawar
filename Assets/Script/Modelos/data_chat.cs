@@ -8,8 +8,8 @@ namespace Assets.Script.Modelos
 {
     public class data_chat
     {
-        int id;
-        string texto;
+        public int id;
+        public string texto;
 
         public data_chat(int id, string texto)
         {

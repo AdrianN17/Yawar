@@ -222,7 +222,7 @@ public class Move_server : MonoBehaviour
         {
             rb.AddForce(Vector3.up*salto* rb.mass );
 
-            server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
+            server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "salto"));
             pisando_tierra = false;
 
             anim.SetTrigger("Saltar");
@@ -305,7 +305,15 @@ public class Move_server : MonoBehaviour
 
                 break;
             case "atacar":
-                atacar();
+                if (arma_actual == tipo_arma.mazo && pisando_tierra)
+                {
+                    anim.SetTrigger("Ataque01");
+
+                    mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                    mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                    server.server.SendToAll("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                }
                 break;
         }
     }

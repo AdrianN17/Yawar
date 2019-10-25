@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Script.Modelos
 {
-    class data_tecla
+    public class data_tecla
     {
         public int id;
         public string tecla;

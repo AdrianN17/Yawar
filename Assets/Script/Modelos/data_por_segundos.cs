@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
-    class data_por_segundos
+    public class data_por_segundos
     {
         public int id;
         public Vector3 posicion;

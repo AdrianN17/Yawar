@@ -127,7 +127,6 @@ public class Move : MonoBehaviour
                     teclas_presionada(dt);
                     tecla_soltada(dt);
 
-                    client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
                     atacar();
 
                     no_arma();
@@ -240,7 +239,7 @@ public class Move : MonoBehaviour
         {
             rb.AddForce(Vector3.up * salto * rb.mass);
 
-            client.client.Send("movimiento", new data_tecla(GetID(), "SPACE", "Salto"));
+            client.client.Send("movimiento", new data_tecla(GetID(), "SPACE", "salto"));
             
 
             pisando_tierra = false;
@@ -329,8 +328,16 @@ public class Move : MonoBehaviour
                 
                 break;
             case "atacar":
-                atacar();
-            break;
+                if (arma_actual == tipo_arma.mazo && pisando_tierra)
+                {
+                    anim.SetTrigger("Ataque01");
+
+                    mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                    mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                    client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                }
+                break;
         }
     }
 

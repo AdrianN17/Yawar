@@ -1110,6 +1110,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Recoger_Arma
       objectReference: {fileID: 0}
+    - target: {fileID: 2032554333740532879, guid: e8b0fd40abeb26640b9eef0f5a04498e,
+        type: 3}
+      propertyPath: m_TagString
+      value: Lanza
+      objectReference: {fileID: 0}
+    - target: {fileID: 2032554333740532879, guid: e8b0fd40abeb26640b9eef0f5a04498e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 3057465572315887260, guid: e8b0fd40abeb26640b9eef0f5a04498e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13854,6 +13864,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: maso
       objectReference: {fileID: 0}
+    - target: {fileID: 5805276528052227763, guid: 46b111eaa178749438d848de73f8963b,
+        type: 3}
+      propertyPath: m_TagString
+      value: Mazo
+      objectReference: {fileID: 0}
     - target: {fileID: 7407055683841014944, guid: 46b111eaa178749438d848de73f8963b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16979,17 +16994,17 @@ PrefabInstance:
     - target: {fileID: 4625859349404398247, guid: 589b0e35a4976b84ab8d15c3f9615f46,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 44.22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4625859349404398247, guid: 589b0e35a4976b84ab8d15c3f9615f46,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 92.64
+      value: -2.95
       objectReference: {fileID: 0}
     - target: {fileID: 4625859349404398247, guid: 589b0e35a4976b84ab8d15c3f9615f46,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -35.14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4625859349404398247, guid: 589b0e35a4976b84ab8d15c3f9615f46,
         type: 3}

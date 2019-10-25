@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class creacion : MonoBehaviour
 {
@@ -23,12 +24,36 @@ public class creacion : MonoBehaviour
 
     private List<GameObject> lista_enemigos;
 
+    public GameObject padre_puntos;
+    private List<contador_enemigos> lista_contador_enemigos;
+    private List<Vector3> puntos_creacion;
+
+    public int max_punto_cantidad;
+
+    public Text text_enemigos;
+
     void Start()
     {
         lista_enemigos = new List<GameObject>();
         data_pendiente = new List<data_enemigo_inicial>();
         ids_por_eliminar = new List<int>();
         id = 0;
+
+        lista_contador_enemigos = new List<contador_enemigos>();
+        puntos_creacion = new List<Vector3>();
+
+        var allChildren = padre_puntos.GetComponentsInChildren<contador_enemigos>();
+
+        foreach (var child in allChildren)
+        {
+            var script = child.gameObject.GetComponent<contador_enemigos>();
+            lista_contador_enemigos.Add(script);
+            puntos_creacion.Add(child.gameObject.transform.position);
+
+        }
+
+
+        max_enemigos = max_enemigos * lista_contador_enemigos.Count;
     }
 
     // Update is called once per frame
@@ -42,11 +67,14 @@ public class creacion : MonoBehaviour
         {
             enemigos_count++;
 
-            GameObject go = (GameObject)Instantiate(prefab_enemigo, this.transform.position, Quaternion.identity);
+            int punto_nacimiento = verificar_punto_id();
+
+            GameObject go = (GameObject)Instantiate(prefab_enemigo, puntos_creacion[punto_nacimiento], Quaternion.identity);
             go.transform.SetParent(this.transform);
             var script = go.GetComponent<enemigo_1>();
             script.id = id;
             script.padre = this.gameObject;
+            script.punto_id = punto_nacimiento;
 
             data_pendiente.Add(new data_enemigo_inicial(go.transform.position,id));
 
@@ -56,6 +84,8 @@ public class creacion : MonoBehaviour
             id++;
 
             time_creacion = 0;
+
+            text_enemigos.text = enemigos_count.ToString();
         }
 
         count_envio = count_envio + dt;
@@ -73,6 +103,8 @@ public class creacion : MonoBehaviour
         if (data_pendiente.Count != 0) 
         { 
             server_script.server.SendToAll("Creacion_enemigo", data_pendiente,true,1);
+
+
             data_pendiente.Clear();
         }
 
@@ -98,12 +130,16 @@ public class creacion : MonoBehaviour
     }
 
 
-    public void saber_muertes(int id, GameObject obj)
+    public void saber_muertes(int id, GameObject obj,int punto_id)
     {
         enemigos_count--;
+        lista_contador_enemigos[punto_id].cantidad--;
+
 
         ids_por_eliminar.Add(id);
         lista_enemigos.Remove(obj);
+
+        text_enemigos.text = enemigos_count.ToString();
     }
 
     public List<data_enemigo_por_segundos> lista_enemigos_actual()
@@ -112,8 +148,8 @@ public class creacion : MonoBehaviour
 
         foreach (var data in lista_enemigos)
         {
-            var script_enemigo = data.gameObject.GetComponent<enemigo_1>();
-            var script_compartido = data.gameObject.GetComponent<acciones_compartidas>();
+            var script_enemigo = data.GetComponent<enemigo_1>();
+            var script_compartido = data.GetComponent<acciones_compartidas>();
 
             data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles));
 
@@ -121,4 +157,22 @@ public class creacion : MonoBehaviour
 
         return data_enviar;
     }
+
+    public int verificar_punto_id()
+    {
+
+        for(int i=0; i< lista_contador_enemigos.Count ; i++)
+        {
+            if(lista_contador_enemigos[i].cantidad< max_punto_cantidad)
+            {
+                lista_contador_enemigos[i].cantidad++;
+
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+
 }

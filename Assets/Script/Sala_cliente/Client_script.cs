@@ -60,9 +60,6 @@ public class Client_script : MonoBehaviour
 
             var data = client.JSONDecode(net_event.Packet);
 
-            Debug.LogWarning("recibi :  " + data);
-
-
             int index = int.Parse(data.value["id_inicial"].ToString());
             var personajes = data.value["lista_usuarios"].ToObject<List<data_inicial>>();
 
@@ -103,10 +100,19 @@ public class Client_script : MonoBehaviour
                 }
             }
 
+            
+
+        });
+
+        client.AddTrigger("Inicializador_enemigos", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            int index = int.Parse(data.value["id_inicial"].ToString());
+
             var enemigos = data.value["lista_enemigos_actuales"].ToObject<List<data_enemigo_por_segundos>>();
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
-
         });
 
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)

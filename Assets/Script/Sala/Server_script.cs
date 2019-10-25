@@ -81,12 +81,16 @@ public class Server_script : MonoBehaviour
 
 
             server.Send("Inicializador", new Dictionary<string, dynamic>()
-                    { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar},{ "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
-                }, net_event.Peer);
+                    { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar}
+            }, net_event.Peer);
 
             server.SendToAllBut("Nuevo_Usuario", new Dictionary<string, dynamic>()
                     {{"nuevo",lista_para_enviar[index]}
-                }, net_event.Peer);
+            }, net_event.Peer);
+
+            server.Send("Inicializador_enemigos", new Dictionary<string, dynamic>()
+                {{ "id_inicial" , index},{ "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
+            }, net_event.Peer);
         });
 
         server.AddTrigger("movimiento", delegate (ENet.Event net_event) {
