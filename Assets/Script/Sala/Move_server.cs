@@ -50,7 +50,6 @@ public class Move_server : MonoBehaviour
     {
         if (arma.gameObject.layer == LayerMask.NameToLayer("Arma") && arma_actual == tipo_arma.ninguna)
         {
-            Debug.LogError(arma.gameObject.tag);
 
             switch(arma.gameObject.tag)
             {

@@ -25,7 +25,7 @@ namespace Assets.Libs.Esharknet
             Byte[] byte_data = Encoding.ASCII.GetBytes(json_value);
             packet.Create(byte_data);
 
-            //Debug.Log("Sending : " + json_value);
+            Debug.Log("Sending : " + json_value);
 
 
             return packet;
@@ -38,7 +38,7 @@ namespace Assets.Libs.Esharknet
             packet_data.CopyTo(buffer);
             string json_value = Encoding.ASCII.GetString(buffer);
 
-            Debug.Log("Received : " + json_value);
+            //Debug.Log("Received : " + json_value);
 
             Data data = JsonConvert.DeserializeObject<Data>(json_value);
             return data;

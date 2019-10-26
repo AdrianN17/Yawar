@@ -88,8 +88,13 @@ public class Server_script : MonoBehaviour
                     {{"nuevo",lista_para_enviar[index]}
             }, net_event.Peer);
 
+            
+        });
+
+        server.AddTrigger("Pedir_enemigos", delegate (ENet.Event net_event)
+        {
             server.Send("Inicializador_enemigos", new Dictionary<string, dynamic>()
-                {{ "id_inicial" , index},{ "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
+                { { "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
             }, net_event.Peer);
         });
 

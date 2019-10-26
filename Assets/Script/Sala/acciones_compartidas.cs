@@ -31,7 +31,7 @@ public class acciones_compartidas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void empujon(Vector3 point)

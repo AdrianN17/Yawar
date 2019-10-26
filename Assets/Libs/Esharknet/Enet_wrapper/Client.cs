@@ -14,7 +14,7 @@ namespace Assets.Libs.Esharknet
         private Peer peer;
 
 
-        public Client(string ip_address, ushort port, int chanel, int timeout)
+        public Client(string ip_address, ushort port, int channel, int timeout)
         {
             ENet.Library.Initialize();
             client = new Host();

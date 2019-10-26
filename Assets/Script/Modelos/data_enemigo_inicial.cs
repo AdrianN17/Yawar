@@ -9,12 +9,12 @@ namespace Assets.Script.Modelos
 {
     public class data_enemigo_inicial
     {
-        public Vector3 pos;
         public int id;
+        public int id_posicion;
         
-        public data_enemigo_inicial(Vector3 pos, int id)
+        public data_enemigo_inicial(int id_posicion, int id)
         {
-            this.pos = pos;
+            this.id_posicion = id_posicion;
             this.id = id;
         }
 

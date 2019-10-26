@@ -15,6 +15,7 @@ public class enemigo_1 : MonoBehaviour
     public int punto_id;
 
     private List<get_center> lista_usuarios;
+    public bool atacando;
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class enemigo_1 : MonoBehaviour
 
         rb.freezeRotation = true;
         angulo = 0f;
+
+        atacando = false;
     }
 
     // Update is called once per frame
@@ -31,8 +34,12 @@ public class enemigo_1 : MonoBehaviour
 
         if (lista_usuarios.Count != 0)
         {
+
             direccionar_angulo(limitar_distancia(), dt);
+            atacando = true;
         }
+
+        atacando = false;
 
     }
 

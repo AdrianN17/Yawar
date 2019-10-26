@@ -9,11 +9,24 @@ public class crear_enemigo_cliente : MonoBehaviour
 
     public List<GameObject> lista_enemigos;
 
+    public GameObject padre_puntos;
+    private List<Vector3> puntos_creacion;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
         lista_enemigos = new List<GameObject>();
+        puntos_creacion = new List<Vector3>();
+
+        var allChildren = padre_puntos.GetComponentsInChildren<contador_enemigos>();
+
+        foreach (var child in allChildren)
+        {
+            puntos_creacion.Add(child.gameObject.transform.position);
+
+        }
     }
 
     // Update is called once per frame
@@ -22,15 +35,15 @@ public class crear_enemigo_cliente : MonoBehaviour
         
     }
 
-    public void crear_enemigos_lista(List<data_enemigo_inicial> data_list)
+    public void crear_enemigos(List<data_enemigo_inicial> data_list)
     {
         foreach (var enemigo in data_list)
         {
             var dato_gameobject = buscar_item(enemigo.id);
 
             if (dato_gameobject == null)
-            { 
-                var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+            {
+                var ene = (GameObject)Instantiate(prefab_enemigo_1, puntos_creacion[enemigo.id_posicion], Quaternion.identity);
                 ene.transform.SetParent(this.transform);
                 var script = ene.GetComponent<enemigo_1>();
                 script.id = enemigo.id;
@@ -39,6 +52,7 @@ public class crear_enemigo_cliente : MonoBehaviour
                 lista_enemigos.Add(ene);
             }
         }
+        
     }
 
     public GameObject buscar_item(int id)
@@ -58,8 +72,9 @@ public class crear_enemigo_cliente : MonoBehaviour
 
     public void actualizar_enemigos(List<data_enemigo_por_segundos> data_list)
     {
-        foreach (var enemigo in data_list)
+        for (var i = data_list.Count - 1; i >= 0; i--)
         {
+            var enemigo = data_list[i];
             var dato_gameobject = buscar_item(enemigo.id);
 
             if(dato_gameobject != null)
@@ -73,30 +88,21 @@ public class crear_enemigo_cliente : MonoBehaviour
 
                 script1.transform.rotation = Quaternion.Euler(enemigo.radio);
                 script1.rb.MoveRotation(Quaternion.Euler(enemigo.radio));
+
+                if (enemigo.vida < 1)
+                {
+                    script2.morir();
+                }
             }
 
         }
     }
 
-    public void eliminar_enemigos(List<int> data_list)
-    {
-        foreach (var ids in data_list)
-        {
-            var dato_gameobject = buscar_item(ids);
-
-            if (dato_gameobject != null)
-            {
-                lista_enemigos.Remove(dato_gameobject);
-                Destroy(dato_gameobject);
-            }
-        }
-    }
-
-    public void crear_enemigo_creacion_player(List<data_enemigo_por_segundos> data_list)
+    public void crear_enemigo_creacion_player(List<data_enemigo_inicial> data_list)
     {
         foreach(var enemigo in data_list)
         {
-            var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+            var ene = (GameObject)Instantiate(prefab_enemigo_1, puntos_creacion[enemigo.id_posicion], Quaternion.identity);
             ene.transform.SetParent(this.transform);
             var script = ene.GetComponent<enemigo_1>();
             script.id = enemigo.id;

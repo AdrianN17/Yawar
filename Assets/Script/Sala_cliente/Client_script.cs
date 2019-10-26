@@ -100,6 +100,8 @@ public class Client_script : MonoBehaviour
                 }
             }
 
+            client.Send("Pedir_enemigos", null);
+
             
 
         });
@@ -108,9 +110,7 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
 
-            int index = int.Parse(data.value["id_inicial"].ToString());
-
-            var enemigos = data.value["lista_enemigos_actuales"].ToObject<List<data_enemigo_por_segundos>>();
+            var enemigos = data.value["lista_enemigos_actuales"].ToObject<List<data_enemigo_inicial>>();
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
         });
@@ -155,25 +155,19 @@ public class Client_script : MonoBehaviour
 
         client.AddTrigger("Creacion_enemigo", delegate (ENet.Event net_event)
         {
+            Debug.LogError("salido");
             var data = client.JSONDecode(net_event.Packet);
 
             var obj = data.value.ToObject<List<data_enemigo_inicial>>();
 
-            script_crearenemigo.crear_enemigos_lista(obj);
-        });
 
-
-        client.AddTrigger("Eliminar_enemigo", delegate (ENet.Event net_event)
-        {
-            var data = client.JSONDecode(net_event.Packet);
-
-            var obj = data.value.ToObject<List<int>>();
-
-            script_crearenemigo.eliminar_enemigos(obj);
+            script_crearenemigo.crear_enemigos(obj);
         });
 
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
         {
+            Debug.LogError("enviar enemigo actualizacion");
+
             var data = client.JSONDecode(net_event.Packet);
 
             var obj = data.value.ToObject<List<data_enemigo_por_segundos>>();

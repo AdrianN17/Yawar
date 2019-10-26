@@ -1,4 +1,5 @@
 ﻿using Assets.Script.Modelos;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,10 +18,10 @@ public class creacion : MonoBehaviour
 
     public Server_script server_script;
     private List<data_enemigo_inicial> data_pendiente;
-    private float count_envio;
-    private float count_envio_max = 1;
-
-    private List<int> ids_por_eliminar;
+    public float count_envio;
+    public float count_envio_max;
+    public float count_envio_creacion;
+    public float count_envio_creacion_max;
 
     private List<GameObject> lista_enemigos;
 
@@ -36,7 +37,8 @@ public class creacion : MonoBehaviour
     {
         lista_enemigos = new List<GameObject>();
         data_pendiente = new List<data_enemigo_inicial>();
-        ids_por_eliminar = new List<int>();
+
+
         id = 0;
 
         lista_contador_enemigos = new List<contador_enemigos>();
@@ -59,6 +61,7 @@ public class creacion : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         float dt = Time.deltaTime;
 
         time_creacion = time_creacion + dt;
@@ -68,7 +71,7 @@ public class creacion : MonoBehaviour
             enemigos_count++;
 
             int punto_nacimiento = verificar_punto_id();
-
+            
             GameObject go = (GameObject)Instantiate(prefab_enemigo, puntos_creacion[punto_nacimiento], Quaternion.identity);
             go.transform.SetParent(this.transform);
             var script = go.GetComponent<enemigo_1>();
@@ -76,8 +79,7 @@ public class creacion : MonoBehaviour
             script.padre = this.gameObject;
             script.punto_id = punto_nacimiento;
 
-            data_pendiente.Add(new data_enemigo_inicial(go.transform.position,id));
-
+            data_pendiente.Add(new data_enemigo_inicial(punto_nacimiento, id));
 
             lista_enemigos.Add(go);
 
@@ -86,6 +88,7 @@ public class creacion : MonoBehaviour
             time_creacion = 0;
 
             text_enemigos.text = enemigos_count.ToString();
+
         }
 
         count_envio = count_envio + dt;
@@ -96,37 +99,39 @@ public class creacion : MonoBehaviour
             count_envio = 0;
         }
 
+        count_envio_creacion = count_envio_creacion + dt;
+
+        if (count_envio_creacion > count_envio_creacion_max)
+        {
+            server_script.server.SendToAll("Creacion_enemigo", data_pendiente);
+            data_pendiente.Clear();
+            count_envio_creacion = 0;
+        }
+
+
+
     }
 
     public void enviar_datos()
     {
-        if (data_pendiente.Count != 0) 
-        { 
-            server_script.server.SendToAll("Creacion_enemigo", data_pendiente,true,1);
-
-
-            data_pendiente.Clear();
-        }
-
-        if (ids_por_eliminar.Count != 0)
-        {
-            server_script.server.SendToAll("Eliminar_enemigo", ids_por_eliminar,true,1);
-            ids_por_eliminar.Clear();
-        }
-
         var data_enviar = new List<data_enemigo_por_segundos>();
+
 
         foreach (var data in lista_enemigos)
         {
             var script_enemigo = data.gameObject.GetComponent<enemigo_1>();
             var script_compartido = data.gameObject.GetComponent<acciones_compartidas>();
 
-            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas,data.transform.rotation.eulerAngles));
-
+            if(script_enemigo.atacando)
+            { 
+                data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles));
+            }
         }
 
-        server_script.server.SendToAll("Actualizar_enemigos", data_enviar,true,1);
-
+        if(data_enviar.Count!=0)
+        { 
+            server_script.server.SendToAll("Actualizar_enemigos", data_enviar);
+        }
     }
 
 
@@ -135,11 +140,18 @@ public class creacion : MonoBehaviour
         enemigos_count--;
         lista_contador_enemigos[punto_id].cantidad--;
 
-
-        ids_por_eliminar.Add(id);
         lista_enemigos.Remove(obj);
 
-        text_enemigos.text = enemigos_count.ToString();
+
+        try
+        {
+            text_enemigos.text = enemigos_count.ToString();
+        }
+        catch(Exception ex)
+        {
+            Debug.LogWarning("Error al acceder a una variable destruida");
+        }
+        
     }
 
     public List<data_enemigo_por_segundos> lista_enemigos_actual()
