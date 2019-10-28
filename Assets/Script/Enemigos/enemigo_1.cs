@@ -17,6 +17,13 @@ public class enemigo_1 : MonoBehaviour
     private List<get_center> lista_usuarios;
     public bool atacando;
 
+    public acciones_compartidas script_compartido;
+    public float max_counter_ahogo;
+    private float counter_ahogo;
+    public float nivel_agua_y;
+    public int coleccionable;
+
+
     void Start()
     {
         lista_usuarios = new List<get_center>();
@@ -38,6 +45,20 @@ public class enemigo_1 : MonoBehaviour
             direccionar_angulo(limitar_distancia(), dt);
             atacando = true;
         }
+
+        counter_ahogo = counter_ahogo + dt;
+
+        if(counter_ahogo> max_counter_ahogo)
+        {
+            if (collider.bounds.center.y < nivel_agua_y)
+            { 
+                script_compartido.disminuir_vida_ahogamiento();
+                
+            }
+
+            counter_ahogo = 0;
+        }
+
 
         atacando = false;
 
@@ -135,17 +156,19 @@ public class enemigo_1 : MonoBehaviour
         if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque") && collision.gameObject.layer == LayerMask.NameToLayer("Personaje"))
         {
             anim.SetTrigger("Atacar");
-
-
-            //collision.gameObject.GetComponent<acciones_compartidas>().empujon(collider.bounds.center);
         }
     }
 
     public void OnDestroy()
     {
-        padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject,this.punto_id);
+        if(padre!=null)
+        { 
+            padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject,this.punto_id);
+        }
+        else
+        {
+            var go = GameObject.Find("Objetos_Botados");
+            go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.id,this.collider.bounds.center);
+        }
     }
-
-
-
 }

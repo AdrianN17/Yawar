@@ -32,6 +32,7 @@ public class creacion : MonoBehaviour
     public int max_punto_cantidad;
 
     public Text text_enemigos;
+    public coleccionable script_crear_coleccionables;
 
     void Start()
     {
@@ -79,7 +80,9 @@ public class creacion : MonoBehaviour
             script.padre = this.gameObject;
             script.punto_id = punto_nacimiento;
 
-            data_pendiente.Add(new data_enemigo_inicial(punto_nacimiento, id));
+            script.coleccionable = new lista_coleccionables().get_coleccionable();
+
+            data_pendiente.Add(new data_enemigo_inicial(punto_nacimiento, id, script.coleccionable));
 
             lista_enemigos.Add(go);
 
@@ -137,6 +140,15 @@ public class creacion : MonoBehaviour
 
     public void saber_muertes(int id, GameObject obj,int punto_id)
     {
+        //crear_enemigo_cliente objeto;
+        var script = obj.GetComponent<enemigo_1>();
+
+
+        script_crear_coleccionables.crear_nuevo_coleccionable(script.coleccionable,script.collider.bounds.center);
+            
+
+
+
         enemigos_count--;
         lista_contador_enemigos[punto_id].cantidad--;
 

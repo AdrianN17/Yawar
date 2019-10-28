@@ -31,8 +31,16 @@ public class Server_script : MonoBehaviour
     public creacion creador_enemigos;
     public Text texto;
 
+    public GameObject water;
+    public float nivel_agua;
+
+    private float counter_dano_agua;
+    public float max_counter_dano_agua;
+
     void Start()
     {
+
+
 
         ip = new LocalIP().SetLocalIP();
 
@@ -135,6 +143,22 @@ public class Server_script : MonoBehaviour
             gameobj.texto.text = obj.texto;
         });
 
+        server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
+        {
+            var data = server.JSONDecode(net_event.Packet);
+            var obj = data.value.ToObject<data_botar_objetos>();
+            var gameobj = lista_personajes[obj.id];
+            gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
+            gameobj.GetComponent<Move>().no_arma_funcion();
+
+            ///falta mas
+            ///
+            server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
+        });
+
+
+        nivel_agua = transform.TransformPoint(water.transform.position).y;
+
     }
 
     // Update is called once per frame
@@ -143,6 +167,14 @@ public class Server_script : MonoBehaviour
         float dt = Time.deltaTime;
 
         server.update();
+
+        counter_dano_agua = counter_dano_agua + dt;
+
+        if (counter_dano_agua > max_counter_dano_agua)
+        {
+            vida_dano_agua();
+            counter_dano_agua = 0;
+        }
 
 
         counter_send = counter_send + dt;
@@ -191,6 +223,24 @@ public class Server_script : MonoBehaviour
 
         }
 
+    }
+
+    void vida_dano_agua()
+    {
+        //var lista_enemigos = creador_enemigos.lista_enemigos_actual();
+        //lista_personajes
+
+        foreach(var personaje in lista_personajes)
+        {
+            var collider = transform.TransformPoint( personaje.GetComponent<get_center>().get_center_position());
+
+            if (collider.y< nivel_agua)
+            {
+
+                var acciones = personaje.GetComponent<acciones_compartidas>();
+                acciones.disminuir_vida_ahogamiento();
+            }
+        }
     }
 
     void OnDestroy()

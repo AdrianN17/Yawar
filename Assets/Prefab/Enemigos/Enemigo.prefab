@@ -1222,6 +1222,7 @@ GameObject:
   - component: {fileID: 6446680136663115189}
   - component: {fileID: 1468223261749818441}
   - component: {fileID: 3147926686425982195}
+  - component: {fileID: 5624072129827030285}
   - component: {fileID: 2157390092756962793}
   m_Layer: 12
   m_Name: Enemigo
@@ -1329,6 +1330,25 @@ MonoBehaviour:
   angulo: 0
   id: 0
   padre: {fileID: 0}
+  punto_id: 0
+  atacando: 0
+  script_compartido: {fileID: 2157390092756962793}
+  max_counter_ahogo: 2
+  nivel_agua_y: 30
+  mi_nivel_y: 0
+--- !u!114 &5624072129827030285
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766624081878747664}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2efac107a3d6c6344b84e512601ca09b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collider: {fileID: -4784338598524146100}
 --- !u!114 &2157390092756962793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,6 +1367,7 @@ MonoBehaviour:
   ama: {fileID: 5162474540936031058}
   texto_vida: {fileID: 0}
   mitipo: 2
+  max_vidas: 5
   vidas: 5
 --- !u!1 &2834420745159735113
 GameObject:
@@ -4878,11 +4899,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1170474285752023043}
     m_Modifications:
-    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
-        type: 3}
-      propertyPath: m_Name
-      value: texto_vida
-      objectReference: {fileID: 0}
     - target: {fileID: 3955943502006002104, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4937,6 +4953,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Name
+      value: texto_vida
       objectReference: {fileID: 0}
     - target: {fileID: 6767624064812816991, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}

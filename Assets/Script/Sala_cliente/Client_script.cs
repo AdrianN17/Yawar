@@ -186,6 +186,18 @@ public class Client_script : MonoBehaviour
             gameobj.texto.text = obj.texto;
         });
 
+        client.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+            var obj = data.value.ToObject<data_botar_objetos>();
+            var gameobj = lista_personajes[obj.id];
+            gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
+            gameobj.GetComponent<Move>().no_arma_funcion();
+
+            ///falta mas
+        });
+
+
     }
 
     // Update is called once per frame

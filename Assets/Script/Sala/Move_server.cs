@@ -303,6 +303,7 @@ public class Move_server : MonoBehaviour
                 pisando_tierra = false;
 
                 break;
+
             case "atacar":
                 if (arma_actual == tipo_arma.mazo && pisando_tierra)
                 {
@@ -313,6 +314,10 @@ public class Move_server : MonoBehaviour
 
                     server.server.SendToAll("movimiento", new data_tecla(GetID(), "X", "atacar"));
                 }
+                break;
+
+            case "no_arma":
+                no_arma_funcion();
                 break;
         }
     }
@@ -394,9 +399,37 @@ public class Move_server : MonoBehaviour
         }
     }
 
+    public void no_arma_funcion()
+    {
+        {
+            switch (arma_actual)
+            {
+                case tipo_arma.mazo:
+                    {
+                        GameObject go = transform.GetChild(2).gameObject;
+                        go.SetActive(false);
+                        break;
+                    }
+
+                case tipo_arma.lanza:
+                    {
+                        GameObject go = transform.GetChild(1).gameObject;
+                        go.SetActive(false);
+                        break;
+                    }
+
+
+            }
+
+            arma_actual = tipo_arma.ninguna;
+
+            anim.SetBool("ConArma", false);
+        }
+    }
+
     public void no_arma()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        if(Input.GetKeyDown(KeyCode.G))
         { 
             switch(arma_actual)
             {
@@ -416,6 +449,8 @@ public class Move_server : MonoBehaviour
 
 
             }
+
+            server.server.SendToAll("movimiento", new data_tecla(GetID(), "G", "no_arma"));
 
             arma_actual = tipo_arma.ninguna;
 

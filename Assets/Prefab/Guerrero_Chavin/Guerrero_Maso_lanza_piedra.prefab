@@ -3983,6 +3983,7 @@ GameObject:
   - component: {fileID: 381386978770866088}
   - component: {fileID: 381386978770866089}
   - component: {fileID: 7319544152646745155}
+  - component: {fileID: 3717071170330054390}
   m_Layer: 9
   m_Name: Guerrero_Maso_lanza_piedra
   m_TagString: Untagged
@@ -4090,6 +4091,7 @@ MonoBehaviour:
   ama: {fileID: 381386978770866003}
   texto_vida: {fileID: 0}
   mitipo: 1
+  max_vidas: 5
   vidas: 5
 --- !u!114 &381386978770866089
 MonoBehaviour:
@@ -4132,6 +4134,18 @@ MonoBehaviour:
   client: {fileID: 0}
   escribiendo: 0
   texto: {fileID: 2491336385499626157}
+--- !u!114 &3717071170330054390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8532940830470018726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 404c6e452464e294abc9768a17faf6dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8600748486725823487
 GameObject:
   m_ObjectHideFlags: 0
@@ -4326,16 +4340,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4625268978095318197}
     m_Modifications:
-    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
-        type: 3}
-      propertyPath: m_Name
-      value: texto_vida
-      objectReference: {fileID: 0}
-    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 3955943502006002104, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4405,6 +4409,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Name
+      value: texto_vida
+      objectReference: {fileID: 0}
+    - target: {fileID: 8549962959463273543, guid: 0075b8b70a632594b9dfbaf099302473,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 6767624064812816991, guid: 0075b8b70a632594b9dfbaf099302473,
         type: 3}

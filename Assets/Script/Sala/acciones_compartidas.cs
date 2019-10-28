@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Script.Modelos;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,17 +16,22 @@ public class acciones_compartidas : MonoBehaviour
     public enum tipo {personaje_principal, personaje, enemigo};
     public tipo mitipo;
 
+    public int max_vidas;
     public int vidas;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        if(mitipo!=tipo.personaje_principal)
+        vidas = max_vidas;
+
+        if (mitipo!=tipo.personaje_principal)
         {
             texto_vida = GetComponentInChildren<TextMesh>();
             texto_vida.text = vidas.ToString();
         }
+
+        
     }
 
     // Update is called once per frame
@@ -66,12 +72,27 @@ public class acciones_compartidas : MonoBehaviour
         return vidas;
     }
 
+    public bool disminuir_vida_ahogamiento()
+    {
+        disminuir_vida(1);
+
+        if (vidas < 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public void morir()
     {
         if (mitipo == tipo.enemigo)
         {
             Invoke("destruir_gameobject", 1);
-            
+        }
+        else if(mitipo == tipo.personaje_principal)
+        {
+            Invoke("volver_al_inicio", 1);
         }
     }
 
@@ -84,4 +105,29 @@ public class acciones_compartidas : MonoBehaviour
     {
         mitipo = tipo.personaje_principal;
     }
+
+    public void volver_al_inicio()
+    {
+        var script = gameObject.GetComponent<personaje_volver_inicio>();
+        
+
+
+        if(gameObject.GetComponent("Move") != null)
+        {
+            var script_cliente = gameObject.GetComponent<Move>();
+            script_cliente.no_arma_funcion();
+            script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),transform.position,null));
+        }
+        else
+        {
+            var script_servidor = gameObject.GetComponent<Move_server>();
+            script_servidor.no_arma_funcion();
+            script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), transform.position,null));
+        }
+
+        script.volver_al_inicio();
+
+        vidas = max_vidas;
+    }
+
 }

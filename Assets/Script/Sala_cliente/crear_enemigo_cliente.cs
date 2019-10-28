@@ -49,6 +49,8 @@ public class crear_enemigo_cliente : MonoBehaviour
                 script.id = enemigo.id;
                 script.padre = this.gameObject;
 
+                script.coleccionable = enemigo.coleccionable;
+
                 lista_enemigos.Add(ene);
             }
         }
@@ -107,6 +109,7 @@ public class crear_enemigo_cliente : MonoBehaviour
             var script = ene.GetComponent<enemigo_1>();
             script.id = enemigo.id;
             script.padre = this.gameObject;
+            script.coleccionable = enemigo.coleccionable;
 
             lista_enemigos.Add(ene);
         }
