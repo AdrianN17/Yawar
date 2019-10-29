@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class crear_enemigo_cliente : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class crear_enemigo_cliente : MonoBehaviour
 
     public GameObject padre_puntos;
     private List<Vector3> puntos_creacion;
+    public Text cantidad_enemigos;
 
 
 
@@ -32,29 +34,6 @@ public class crear_enemigo_cliente : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    public void crear_enemigos(List<data_enemigo_inicial> data_list)
-    {
-        foreach (var enemigo in data_list)
-        {
-            var dato_gameobject = buscar_item(enemigo.id);
-
-            if (dato_gameobject == null)
-            {
-                var ene = (GameObject)Instantiate(prefab_enemigo_1, puntos_creacion[enemigo.id_posicion], Quaternion.identity);
-                ene.transform.SetParent(this.transform);
-                var script = ene.GetComponent<enemigo_1>();
-                script.id = enemigo.id;
-                script.padre = this.gameObject;
-                script.es_servidor = false;
-
-                script.coleccionable = enemigo.coleccionable;
-
-                lista_enemigos.Add(ene);
-            }
-        }
         
     }
 
@@ -112,6 +91,8 @@ public class crear_enemigo_cliente : MonoBehaviour
 
 
                 lista_enemigos.Add(ene);
+
+                cantidad_enemigos.text = lista_enemigos.Count.ToString();
             }
 
         }
@@ -138,8 +119,16 @@ public class crear_enemigo_cliente : MonoBehaviour
 
 
                 lista_enemigos.Add(ene);
+
+                cantidad_enemigos.text = lista_enemigos.Count.ToString();
             }
         }
+    }
+
+    public void contar_muertes(GameObject enemigo)
+    {
+        lista_enemigos.Remove(enemigo);
+        cantidad_enemigos.text = lista_enemigos.Count.ToString();
     }
 
 }

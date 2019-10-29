@@ -166,6 +166,10 @@ public class enemigo_1 : MonoBehaviour
         { 
             padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject,this.punto_id);
         }
+        else
+        {
+            padre.GetComponent<crear_enemigo_cliente>().contar_muertes(this.gameObject);
+        }
 
         var go = GameObject.Find("Objetos_Botados");
         go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.id, this.collider.bounds.center);

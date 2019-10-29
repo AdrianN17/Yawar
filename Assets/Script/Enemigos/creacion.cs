@@ -83,8 +83,6 @@ public class creacion : MonoBehaviour
 
             script.coleccionable = new lista_coleccionables().get_coleccionable();
 
-            data_pendiente.Add(new data_enemigo_inicial(punto_nacimiento, id, script.coleccionable));
-
             lista_enemigos.Add(go);
 
             id++;
@@ -102,18 +100,6 @@ public class creacion : MonoBehaviour
             enviar_datos();
             count_envio = 0;
         }
-
-        count_envio_creacion = count_envio_creacion + dt;
-
-        if (count_envio_creacion > count_envio_creacion_max)
-        {
-            server_script.server.SendToAll("Creacion_enemigo", data_pendiente);
-            data_pendiente.Clear();
-            count_envio_creacion = 0;
-        }
-
-
-
     }
 
     public void enviar_datos()

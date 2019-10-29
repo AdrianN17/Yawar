@@ -153,16 +153,6 @@ public class Client_script : MonoBehaviour
             gameobj.set_arma_actual(obj.arma);
         });
 
-        client.AddTrigger("Creacion_enemigo", delegate (ENet.Event net_event)
-        {
-            var data = client.JSONDecode(net_event.Packet);
-
-            var obj = data.value.ToObject<List<data_enemigo_inicial>>();
-
-
-            script_crearenemigo.crear_enemigos(obj);
-        });
-
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
@@ -170,6 +160,8 @@ public class Client_script : MonoBehaviour
             var obj = data.value.ToObject<List<data_enemigo_por_segundos>>();
 
             script_crearenemigo.actualizar_enemigos(obj);
+
+
         });
 
         client.AddTrigger("chat", delegate (ENet.Event net_event)
