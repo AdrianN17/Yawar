@@ -9,9 +9,9 @@ namespace Assets.Script.Modelos
 {
     public class data_inicial
     {
-        public int id;
-        public Vector3 posicion;
-         
+        public int id { get; set; }
+        public Vector3 posicion { get; set; }
+
         public data_inicial(int id,  Vector3 posicion)
         {
             this.id = id;

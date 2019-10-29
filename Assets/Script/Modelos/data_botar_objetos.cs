@@ -9,9 +9,9 @@ namespace Assets.Script.Modelos
 {
     public class data_botar_objetos
     {
-        public int id;
-        public Vector3 posicion;
-        public Dictionary<int,int> objetos;
+        public int id { get; set; }
+        public Vector3 posicion { get; set; }
+        public Dictionary<int,int> objetos { get; set; }
 
         public data_botar_objetos(int id, Vector3 posicion, Dictionary<int,int> objetos)
         {

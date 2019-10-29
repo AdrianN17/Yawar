@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
-    public class data_chat
+    public class Listado_Usuarios
     {
         public int id { get; set; }
-        public string texto { get; set; }
+        public List<data_inicial> lista { get; set; }
 
-        public data_chat(int id, string texto)
+        public Listado_Usuarios(int id, List<data_inicial> lista)
         {
             this.id = id;
-            this.texto = texto;
+            this.lista = lista;
         }
     }
 }

@@ -59,9 +59,11 @@ public class Client_script : MonoBehaviour
         {
 
             var data = client.JSONDecode(net_event.Packet);
+           
+            var obj = data.value.ToObject<Listado_Usuarios>();
 
-            int index = int.Parse(data.value["id_inicial"].ToString());
-            var personajes = data.value["lista_usuarios"].ToObject<List<data_inicial>>();
+            int index = obj.id;
+            var personajes = obj.lista;
 
 
             foreach (var personaje in personajes)
@@ -96,6 +98,8 @@ public class Client_script : MonoBehaviour
                     var script_compartido = go.GetComponent<acciones_compartidas>();
                     script_compartido.personaje_principal();
 
+                    
+
 
                 }
             }
@@ -110,7 +114,8 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
 
-            var enemigos = data.value["lista_enemigos_actuales"].ToObject<List<data_enemigo_inicial>>();
+            
+            var enemigos = data.value.ToObject<List<data_enemigo_inicial_2>>();
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
         });
@@ -118,7 +123,7 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-            var personaje = data.value["nuevo"].ToObject<data_inicial>();
+            var personaje = data.value.ToObject<data_inicial>();
 
             GameObject go = (GameObject)Instantiate(prefab_personaje, personaje.posicion, Quaternion.identity);
             lista_personajes.Add(go);
@@ -155,7 +160,6 @@ public class Client_script : MonoBehaviour
 
         client.AddTrigger("Creacion_enemigo", delegate (ENet.Event net_event)
         {
-            Debug.LogError("salido");
             var data = client.JSONDecode(net_event.Packet);
 
             var obj = data.value.ToObject<List<data_enemigo_inicial>>();
@@ -166,8 +170,6 @@ public class Client_script : MonoBehaviour
 
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
         {
-            Debug.LogError("enviar enemigo actualizacion");
-
             var data = client.JSONDecode(net_event.Packet);
 
             var obj = data.value.ToObject<List<data_enemigo_por_segundos>>();
@@ -195,6 +197,15 @@ public class Client_script : MonoBehaviour
             gameobj.GetComponent<Move>().no_arma_funcion();
 
             ///falta mas
+        });
+
+        client.AddTrigger("Jugador_desconectado", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+            var obj = data.value.ToObject<data_solo_id>();
+
+            lista_personajes.Remove(obj.id);
+
         });
 
 

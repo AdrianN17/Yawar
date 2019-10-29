@@ -27,18 +27,20 @@ namespace Assets.Libs.Esharknet
 
             Debug.Log("Sending : " + json_value);
 
+            packet.Create(byte_data);
 
             return packet;
         }
 
         public Data JSONDecode(ENet.Packet packet_data)
         {
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[packet_data.Length];
 
             packet_data.CopyTo(buffer);
+
             string json_value = Encoding.ASCII.GetString(buffer);
 
-            //Debug.Log("Received : " + json_value);
+            Debug.Log("Received : " + json_value);
 
             Data data = JsonConvert.DeserializeObject<Data>(json_value);
             return data;
