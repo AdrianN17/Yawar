@@ -48,7 +48,6 @@ public class crear_enemigo_cliente : MonoBehaviour
                 var script = ene.GetComponent<enemigo_1>();
                 script.id = enemigo.id;
                 script.padre = this.gameObject;
-                script.es_servidor = false;
 
                 script.coleccionable = enemigo.coleccionable;
 
@@ -101,20 +100,16 @@ public class crear_enemigo_cliente : MonoBehaviour
         }
     }
 
-    public void crear_enemigo_creacion_player(List<data_enemigo_inicial_2> data_list)
+    public void crear_enemigo_creacion_player(List<data_enemigo_inicial> data_list)
     {
         foreach(var enemigo in data_list)
         {
-            var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+            var ene = (GameObject)Instantiate(prefab_enemigo_1, puntos_creacion[enemigo.id_posicion], Quaternion.identity);
             ene.transform.SetParent(this.transform);
             var script = ene.GetComponent<enemigo_1>();
             script.id = enemigo.id;
             script.padre = this.gameObject;
             script.coleccionable = enemigo.coleccionable;
-            script.es_servidor = false;
-
-            var compartido = ene.GetComponent<acciones_compartidas>();
-            compartido.vidas = enemigo.vidas;
 
             lista_enemigos.Add(ene);
         }

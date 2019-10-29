@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using ENet;
@@ -17,22 +16,7 @@ namespace Assets.Libs.Esharknet
         
         public Server(string ip_address, ushort port, int max_clients, int max_channel, int timeout)
         {
-            AllocCallback OnMemoryAllocate = (size) => {
-                return Marshal.AllocHGlobal(size);
-            };
-
-            FreeCallback OnMemoryFree = (memory) => {
-                Marshal.FreeHGlobal(memory);
-            };
-
-            NoMemoryCallback OnNoMemory = () => {
-                throw new OutOfMemoryException();
-            };
-
-            Callbacks callbacks = new Callbacks(OnMemoryAllocate, OnMemoryFree, OnNoMemory);
-
-            if (ENet.Library.Initialize(callbacks))
-                Debug.LogWarning("ENet successfully initialized using a custom memory allocator");
+            ENet.Library.Initialize();
 
             clients = new List<Peer>();
 
@@ -54,13 +38,13 @@ namespace Assets.Libs.Esharknet
                 AddPeer(net_event);
             });*/
 
-            /*TriggerFunctions.Add("Disconnect", delegate (ENet.Event net_event) {
+            TriggerFunctions.Add("Disconnect", delegate (ENet.Event net_event) {
                 RemovePeer(net_event);
             });
 
             TriggerFunctions.Add("Timeout", delegate (ENet.Event net_event) {
                 RemovePeer(net_event);
-            });*/
+            });
 
         }
 
@@ -215,8 +199,6 @@ namespace Assets.Libs.Esharknet
 
         public int RemovePeer(ENet.Event net_event)
         {
-            Debug.LogError("Client delete");
-
             clients.Remove(net_event.Peer);
             int index = clients.IndexOf(net_event.Peer);
             return index;

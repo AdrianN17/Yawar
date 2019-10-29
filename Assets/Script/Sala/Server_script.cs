@@ -40,6 +40,8 @@ public class Server_script : MonoBehaviour
     void Start()
     {
 
+
+
         ip = new LocalIP().SetLocalIP();
 
         server = new Server(ip, port, max_clients, 3, timeout);
@@ -86,30 +88,28 @@ public class Server_script : MonoBehaviour
 
 
 
-            server.Send("Inicializador", new Listado_Usuarios(index,lista_para_enviar), net_event.Peer);
+            server.Send("Inicializador", new Dictionary<string, dynamic>()
+                    { { "id_inicial" , index} ,{"lista_usuarios",lista_para_enviar}
+            }, net_event.Peer);
 
-            server.SendToAllBut("Nuevo_Usuario", lista_para_enviar[index], net_event.Peer);
+            server.SendToAllBut("Nuevo_Usuario", new Dictionary<string, dynamic>()
+                    {{"nuevo",lista_para_enviar[index]}
+            }, net_event.Peer);
 
             
         });
 
-        server.AddTrigger("Disconnect", delegate (ENet.Event net_event)
-        {
-            int i = server.RemovePeer(net_event);
-            lista_personajes.RemoveAt(i);
-            server.SendToAll("Jugador_desconectado", new data_solo_id(i));
-
-        });
-
         server.AddTrigger("Pedir_enemigos", delegate (ENet.Event net_event)
         {
-            server.Send("Inicializador_enemigos", creador_enemigos.lista_enemigos_actual(), net_event.Peer);
+            server.Send("Inicializador_enemigos", new Dictionary<string, dynamic>()
+                { { "lista_enemigos_actuales", creador_enemigos.lista_enemigos_actual()}
+            }, net_event.Peer);
         });
 
         server.AddTrigger("movimiento", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_tecla>(); ;
+            var obj = data.value.ToObject<data_tecla>();
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 

@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 using ENet;
-using System.Runtime.InteropServices;
 
 namespace Assets.Libs.Esharknet
 {
@@ -17,23 +16,6 @@ namespace Assets.Libs.Esharknet
 
         public Client(string ip_address, ushort port, int channel, int timeout)
         {
-            AllocCallback OnMemoryAllocate = (size) => {
-                return Marshal.AllocHGlobal(size);
-            };
-
-            FreeCallback OnMemoryFree = (memory) => {
-                Marshal.FreeHGlobal(memory);
-            };
-
-            NoMemoryCallback OnNoMemory = () => {
-                throw new OutOfMemoryException();
-            };
-
-            Callbacks callbacks = new Callbacks(OnMemoryAllocate, OnMemoryFree, OnNoMemory);
-
-            if (ENet.Library.Initialize(callbacks))
-                Debug.LogWarning("ENet successfully initialized using a custom memory allocator");
-
             ENet.Library.Initialize();
             client = new Host();
 

@@ -9,10 +9,11 @@ namespace Assets.Script.Modelos
 {
     public class data_enemigo_por_segundos
     {
-        public int id { get; set; }
-        public Vector3 pos { get; set; }
-        public int vida { get; set; }
-        public Vector3 radio { get; set; }
+        public int id;
+        public Vector3 pos;
+        public int vida;
+
+        public Vector3 radio;
 
         public data_enemigo_por_segundos(int id, Vector3 pos, int vida, Vector3 radio)
         {

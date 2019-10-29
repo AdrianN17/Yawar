@@ -22,7 +22,6 @@ public class enemigo_1 : MonoBehaviour
     private float counter_ahogo;
     public float nivel_agua_y;
     public int coleccionable;
-    public bool es_servidor;
 
 
     void Start()
@@ -162,12 +161,14 @@ public class enemigo_1 : MonoBehaviour
 
     public void OnDestroy()
     {
-        if(es_servidor)
+        if(padre!=null)
         { 
             padre.GetComponent<creacion>().saber_muertes(this.id,this.gameObject,this.punto_id);
         }
-
-        var go = GameObject.Find("Objetos_Botados");
-        go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.id, this.collider.bounds.center);
+        else
+        {
+            var go = GameObject.Find("Objetos_Botados");
+            go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.id,this.collider.bounds.center);
+        }
     }
 }

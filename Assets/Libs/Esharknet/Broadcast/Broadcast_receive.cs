@@ -45,8 +45,9 @@ namespace Assets.Libs.Esharknet.Broadcast
 
                             if (data.key== "broadcast")
                             {
-
+                                
                                 var data_value = data.value.ToObject<Data_broadcast>();
+                                Debug.Log(data.value);
                                 var data_existence = validate_ip_existence(data_value.ip);
 
                                 Debug.Log("Broadcast receive ip is : " + data_value.ip);

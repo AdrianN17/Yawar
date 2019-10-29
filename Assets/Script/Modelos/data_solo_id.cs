@@ -8,7 +8,7 @@ namespace Assets.Script.Modelos
 {
     public class data_solo_id
     {
-        public int id { get; set; }
+        public int id;
 
         public data_solo_id(int id)
         {

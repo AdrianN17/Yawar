@@ -34,9 +34,10 @@ namespace Assets.Libs.Esharknet.Broadcast
             {
                 while (loop)
                 {
-                    var json_data = JsonConvert.SerializeObject(data);
 
-                    Debug.Log("Broadcast Send : " + json_data);
+                    var json_data  = JsonConvert.SerializeObject(data);
+
+                    Debug.Log("Broadcast Send : "+ json_data);
 
                     var bytes = Encoding.ASCII.GetBytes(json_data);
 

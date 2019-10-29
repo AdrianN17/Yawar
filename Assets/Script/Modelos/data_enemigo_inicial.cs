@@ -9,10 +9,10 @@ namespace Assets.Script.Modelos
 {
     public class data_enemigo_inicial
     {
-        public int id { get; set; }
-        public int id_posicion { get; set; }
-        public int coleccionable { get; set; }
-
+        public int id;
+        public int id_posicion;
+        public int coleccionable;
+        
         public data_enemigo_inicial(int id_posicion, int id,int coleccionable)
         {
             this.id_posicion = id_posicion;

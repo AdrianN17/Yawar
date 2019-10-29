@@ -8,9 +8,9 @@ namespace Assets.Script.Modelos
 {
     public class data_tecla
     {
-        public int id { get; set; }
-        public string tecla { get; set; }
-        public string orientacion { get; set; }
+        public int id;
+        public string tecla;
+        public string orientacion;
 
         public data_tecla(int id, string tecla, string orientacion)
         {

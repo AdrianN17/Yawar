@@ -470,22 +470,6 @@ public class Move_server : MonoBehaviour
         if(arma_actual!=tipo_arma.ninguna)
         {
             anim.SetBool("ConArma", true);
-
-            switch(arma_actual)
-            {
-                case tipo_arma.mazo:
-                {
-                    GameObject go = transform.GetChild(2).gameObject;
-                    go.SetActive(true);
-                    break;
-                }
-                case tipo_arma.lanza:
-                {
-                    GameObject go = transform.GetChild(1).gameObject;
-                    go.SetActive(true);
-                    break;
-                }
-            }
         }
 
     }
