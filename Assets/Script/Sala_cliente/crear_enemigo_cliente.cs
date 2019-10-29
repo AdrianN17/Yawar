@@ -97,26 +97,48 @@ public class crear_enemigo_cliente : MonoBehaviour
                     script2.morir();
                 }
             }
+            else
+            {
+                var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+                ene.transform.SetParent(this.transform);
+                var script = ene.GetComponent<enemigo_1>();
+                script.id = enemigo.id;
+                script.padre = this.gameObject;
+                script.coleccionable = enemigo.coleccionable;
+                script.es_servidor = false;
+
+                var compartido = ene.GetComponent<acciones_compartidas>();
+                compartido.vidas = enemigo.vida;
+
+
+                lista_enemigos.Add(ene);
+            }
 
         }
     }
 
-    public void crear_enemigo_creacion_player(List<data_enemigo_inicial_2> data_list)
+    public void crear_enemigo_creacion_player(List<data_enemigo_por_segundos> data_list)
     {
         foreach(var enemigo in data_list)
         {
-            var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
-            ene.transform.SetParent(this.transform);
-            var script = ene.GetComponent<enemigo_1>();
-            script.id = enemigo.id;
-            script.padre = this.gameObject;
-            script.coleccionable = enemigo.coleccionable;
-            script.es_servidor = false;
+            var dato_gameobject = buscar_item(enemigo.id);
 
-            var compartido = ene.GetComponent<acciones_compartidas>();
-            compartido.vidas = enemigo.vidas;
+            if (dato_gameobject == null)
+            {
+                var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+                ene.transform.SetParent(this.transform);
+                var script = ene.GetComponent<enemigo_1>();
+                script.id = enemigo.id;
+                script.padre = this.gameObject;
+                script.coleccionable = enemigo.coleccionable;
+                script.es_servidor = false;
 
-            lista_enemigos.Add(ene);
+                var compartido = ene.GetComponent<acciones_compartidas>();
+                compartido.vidas = enemigo.vida;
+
+
+                lista_enemigos.Add(ene);
+            }
         }
     }
 

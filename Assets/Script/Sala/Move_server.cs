@@ -38,7 +38,7 @@ public class Move_server : MonoBehaviour
 
     void Start()
     {
-        Debug.Log(id);
+        //Debug.Log(id);
         rb.freezeRotation = true;
 
         escribiendo = false;

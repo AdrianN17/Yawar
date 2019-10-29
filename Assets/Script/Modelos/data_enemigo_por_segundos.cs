@@ -13,13 +13,15 @@ namespace Assets.Script.Modelos
         public Vector3 pos { get; set; }
         public int vida { get; set; }
         public Vector3 radio { get; set; }
+        public int coleccionable { get; set; }
 
-        public data_enemigo_por_segundos(int id, Vector3 pos, int vida, Vector3 radio)
+        public data_enemigo_por_segundos(int id, Vector3 pos, int vida, Vector3 radio, int coleccionable)
         {
             this.id = id;
             this.pos = pos;
             this.vida = vida;
             this.radio = radio;
+            this.coleccionable = coleccionable;
         }
     }
 }

@@ -63,30 +63,36 @@ namespace Assets.Libs.Esharknet
 
         public void Update()
         {
-            while (isAlive)
-            {
-                ENet.Event netEvent;
-
-                bool polled = false;
-
-                while (!polled)
+            try { 
+                while (isAlive)
                 {
+                    ENet.Event netEvent;
 
-                    if (server.CheckEvents(out netEvent) <= 0)
+                    bool polled = false;
+
+                    while (!polled)
                     {
-                        if (server.Service(timeout, out netEvent) <= 0)
-                            break;
 
-                        polled = true;
+                        if (server.CheckEvents(out netEvent) <= 0)
+                        {
+                            if (server.Service(timeout, out netEvent) <= 0)
+                                break;
+
+                            polled = true;
+                        }
+
+                        UnityMainThreadDispatcher.Instance().Enqueue(() => switch_callbacks(netEvent) );
                     }
 
-                    UnityMainThreadDispatcher.Instance().Enqueue(() => switch_callbacks(netEvent) );
+                    Thread.Sleep(1000);
                 }
 
-                Thread.Sleep(1000);
+                server.Flush();
             }
+            catch(ThreadAbortException ex)
+            {
 
-            server.Flush();
+            }
         }
 
         public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true,int channel=0)

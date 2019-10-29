@@ -44,7 +44,7 @@ public class Move : MonoBehaviour
             client = client_manager.GetComponent<Client_script>();
         }
 
-        Debug.Log(id);
+        //Debug.Log(id);
         rb.freezeRotation = true;
 
         escribiendo = false;

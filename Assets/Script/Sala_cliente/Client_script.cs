@@ -107,7 +107,7 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
             
-            var enemigos = data.value.ToObject<List<data_enemigo_inicial_2>>();
+            var enemigos = data.value.ToObject<List<data_enemigo_por_segundos>>();
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
 
