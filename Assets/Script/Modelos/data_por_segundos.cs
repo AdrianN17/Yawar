@@ -9,10 +9,10 @@ namespace Assets.Script.Modelos
 {
     public class data_por_segundos
     {
-        public int id;
-        public Vector3 posicion;
+        public int id { get; set; }
+        public Vector3 posicion { get; set; }
 
-        public Vector3 radio;
+        public Vector3 radio { get; set; }
 
         public int arma;
 

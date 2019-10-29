@@ -11,7 +11,8 @@ public class acciones_compartidas : MonoBehaviour
     public Collider collider_arma;
     public arma_melee_atacar ama;
 
-    public TextMesh texto_vida;
+    public GameObject prefab_barra;
+    public barra_vida barra;
 
     public enum tipo {personaje_principal, personaje, enemigo};
     public tipo mitipo;
@@ -27,8 +28,11 @@ public class acciones_compartidas : MonoBehaviour
 
         if (mitipo!=tipo.personaje_principal)
         {
-            texto_vida = GetComponentInChildren<TextMesh>();
-            texto_vida.text = vidas.ToString();
+            barra = prefab_barra.GetComponent<barra_vida>();
+        }
+        else
+        {
+            prefab_barra.SetActive(false);
         }
 
         
@@ -61,7 +65,7 @@ public class acciones_compartidas : MonoBehaviour
 
         if (mitipo != tipo.personaje_principal)
         {
-            texto_vida.text = vidas.ToString();
+            barra.reduce(max_vidas, vidas);
         }
 
         if (vidas<1)
@@ -128,6 +132,8 @@ public class acciones_compartidas : MonoBehaviour
         script.volver_al_inicio();
 
         vidas = max_vidas;
+
+        barra.reduce(max_vidas, vidas);
     }
 
 }

@@ -79,6 +79,7 @@ public class creacion : MonoBehaviour
             script.id = id;
             script.padre = this.gameObject;
             script.punto_id = punto_nacimiento;
+            script.es_servidor = true;
 
             script.coleccionable = new lista_coleccionables().get_coleccionable();
 
@@ -125,10 +126,9 @@ public class creacion : MonoBehaviour
             var script_enemigo = data.gameObject.GetComponent<enemigo_1>();
             var script_compartido = data.gameObject.GetComponent<acciones_compartidas>();
 
-            if(script_enemigo.atacando)
-            { 
-                data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles));
-            }
+
+            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles));
+            
         }
 
         if(data_enviar.Count!=0)
@@ -166,16 +166,17 @@ public class creacion : MonoBehaviour
         
     }
 
-    public List<data_enemigo_por_segundos> lista_enemigos_actual()
+    public List<data_enemigo_inicial_2> lista_enemigos_actual()
     {
-        var data_enviar = new List<data_enemigo_por_segundos>();
+        var data_enviar = new List<data_enemigo_inicial_2>();
 
         foreach (var data in lista_enemigos)
         {
             var script_enemigo = data.GetComponent<enemigo_1>();
             var script_compartido = data.GetComponent<acciones_compartidas>();
 
-            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles));
+            data_enviar.Add(new data_enemigo_inicial_2(script_enemigo.id, data.transform.position, data.transform.rotation.eulerAngles, script_enemigo.coleccionable, script_compartido.vidas));
+
 
         }
 
