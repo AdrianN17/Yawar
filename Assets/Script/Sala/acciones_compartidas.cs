@@ -20,6 +20,9 @@ public class acciones_compartidas : MonoBehaviour
     public int max_vidas;
     public int vidas;
 
+    //animator
+    public Animator anim;
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +38,7 @@ public class acciones_compartidas : MonoBehaviour
             prefab_barra.SetActive(false);
         }
 
-        
+
     }
 
     // Update is called once per frame
@@ -96,7 +99,8 @@ public class acciones_compartidas : MonoBehaviour
         }
         else if(mitipo == tipo.personaje_principal)
         {
-            Invoke("volver_al_inicio", 1);
+            //Invoke("volver_al_inicio", 1);
+            anim.SetBool("Morir", true);
         }
     }
 
@@ -113,10 +117,10 @@ public class acciones_compartidas : MonoBehaviour
     public void volver_al_inicio()
     {
         var script = gameObject.GetComponent<personaje_volver_inicio>();
-        
+        anim.SetBool("Morir", false);
 
 
-        if(gameObject.GetComponent("Move") != null)
+        if (gameObject.GetComponent("Move") != null)
         {
             var script_cliente = gameObject.GetComponent<Move>();
             script_cliente.no_arma_funcion();

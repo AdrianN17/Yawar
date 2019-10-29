@@ -22594,6 +22594,11 @@ PrefabInstance:
       propertyPath: nivel_agua
       value: 
       objectReference: {fileID: 40102574}
+    - target: {fileID: 381386978770866088, guid: 9e3333877b1e7cb4bbce00530bb23084,
+        type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 3166231814852458265}
     - target: {fileID: 1929600874580116123, guid: 9e3333877b1e7cb4bbce00530bb23084,
         type: 3}
       propertyPath: m_RootOrder
