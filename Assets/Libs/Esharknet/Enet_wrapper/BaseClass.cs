@@ -25,7 +25,7 @@ namespace Assets.Libs.Esharknet
             Byte[] byte_data = Encoding.ASCII.GetBytes(json_value);
             packet.Create(byte_data);
 
-            Debug.Log("Sending : " + json_value);
+            //Debug.Log("Sending : " + json_value);
 
             packet.Create(byte_data);
 
@@ -40,7 +40,7 @@ namespace Assets.Libs.Esharknet
 
             string json_value = Encoding.ASCII.GetString(buffer);
 
-            Debug.Log("Received : " + json_value);
+            //Debug.Log("Received : " + json_value);
 
             Data data = JsonConvert.DeserializeObject<Data>(json_value);
             return data;
@@ -54,7 +54,7 @@ namespace Assets.Libs.Esharknet
             }
             else
             {
-                Debug.LogError(key + " function not defined in dictionary");
+               //Debug.LogError(key + " function not defined in dictionary");
             }
         }
 
@@ -68,7 +68,7 @@ namespace Assets.Libs.Esharknet
             }
             else
             {
-                Debug.LogError(data.key + " function not defined in dictionary");
+                //Debug.LogError(data.key + " function not defined in dictionary");
             }
         }
 

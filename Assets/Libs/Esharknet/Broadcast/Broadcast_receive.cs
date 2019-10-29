@@ -41,7 +41,7 @@ namespace Assets.Libs.Esharknet.Broadcast
                             var json_data = Encoding.ASCII.GetString(bytes);
                             var data = JsonConvert.DeserializeObject<Data>(json_data);
 
-                            Debug.Log("Broadcast receive : " + json_data);
+                            //Debug.Log("Broadcast receive : " + json_data);
 
                             if (data.key== "broadcast")
                             {

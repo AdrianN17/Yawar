@@ -57,9 +57,8 @@ public class Client_script : MonoBehaviour
 
         client.AddTrigger("Inicializador", delegate (ENet.Event net_event)
         {
-
             var data = client.JSONDecode(net_event.Packet);
-           
+
             var obj = data.value.ToObject<Listado_Usuarios>();
 
             int index = obj.id;
@@ -98,26 +97,21 @@ public class Client_script : MonoBehaviour
                     var script_compartido = go.GetComponent<acciones_compartidas>();
                     script_compartido.personaje_principal();
 
-                    
-
-
                 }
             }
 
             client.Send("Pedir_enemigos", null);
-
-            
-
         });
 
         client.AddTrigger("Inicializador_enemigos", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-
             
             var enemigos = data.value.ToObject<List<data_enemigo_inicial_2>>();
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
+
+            start_send = true;
         });
 
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)
@@ -132,6 +126,7 @@ public class Client_script : MonoBehaviour
 
             var go_script = go.GetComponent<Move>();
             go_script.SetID(personaje.id);
+
         });
 
         client.AddTrigger("movimiento", delegate (ENet.Event net_event)
@@ -208,15 +203,12 @@ public class Client_script : MonoBehaviour
 
         });
 
-
     }
 
     // Update is called once per frame
     void Update()
     {
         float dt = Time.deltaTime;
-
-        client.update();
 
         if (start_send)
         {
@@ -267,6 +259,7 @@ public class Client_script : MonoBehaviour
             }
         } 
     }
+
 
     void OnDestroy()
     {

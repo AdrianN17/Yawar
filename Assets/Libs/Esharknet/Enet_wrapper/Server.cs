@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using ENet;
 using UnityEngine;
@@ -13,10 +14,14 @@ namespace Assets.Libs.Esharknet
     {
         private Host server;
         private List<Peer> clients;
+        private Thread serverThread;
+        private bool isAlive;
 
-        
+
         public Server(string ip_address, ushort port, int max_clients, int max_channel, int timeout)
         {
+            isAlive = true;
+
             AllocCallback OnMemoryAllocate = (size) => {
                 return Marshal.AllocHGlobal(size);
             };
@@ -50,59 +55,38 @@ namespace Assets.Libs.Esharknet
 
             Debug.Log("Create server IP : " + ip_address);
 
-            /*TriggerFunctions.Add("Connect", delegate(ENet.Event net_event) {
-                AddPeer(net_event);
-            });*/
 
-            /*TriggerFunctions.Add("Disconnect", delegate (ENet.Event net_event) {
-                RemovePeer(net_event);
-            });
-
-            TriggerFunctions.Add("Timeout", delegate (ENet.Event net_event) {
-                RemovePeer(net_event);
-            });*/
+            serverThread = new Thread(Update);
+            serverThread.Start();
 
         }
 
-        public void update()
+        public void Update()
         {
-            ENet.Event netEvent;
-
-            if (server.CheckEvents(out netEvent) <= 0)
+            while (isAlive)
             {
-                if (server.Service(timeout, out netEvent) <= 0)
+                ENet.Event netEvent;
+
+                bool polled = false;
+
+                while (!polled)
                 {
-                    return;
+
+                    if (server.CheckEvents(out netEvent) <= 0)
+                    {
+                        if (server.Service(timeout, out netEvent) <= 0)
+                            break;
+
+                        polled = true;
+                    }
+
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => switch_callbacks(netEvent) );
                 }
+
+                Thread.Sleep(1000);
             }
 
-            switch (netEvent.Type)
-            {
-                case ENet.EventType.None:
-                    break;
-
-                case ENet.EventType.Connect:
-                    Debug.Log("Client connected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
-                    ExecuteTrigger("Connect", netEvent);
-                    break;
-
-                case ENet.EventType.Disconnect:
-                    Debug.Log("Client disconnected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
-                    ExecuteTrigger("Disconnect", netEvent);
-                    break;
-
-                case ENet.EventType.Timeout:
-                    Debug.Log("Client timeout - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
-                    ExecuteTrigger("Timeout", netEvent);
-                    break;
-
-                case ENet.EventType.Receive:
-                    Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
-                    byte[] buffer = new byte[1024];
-                    ExecuteTriggerBytes(netEvent);
-                    netEvent.Packet.Dispose();
-                    break;
-            }
+            server.Flush();
         }
 
         public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true,int channel=0)
@@ -215,7 +199,7 @@ namespace Assets.Libs.Esharknet
 
         public int RemovePeer(ENet.Event net_event)
         {
-            Debug.LogError("Client delete");
+            //Debug.LogError("Client delete");
 
             clients.Remove(net_event.Peer);
             int index = clients.IndexOf(net_event.Peer);
@@ -224,10 +208,48 @@ namespace Assets.Libs.Esharknet
 
         public void Destroy()
         {
+            isAlive = false;
             clients.Clear();
-            server.Flush();
             ENet.Library.Deinitialize();
-            Debug.LogWarning("Server finish");
+            //Debug.LogWarning("Server finish");
+        }
+
+        void switch_callbacks(ENet.Event netEvent)
+        {
+            switch (netEvent.Type)
+            {
+                case ENet.EventType.None:
+                    {
+                        break;
+                    }
+
+                case ENet.EventType.Connect:
+                    {
+                        //Debug.Log("Client connected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        ExecuteTrigger("Connect", netEvent);
+                        break;
+                    }
+                case ENet.EventType.Disconnect:
+                    {
+                        //Debug.Log("Client disconnected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        ExecuteTrigger("Disconnect", netEvent);
+                        break;
+                    }
+                case ENet.EventType.Timeout:
+                    {
+                        //Debug.Log("Client timeout - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        ExecuteTrigger("Timeout", netEvent);
+                        break;
+                    }
+                case ENet.EventType.Receive:
+                    {
+                        //Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
+
+                        ExecuteTriggerBytes(netEvent);
+                        netEvent.Packet.Dispose();
+                        break;
+                    }
+            }
         }
     }  
 }

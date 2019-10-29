@@ -54,19 +54,19 @@ public class Server_script : MonoBehaviour
 
             int index = server.AddPeer(net_event) + 1;
 
+            var lista_para_enviar = new List<data_inicial>();
+
             GameObject go = (GameObject)Instantiate(prefab_personaje, punto_creacion.transform.position, Quaternion.identity);
             go.transform.SetParent(padre.transform);
             go.GetComponent<Move>().SetID(index);
 
             lista_personajes.Add(go);
 
-            var lista_para_enviar = new List<data_inicial>();
-
             int i = 0;
 
             foreach (var player in lista_personajes)
             {
-                if(i==0)
+                if (i == 0)
                 {
                     var script = player.GetComponent<Move_server>();
                     var datos = new data_inicial(script.GetID(), player.transform.position);
@@ -74,29 +74,29 @@ public class Server_script : MonoBehaviour
                     lista_para_enviar.Add(datos);
                 }
                 else
-                { 
+                {
                     var script = player.GetComponent<Move>();
-                    var datos = new data_inicial(script.GetID(),player.transform.position);
+                    var datos = new data_inicial(script.GetID(), player.transform.position);
 
                     lista_para_enviar.Add(datos);
                 }
 
                 i++;
+
             }
 
-
-
-            server.Send("Inicializador", new Listado_Usuarios(index,lista_para_enviar), net_event.Peer);
+            server.Send("Inicializador", new Listado_Usuarios(index, lista_para_enviar), net_event.Peer);
 
             server.SendToAllBut("Nuevo_Usuario", lista_para_enviar[index], net_event.Peer);
 
-            
         });
 
         server.AddTrigger("Disconnect", delegate (ENet.Event net_event)
         {
             int i = server.RemovePeer(net_event);
+
             lista_personajes.RemoveAt(i);
+
             server.SendToAll("Jugador_desconectado", new data_solo_id(i));
 
         });
@@ -126,8 +126,10 @@ public class Server_script : MonoBehaviour
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            gameobj.normalizado(obj.posicion,Quaternion.Euler(obj.radio));
+            gameobj.normalizado(obj.posicion, Quaternion.Euler(obj.radio));
             gameobj.set_arma_actual(obj.arma);
+
+            
 
             server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
         });
@@ -165,8 +167,6 @@ public class Server_script : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-
-        server.update();
 
         counter_dano_agua = counter_dano_agua + dt;
 
@@ -243,6 +243,7 @@ public class Server_script : MonoBehaviour
         }
     }
 
+ 
     void OnDestroy()
     {
         server.Destroy();

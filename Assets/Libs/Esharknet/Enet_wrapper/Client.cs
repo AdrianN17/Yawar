@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ENet;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Assets.Libs.Esharknet
 {
@@ -13,10 +14,14 @@ namespace Assets.Libs.Esharknet
     {
         private Host client;
         private Peer peer;
+        private bool isAlive;
+        private Thread clientThread;
 
 
         public Client(string ip_address, ushort port, int channel, int timeout)
         {
+            isAlive = true;
+
             AllocCallback OnMemoryAllocate = (size) => {
                 return Marshal.AllocHGlobal(size);
             };
@@ -34,7 +39,6 @@ namespace Assets.Libs.Esharknet
             if (ENet.Library.Initialize(callbacks))
                 Debug.LogWarning("ENet successfully initialized using a custom memory allocator");
 
-            ENet.Library.Initialize();
             client = new Host();
 
             Address address = new Address();
@@ -47,50 +51,38 @@ namespace Assets.Libs.Esharknet
 
             peer = client.Connect(address);
 
+            clientThread = new Thread(Update);
+            clientThread.Start();
+
+
         }
 
-        public void update()
+        public void Update()
         {
-            ENet.Event netEvent;
-
-            if (client.CheckEvents(out netEvent) <= 0)
+            while (isAlive)
             {
-                if (client.Service(timeout, out netEvent) <= 0)
+
+                bool polled = false;
+
+                ENet.Event netEvent;
+
+                while (!polled)
                 {
-                    return;
+                    if (client.CheckEvents(out netEvent) <= 0)
+                    {
+                        if (client.Service(timeout, out netEvent) <= 0)
+                            break;
+
+                        polled = true;
+                    }
+
+                    UnityMainThreadDispatcher.Instance().Enqueue(() => switch_callbacks(netEvent));
                 }
 
-                switch (netEvent.Type)
-                {
-                    case ENet.EventType.None:
-                        break;
-
-                    case ENet.EventType.Connect:
-                        Debug.Log("Client connected to server");
-                        ExecuteTrigger("Connect", netEvent);
-
-                        break;
-
-                    case ENet.EventType.Disconnect:
-                        Debug.Log("Client disconnected from server");
-                        ExecuteTrigger("Disconnect", netEvent);
-
-                        break;
-
-                    case ENet.EventType.Timeout:
-                        Debug.Log("Client connection timeout");
-                        ExecuteTrigger("Timeout", netEvent);
-
-                        break;
-
-                    case ENet.EventType.Receive:
-                        Debug.Log("Packet received from server - Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
-
-                        ExecuteTriggerBytes(netEvent);
-                        netEvent.Packet.Dispose();
-                        break;
-                }
+                Thread.Sleep(1000);
             }
+
+            client.Flush();
         }
 
         public void Send(string event_name, dynamic data_value, bool Encode = true, int channel = 0)
@@ -109,10 +101,46 @@ namespace Assets.Libs.Esharknet
             peer.Send((byte)channel, ref packet);
         }
 
+        void switch_callbacks(ENet.Event netEvent)
+        {
+            switch (netEvent.Type)
+            {
+                case ENet.EventType.None:
+                    break;
+
+                case ENet.EventType.Connect:
+                    //Debug.Log("Client connected to server");
+                    ExecuteTrigger("Connect", netEvent);
+
+                    break;
+
+                case ENet.EventType.Disconnect:
+                    //Debug.Log("Client disconnected from server");
+                    ExecuteTrigger("Disconnect", netEvent);
+
+                    break;
+
+                case ENet.EventType.Timeout:
+                    //Debug.Log("Client connection timeout");
+                    ExecuteTrigger("Timeout", netEvent);
+
+                    break;
+
+                case ENet.EventType.Receive:
+                    //Debug.Log("Packet received from server - Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
+
+                    ExecuteTriggerBytes(netEvent);
+                    netEvent.Packet.Dispose();
+                    break;
+
+            }
+        }
+
         public void Destroy()
         {
+            isAlive = false;
+
             peer.Disconnect(0);
-            client.Flush();
             ENet.Library.Deinitialize();
             Debug.LogWarning("Client finish");
         }
