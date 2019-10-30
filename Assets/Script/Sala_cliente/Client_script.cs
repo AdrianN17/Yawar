@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Client_script : MonoBehaviour
+public class Client_script : Convert_vector
 {
     // Start is called before the first frame update
     public ushort port;
@@ -59,7 +59,7 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<Listado_Usuarios>();
+            var obj = (Listado_Usuarios)data.value;
 
             int index = obj.id;
             var personajes = obj.lista;
@@ -67,7 +67,7 @@ public class Client_script : MonoBehaviour
 
             foreach (var personaje in personajes)
             {
-                GameObject go = (GameObject)Instantiate(prefab_personaje, personaje.posicion, Quaternion.identity);
+                GameObject go = (GameObject)Instantiate(prefab_personaje, obj_to_vec(personaje.posicion), Quaternion.identity);
                 lista_personajes.Add(go);
 
                 go.transform.SetParent(padre.transform);
@@ -106,8 +106,8 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("Inicializador_enemigos", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-            
-            var enemigos = data.value.ToObject<List<data_enemigo_por_segundos>>();
+
+            var enemigos = (List<data_enemigo_por_segundos>)data.value;
 
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
 
@@ -117,9 +117,9 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-            var personaje = data.value.ToObject<data_inicial>();
+            var personaje = (data_inicial)data.value;
 
-            GameObject go = (GameObject)Instantiate(prefab_personaje, personaje.posicion, Quaternion.identity);
+            GameObject go = (GameObject)Instantiate(prefab_personaje, obj_to_vec(personaje.posicion), Quaternion.identity);
             lista_personajes.Add(go);
 
             go.transform.SetParent(padre.transform);
@@ -133,7 +133,7 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_tecla>();
+            var obj = (data_tecla)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
@@ -144,20 +144,22 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_por_segundos>();
+            var obj = (data_por_segundos)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            gameobj.normalizado(obj.posicion, Quaternion.Euler(obj.radio));
+            gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
 
             gameobj.set_arma_actual(obj.arma);
         });
 
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
         {
+            Debug.LogError("Recibido_actulziar");
+
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<List<data_enemigo_por_segundos>>();
+            var obj = (List<data_enemigo_por_segundos>)data.value;
 
             script_crearenemigo.actualizar_enemigos(obj);
 
@@ -168,7 +170,7 @@ public class Client_script : MonoBehaviour
         {
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_chat>();
+            var obj = (data_chat)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
@@ -178,7 +180,7 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-            var obj = data.value.ToObject<data_botar_objetos>();
+            var obj = (data_botar_objetos)data.value;
             var gameobj = lista_personajes[obj.id];
             gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
             gameobj.GetComponent<Move>().no_arma_funcion();
@@ -189,10 +191,14 @@ public class Client_script : MonoBehaviour
         client.AddTrigger("Jugador_desconectado", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
-            var obj = data.value.ToObject<data_solo_id>();
+            var obj = (data_solo_id)data.value;
 
-            lista_personajes.Remove(obj.id);
+            var obj_buscado = buscar_usuario(obj.id);
 
+            if(obj_buscado!=null)
+            {
+                lista_personajes.Remove(obj_buscado);
+            }
         });
 
     }
@@ -200,6 +206,8 @@ public class Client_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        client.update();
+
         float dt = Time.deltaTime;
 
         if (start_send)
@@ -208,7 +216,7 @@ public class Client_script : MonoBehaviour
 
             if (counter_send > max_counter)
             {
-                client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), player_object_script.transform.position,player_object_script.transform.rotation.eulerAngles,player_object_script.get_arma_actual()));
+                client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), vec_to_obj(player_object_script.transform.position), vec_to_obj(player_object_script.transform.rotation.eulerAngles),player_object_script.get_arma_actual()));
 
                 counter_send = 0;
             }
@@ -250,6 +258,20 @@ public class Client_script : MonoBehaviour
 
             }
         } 
+    }
+
+    public GameObject buscar_usuario(int id)
+    {
+        foreach(var go in lista_personajes)
+        {
+            var script = go.GetComponent<enemigo_1>();
+            if(script.id == id)
+            {
+                return go;
+            }
+        }
+
+        return null;
     }
 
 

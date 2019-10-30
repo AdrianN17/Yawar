@@ -7,13 +7,15 @@ using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class data_botar_objetos
     {
         public int id { get; set; }
-        public Vector3 posicion { get; set; }
+        [SerializeField]
+        public data_vector posicion { get; set; }
         public Dictionary<int,int> objetos { get; set; }
 
-        public data_botar_objetos(int id, Vector3 posicion, Dictionary<int,int> objetos)
+        public data_botar_objetos(int id, data_vector posicion, Dictionary<int,int> objetos)
         {
             this.id = id;
             this.posicion = posicion;

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class lista_coleccionables
     {
         private enum coleccionables {ninguno = 0 , oca_1=1,papa_1=2, papa_2=3,papa_3=4,papa_4=5};

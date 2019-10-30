@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class data_solo_id
     {
         public int id { get; set; }

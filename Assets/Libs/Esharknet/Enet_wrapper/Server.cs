@@ -14,13 +14,10 @@ namespace Assets.Libs.Esharknet
     {
         private Host server;
         private List<Peer> clients;
-        private Thread serverThread;
-        private bool isAlive;
 
 
         public Server(string ip_address, ushort port, int max_clients, int max_channel, int timeout)
         {
-            isAlive = true;
 
             AllocCallback OnMemoryAllocate = (size) => {
                 return Marshal.AllocHGlobal(size);
@@ -54,45 +51,29 @@ namespace Assets.Libs.Esharknet
             this.timeout = timeout;
 
             Debug.Log("Create server IP : " + ip_address);
-
-
-            serverThread = new Thread(Update);
-            serverThread.Start();
-
         }
 
-        public void Update()
+        public void update()
         {
-            try { 
-                while (isAlive)
-                {
-                    ENet.Event netEvent;
 
-                    bool polled = false;
+            ENet.Event netEvent;
 
-                    while (!polled)
-                    {
+            bool polled = false;
 
-                        if (server.CheckEvents(out netEvent) <= 0)
-                        {
-                            if (server.Service(timeout, out netEvent) <= 0)
-                                break;
-
-                            polled = true;
-                        }
-
-                        UnityMainThreadDispatcher.Instance().Enqueue(() => switch_callbacks(netEvent) );
-                    }
-
-                    Thread.Sleep(1000);
-                }
-
-                server.Flush();
-            }
-            catch(ThreadAbortException ex)
+            while (!polled)
             {
 
+                if (server.CheckEvents(out netEvent) <= 0)
+                {
+                    if (server.Service(timeout, out netEvent) <= 0)
+                        break;
+
+                    polled = true;
+                }
+
+                switch_callbacks(netEvent);
             }
+
         }
 
         public void Send(string event_name, dynamic data_value, Peer peer, bool Encode = true,int channel=0)
@@ -214,7 +195,7 @@ namespace Assets.Libs.Esharknet
 
         public void Destroy()
         {
-            isAlive = false;
+            server.Flush();
             clients.Clear();
             ENet.Library.Deinitialize();
             //Debug.LogWarning("Server finish");
@@ -231,25 +212,25 @@ namespace Assets.Libs.Esharknet
 
                 case ENet.EventType.Connect:
                     {
-                        //Debug.Log("Client connected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        Debug.Log("Client connected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
                         ExecuteTrigger("Connect", netEvent);
                         break;
                     }
                 case ENet.EventType.Disconnect:
                     {
-                        //Debug.Log("Client disconnected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        Debug.Log("Client disconnected - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
                         ExecuteTrigger("Disconnect", netEvent);
                         break;
                     }
                 case ENet.EventType.Timeout:
                     {
-                        //Debug.Log("Client timeout - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
+                        Debug.Log("Client timeout - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP);
                         ExecuteTrigger("Timeout", netEvent);
                         break;
                     }
                 case ENet.EventType.Receive:
                     {
-                        //Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
+                        Debug.Log("Packet received from - ID: " + netEvent.Peer.ID + ", IP: " + netEvent.Peer.IP + ", Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
 
                         ExecuteTriggerBytes(netEvent);
                         netEvent.Packet.Dispose();

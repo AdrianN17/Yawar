@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class Listado_Usuarios
     {
         public int id { get; set; }

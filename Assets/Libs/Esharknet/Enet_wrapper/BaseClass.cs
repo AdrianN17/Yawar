@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using ENet;
-using Newtonsoft.Json;
-using UnityEngine;
+using Assets.Libs.Esharknet.Serialize;
 
 namespace Assets.Libs.Esharknet
 {
-    public class BaseClass
+    public class BaseClass: Serialize_Class
     {
         protected Dictionary<string, Action<ENet.Event>> TriggerFunctions;
         protected int timeout;
@@ -20,14 +17,7 @@ namespace Assets.Libs.Esharknet
         public ENet.Packet JSONEncode(Data data)
         {
             ENet.Packet packet = default(ENet.Packet);
-
-            String json_value = JsonConvert.SerializeObject(data);
-            Byte[] byte_data = Encoding.ASCII.GetBytes(json_value);
-            packet.Create(byte_data);
-
-            //Debug.Log("Sending : " + json_value);
-
-            packet.Create(byte_data);
+            packet.Create(Serialize(data));
 
             return packet;
         }
@@ -38,12 +28,7 @@ namespace Assets.Libs.Esharknet
 
             packet_data.CopyTo(buffer);
 
-            string json_value = Encoding.ASCII.GetString(buffer);
-
-            //Debug.Log("Received : " + json_value);
-
-            Data data = JsonConvert.DeserializeObject<Data>(json_value);
-            return data;
+            return (Data)Deserialize(buffer);
         }
 
         protected void ExecuteTrigger(string key, ENet.Event netEvent)

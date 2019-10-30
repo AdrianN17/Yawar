@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class acciones_compartidas : MonoBehaviour
+public class acciones_compartidas : Convert_vector
 {
     public Rigidbody rb;
     public Collider collider;
@@ -128,13 +128,13 @@ public class acciones_compartidas : MonoBehaviour
         {
             var script_cliente = gameObject.GetComponent<Move>();
             script_cliente.no_arma_funcion();
-            script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),transform.position,null));
+            script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),vec_to_obj(transform.position),null));
         }
         else
         {
             var script_servidor = gameObject.GetComponent<Move_server>();
             script_servidor.no_arma_funcion();
-            script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), transform.position,null));
+            script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(transform.position),null));
         }
 
         script.volver_al_inicio();

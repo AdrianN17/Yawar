@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Server_script : MonoBehaviour
+public class Server_script : Convert_vector
 {
     // Start is called before the first frame update
     public ushort port;
@@ -69,14 +69,14 @@ public class Server_script : MonoBehaviour
                 if (i == 0)
                 {
                     var script = player.GetComponent<Move_server>();
-                    var datos = new data_inicial(script.GetID(), player.transform.position);
+                    var datos = new data_inicial(script.GetID(), vec_to_obj(player.transform.position));
 
                     lista_para_enviar.Add(datos);
                 }
                 else
                 {
                     var script = player.GetComponent<Move>();
-                    var datos = new data_inicial(script.GetID(), player.transform.position);
+                    var datos = new data_inicial(script.GetID(), vec_to_obj(player.transform.position));
 
                     lista_para_enviar.Add(datos);
                 }
@@ -109,7 +109,7 @@ public class Server_script : MonoBehaviour
         server.AddTrigger("movimiento", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_tecla>(); ;
+            var obj = (data_tecla)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
@@ -122,11 +122,11 @@ public class Server_script : MonoBehaviour
         server.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_por_segundos>();
+            var obj = (data_por_segundos)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
-            gameobj.normalizado(obj.posicion, Quaternion.Euler(obj.radio));
+            gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
             gameobj.set_arma_actual(obj.arma);
 
             
@@ -138,7 +138,7 @@ public class Server_script : MonoBehaviour
         {
             var data = server.JSONDecode(net_event.Packet);
 
-            var obj = data.value.ToObject<data_chat>();
+            var obj = (data_chat)data.value;
 
             var gameobj = lista_personajes[obj.id].GetComponent<Move>();
 
@@ -148,7 +148,7 @@ public class Server_script : MonoBehaviour
         server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
         {
             var data = server.JSONDecode(net_event.Packet);
-            var obj = data.value.ToObject<data_botar_objetos>();
+            var obj = (data_botar_objetos)data.value;
             var gameobj = lista_personajes[obj.id];
             gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
             gameobj.GetComponent<Move>().no_arma_funcion();
@@ -166,6 +166,9 @@ public class Server_script : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        server.update();
+
         float dt = Time.deltaTime;
 
         counter_dano_agua = counter_dano_agua + dt;
@@ -181,7 +184,7 @@ public class Server_script : MonoBehaviour
 
         if (counter_send > max_counter)
         {
-            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), player_inicial_servidor_script.transform.position, player_inicial_servidor.transform.rotation.eulerAngles, player_inicial_servidor_script.get_arma_actual()));
+            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), vec_to_obj(player_inicial_servidor_script.transform.position), vec_to_obj(player_inicial_servidor.transform.rotation.eulerAngles), player_inicial_servidor_script.get_arma_actual()));
 
             counter_send = 0;
         }

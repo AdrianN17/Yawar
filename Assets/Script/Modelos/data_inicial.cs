@@ -7,12 +7,13 @@ using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class data_inicial
     {
         public int id { get; set; }
-        public Vector3 posicion { get; set; }
+        public data_vector posicion { get; set; }
 
-        public data_inicial(int id,  Vector3 posicion)
+        public data_inicial(int id, data_vector posicion)
         {
             this.id = id;
             this.posicion = posicion;

@@ -7,6 +7,7 @@ using UnityEngine;
 
 namespace Assets.Script.Modelos
 {
+    [Serializable]
     public class data_enemigo_inicial
     {
         public int id { get; set; }

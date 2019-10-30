@@ -13,8 +13,8 @@ namespace Assets.Libs.Esharknet
     public class Data
     {
         public string key { get; set; }
-        public dynamic value { get; set; }
-        public Data(string key, dynamic value)
+        public object value { get; set; }
+        public Data(string key, object value)
         {
             this.key = key;
 

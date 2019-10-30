@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class crear_enemigo_cliente : MonoBehaviour
+public class crear_enemigo_cliente : Convert_vector
 {
     public GameObject prefab_enemigo_1;
 
@@ -65,11 +65,11 @@ public class crear_enemigo_cliente : MonoBehaviour
                 var script2 = dato_gameobject.GetComponent<acciones_compartidas>();
                 
 
-                script1.transform.position = enemigo.pos;
+                script1.transform.position = obj_to_vec(enemigo.pos);
                 script2.vidas = enemigo.vida;
 
-                script1.transform.rotation = Quaternion.Euler(enemigo.radio);
-                script1.rb.MoveRotation(Quaternion.Euler(enemigo.radio));
+                script1.transform.rotation = Quaternion.Euler(obj_to_vec(enemigo.radio));
+                script1.rb.MoveRotation(script1.transform.rotation);
 
                 if (enemigo.vida < 1)
                 {
@@ -78,7 +78,7 @@ public class crear_enemigo_cliente : MonoBehaviour
             }
             else
             {
-                var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+                var ene = (GameObject)Instantiate(prefab_enemigo_1, obj_to_vec(enemigo.pos), Quaternion.identity);
                 ene.transform.SetParent(this.transform);
                 var script = ene.GetComponent<enemigo_1>();
                 script.id = enemigo.id;
@@ -106,7 +106,7 @@ public class crear_enemigo_cliente : MonoBehaviour
 
             if (dato_gameobject == null)
             {
-                var ene = (GameObject)Instantiate(prefab_enemigo_1, enemigo.pos, Quaternion.identity);
+                var ene = (GameObject)Instantiate(prefab_enemigo_1, obj_to_vec(enemigo.pos), Quaternion.identity);
                 ene.transform.SetParent(this.transform);
                 var script = ene.GetComponent<enemigo_1>();
                 script.id = enemigo.id;

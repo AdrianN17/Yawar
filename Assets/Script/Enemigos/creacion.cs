@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class creacion : MonoBehaviour
+public class creacion : Convert_vector
 {
     // Start is called before the first frame update
     public GameObject prefab_enemigo;
@@ -33,6 +33,8 @@ public class creacion : MonoBehaviour
 
     public Text text_enemigos;
     public coleccionable script_crear_coleccionables;
+
+    public Convert_vector cv = new Convert_vector();
 
     void Start()
     {
@@ -113,13 +115,16 @@ public class creacion : MonoBehaviour
             var script_compartido = data.gameObject.GetComponent<acciones_compartidas>();
 
 
-            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles,script_enemigo.coleccionable));
+            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, vec_to_obj(data.transform.position), script_compartido.vidas, vec_to_obj(data.transform.rotation.eulerAngles),script_enemigo.coleccionable));
             
         }
 
         if(data_enviar.Count!=0)
-        { 
+        {
+           
             server_script.server.SendToAll("Actualizar_enemigos", data_enviar);
+            Debug.LogError("Enviado actualizar");
+
         }
     }
 
@@ -161,7 +166,7 @@ public class creacion : MonoBehaviour
             var script_enemigo = data.GetComponent<enemigo_1>();
             var script_compartido = data.GetComponent<acciones_compartidas>();
 
-            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, data.transform.position, script_compartido.vidas, data.transform.rotation.eulerAngles, script_enemigo.coleccionable));
+            data_enviar.Add(new data_enemigo_por_segundos(script_enemigo.id, vec_to_obj( data.transform.position), script_compartido.vidas, vec_to_obj(data.transform.rotation.eulerAngles), script_enemigo.coleccionable));
 
 
         }
