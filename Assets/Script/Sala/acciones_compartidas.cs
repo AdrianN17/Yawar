@@ -22,6 +22,9 @@ public class acciones_compartidas : MonoBehaviour
 
     //animator
     public Animator anim;
+    public Animator Sacerdote_animacion;
+    //sacerdote
+
 
 
     // Start is called before the first frame update
@@ -46,6 +49,7 @@ public class acciones_compartidas : MonoBehaviour
     {
         
     }
+
 
     public void empujon(Vector3 point)
     {
@@ -139,5 +143,16 @@ public class acciones_compartidas : MonoBehaviour
 
         barra.reduce(max_vidas, vidas);
     }
+
+
+    public void OnTriggerStay(Collider other)
+    {
+        if (other.tag == "Sacerdote")
+        {
+            Debug.Log("testtesd");
+            Sacerdote_animacion.SetBool("PedirObjetos", true);
+        }
+    }
+
 
 }

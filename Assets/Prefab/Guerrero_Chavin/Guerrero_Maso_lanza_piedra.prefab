@@ -4094,6 +4094,11 @@ MonoBehaviour:
   mitipo: 1
   max_vidas: 5
   vidas: 5
+  anim: {fileID: 3367076653914507727}
+  Sacerdote_animacion: {fileID: 8581020610334413142, guid: 7b3f53c1264635e47b603cf41c01d52b,
+    type: 3}
+  prefabSacerdote: {fileID: 3442072684602297919, guid: 7b3f53c1264635e47b603cf41c01d52b,
+    type: 3}
 --- !u!114 &381386978770866089
 MonoBehaviour:
   m_ObjectHideFlags: 0
