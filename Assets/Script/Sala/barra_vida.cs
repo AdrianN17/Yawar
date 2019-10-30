@@ -21,7 +21,10 @@ public class barra_vida : MonoBehaviour
     public void reduce(int max_hp, int hp)
     {
         var vec = vector;
-        vec.x = (hp / max_hp) * vec.x;
+        float porcentaje = ((float)hp / (float)max_hp);
+        vec.x = porcentaje  * vector.x;
+
+
 
         barra.transform.localScale = vec;
     }

@@ -36,7 +36,6 @@ public class coleccionable : MonoBehaviour
             go.transform.position = posicion;
             go.transform.localScale = new Vector3(0.1f,0.1f, 0.1f);
 
-
         }
     }
 }

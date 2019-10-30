@@ -123,7 +123,6 @@ public class creacion : Convert_vector
         {
            
             server_script.server.SendToAll("Actualizar_enemigos", data_enviar);
-            Debug.LogError("Enviado actualizar");
 
         }
     }

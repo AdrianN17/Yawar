@@ -22,7 +22,6 @@ public class acciones_compartidas : Convert_vector
 
     //animator
     public Animator anim;
-    public Animator Sacerdote_animacion;
     //sacerdote
 
 
@@ -99,12 +98,33 @@ public class acciones_compartidas : Convert_vector
     {
         if (mitipo == tipo.enemigo)
         {
-            Invoke("destruir_gameobject", 1);
+            anim.SetTrigger("Morir");
+            Invoke("destruir_gameobject", 2.1f);
+            barra.reduce(max_vidas, 0);
         }
-        else if(mitipo == tipo.personaje_principal)
+        else
         {
-            //Invoke("volver_al_inicio", 1);
             anim.SetBool("Morir", true);
+
+            if(mitipo==tipo.personaje)
+            {
+                barra.reduce(max_vidas, 0);
+            }
+    
+        }
+            
+    }
+
+    public void muerte_final()
+    {
+        if (mitipo == tipo.enemigo)
+        {
+            
+        }
+        else
+        {
+            anim.SetBool("Morir", false);
+            volver_al_inicio();
         }
     }
 
@@ -121,8 +141,6 @@ public class acciones_compartidas : Convert_vector
     public void volver_al_inicio()
     {
         var script = gameObject.GetComponent<personaje_volver_inicio>();
-        anim.SetBool("Morir", false);
-
 
         if (gameObject.GetComponent("Move") != null)
         {
@@ -141,18 +159,22 @@ public class acciones_compartidas : Convert_vector
 
         vidas = max_vidas;
 
-        barra.reduce(max_vidas, vidas);
+        if(mitipo != tipo.personaje_principal)
+        {
+            barra.reduce(max_vidas, vidas);
+        }
+            
     }
 
 
-    public void OnTriggerStay(Collider other)
+    /*public void OnTriggerStay(Collider other)
     {
         if (other.tag == "Sacerdote")
         {
             Debug.Log("testtesd");
             Sacerdote_animacion.SetBool("PedirObjetos", true);
         }
-    }
+    }*/
 
 
 }

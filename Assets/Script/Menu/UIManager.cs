@@ -78,10 +78,6 @@ public class UIManager : MonoBehaviour
 
             var lista_servidores = broadcast.GetListObtained();
 
-            var json_data = Newtonsoft.Json.JsonConvert.SerializeObject(lista_servidores, Newtonsoft.Json.Formatting.Indented);
-
-            Debug.Log(json_data);
-
 
             crear_gameobjects(lista_servidores);
 

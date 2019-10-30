@@ -172,6 +172,7 @@ public class enemigo_1 : MonoBehaviour
         }
 
         var go = GameObject.Find("Objetos_Botados");
-        go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.id, this.collider.bounds.center);
+        go.GetComponent<coleccionable>().crear_nuevo_coleccionable(this.coleccionable, this.collider.bounds.center);
+        coleccionable = 0;
     }
 }

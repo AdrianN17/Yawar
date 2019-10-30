@@ -1371,6 +1371,7 @@ MonoBehaviour:
   mitipo: 2
   max_vidas: 5
   vidas: 5
+  anim: {fileID: 9130027798833845625}
 --- !u!1 &2834420745159735113
 GameObject:
   m_ObjectHideFlags: 0
@@ -4901,11 +4902,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1170474285752023043}
     m_Modifications:
-    - target: {fileID: 5958932811752315876, guid: b05f4a089e5adb24498cdcd826e52364,
-        type: 3}
-      propertyPath: m_Name
-      value: Barra_vida_enemigo
-      objectReference: {fileID: 0}
     - target: {fileID: 7086283921375526718, guid: b05f4a089e5adb24498cdcd826e52364,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4960,6 +4956,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5958932811752315876, guid: b05f4a089e5adb24498cdcd826e52364,
+        type: 3}
+      propertyPath: m_Name
+      value: Barra_vida_enemigo
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b05f4a089e5adb24498cdcd826e52364, type: 3}

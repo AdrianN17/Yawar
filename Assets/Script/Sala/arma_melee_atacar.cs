@@ -82,7 +82,6 @@ public class arma_melee_atacar : MonoBehaviour
 
             if (vida < 1)
             {
-                Debug.LogError("Enemigo destruido");
                 lista_personajes_golpe.Remove(pj);
             }
         }

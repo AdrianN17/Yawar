@@ -155,7 +155,6 @@ public class Client_script : Convert_vector
 
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
         {
-            Debug.LogError("Recibido_actulziar");
 
             var data = client.JSONDecode(net_event.Packet);
 
