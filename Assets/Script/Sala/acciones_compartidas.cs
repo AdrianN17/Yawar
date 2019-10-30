@@ -23,8 +23,10 @@ public class acciones_compartidas : Convert_vector
     //animator
     public Animator anim;
     //sacerdote
-
-
+    public GameObject sacerdote;
+    //mensajes emergentes
+    public GameObject mensajeEmergente;
+    public Text TxtMensajeEmergente = null;
 
     // Start is called before the first frame update
     void Start()
@@ -40,13 +42,13 @@ public class acciones_compartidas : Convert_vector
             prefab_barra.SetActive(false);
         }
 
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        TxtMensajeEmergente.text = "Que es lo que tienes para mi? ";
     }
 
 
@@ -167,14 +169,18 @@ public class acciones_compartidas : Convert_vector
     }
 
 
-    /*public void OnTriggerStay(Collider other)
+    public void OnTriggerStay(Collider other)
     {
         if (other.tag == "Sacerdote")
         {
-            Debug.Log("testtesd");
-            Sacerdote_animacion.SetBool("PedirObjetos", true);
+            var animacionSacerdote = sacerdote.GetComponent<Animator>();
+            animacionSacerdote.SetBool("PedirObjetos", true);
+
+            mensajeEmergente.SetActive(true);
+            TxtMensajeEmergente.text = "Que es lo que tienes para mi? ";
         }
-    }*/
+    }
+    
 
 
 }

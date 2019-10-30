@@ -4095,9 +4095,11 @@ MonoBehaviour:
   max_vidas: 5
   vidas: 5
   anim: {fileID: 3367076653914507727}
-  Sacerdote_animacion: {fileID: 8581020610334413142, guid: 7b3f53c1264635e47b603cf41c01d52b,
+  sacerdote: {fileID: 3442072684602297919, guid: 7b3f53c1264635e47b603cf41c01d52b,
     type: 3}
-  prefabSacerdote: {fileID: 3442072684602297919, guid: 7b3f53c1264635e47b603cf41c01d52b,
+  mensajeEmergente: {fileID: 2886243548866497189, guid: 603b294427aa9fe43828b8dab0cfe460,
+    type: 3}
+  TxtMensajeEmergente: {fileID: 4558596520287452972, guid: d5fe0d566e1566c479025d122585bae2,
     type: 3}
 --- !u!114 &381386978770866089
 MonoBehaviour:
