@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class coleccionable_data : MonoBehaviour
 {
-    public int id;
     public int tipo;
+    public int cantidad;
 
     // Start is called before the first frame update
     void Start()
@@ -28,12 +28,12 @@ public class coleccionable_data : MonoBehaviour
                 if(other.gameObject.tag == ("Personaje Principal"))
                 {
                     var script = GameObject.FindGameObjectWithTag("Inventario_Main").GetComponent<inventario_coleccionables>();
-                    script.agregar(tipo);
+                    script.agregar(tipo, cantidad);
                 }
                 else
                 {
                     var script = other.gameObject.GetComponent<bolsa_inventario>();
-                    script.agregar(tipo);
+                    script.agregar(tipo, cantidad);
                 }
                     
             }

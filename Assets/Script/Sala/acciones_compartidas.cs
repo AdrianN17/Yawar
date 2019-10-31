@@ -185,18 +185,43 @@ public class acciones_compartidas : Convert_vector
     public void volver_al_inicio()
     {
         var script = gameObject.GetComponent<personaje_volver_inicio>();
+        var obj = GameObject.Find("Server_Manager"); 
 
-        if (gameObject.GetComponent("Move") != null)
+        if(obj!=null)
         {
-            var script_cliente = gameObject.GetComponent<Move>();
-            script_cliente.no_arma_funcion();
-            //script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),vec_to_obj(transform.position),null));
-        }
-        else
-        {
-            var script_servidor = gameObject.GetComponent<Move_server>();
-            script_servidor.no_arma_funcion();
-            //script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(transform.position),null));
+            var server = obj.GetComponent<Server_script>();
+            var bolsa = GameObject.FindGameObjectWithTag("Inventario_Main");
+            var bolsa_script = bolsa.GetComponent<inventario_coleccionables>();
+
+            if (gameObject.tag == "Personaje Principal")
+            {
+                var script_servidor = gameObject.GetComponent<Move_server>();
+                script_servidor.no_arma_funcion();
+
+                
+                var lista = bolsa_script.limpiar_para_enviar();
+
+                server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(collider.bounds.center), lista));
+
+                bolsa_script.crear_varios(lista, collider.bounds.center);
+
+                bolsa_script.limpiar_principal();
+            }
+            else
+            {
+                var script_cliente = gameObject.GetComponent<Move>();
+                script_cliente.no_arma_funcion();
+
+                var bolsa_2 = gameObject.GetComponent<bolsa_inventario>();
+
+                var lista = bolsa_2.limpiar_para_enviar();
+
+                server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_cliente.GetID(), vec_to_obj(collider.bounds.center), lista));
+
+                bolsa_script.crear_varios(lista, collider.bounds.center);
+
+                bolsa_2.limpiar_principal();
+            }
         }
 
         script.volver_al_inicio();

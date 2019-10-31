@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class Server_script : Convert_vector
 {
+    public Broadcasting_send broadcasting;
+
     // Start is called before the first frame update
     public ushort port;
     public int max_clients;
@@ -44,6 +46,8 @@ public class Server_script : Convert_vector
 
     public float counter_envio_bolsa_max;
 
+    public inventario_coleccionables script_inventario_coleccionable;
+
     void Start()
     {
 
@@ -66,6 +70,7 @@ public class Server_script : Convert_vector
             GameObject go = (GameObject)Instantiate(prefab_personaje, punto_creacion.transform.position, Quaternion.identity);
             go.transform.SetParent(padre.transform);
             go.GetComponent<Move>().SetID(id_personajes);
+            go.GetComponent<get_id>().id = id_personajes;
 
             //bolsa guardado
             var script_bolsa = go.AddComponent<bolsa_inventario>();
@@ -100,6 +105,8 @@ public class Server_script : Convert_vector
                 i++;
 
             }
+
+            broadcasting.actualizar(server.GetListClientsCount());
 
             server.Send("Inicializador", new Listado_Usuarios(id_personajes, lista_para_enviar), net_event.Peer);
 
@@ -180,7 +187,7 @@ public class Server_script : Convert_vector
             
         });
 
-        server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
+        /*server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
         {
             var data = server.JSONDecode(net_event.Packet);
             var obj = (data_botar_objetos)data.value;
@@ -193,12 +200,14 @@ public class Server_script : Convert_vector
                 buscado.GetComponent<personaje_volver_inicio>().volver_al_inicio();
                 buscado.GetComponent<Move>().no_arma_funcion();
 
-                ///falta mas
-                ///
-                server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
+                script_inventario_coleccionable.crear_varios(obj.objetos,obj_to_vec(obj.posicion));
+
+
+
+                //server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
             }
                 
-        });
+        });*/
 
         
 
@@ -320,7 +329,7 @@ public class Server_script : Convert_vector
     {
         foreach (var go in lista_personajes)
         {
-            var script = go.GetComponent<enemigo_1>();
+            var script = go.GetComponent<get_id>();
             if (script.id == id)
             {
                 return go;
@@ -336,7 +345,7 @@ public class Server_script : Convert_vector
 
         foreach (var go in lista_personajes)
         {
-            var script = go.GetComponent<enemigo_1>();
+            var script = go.GetComponent<get_id>();
             if (script.id == id)
             {
                 return i;

@@ -43,11 +43,11 @@ public class bolsa_inventario : MonoBehaviour
     }
 
 
-    public void agregar(int tipo)
+    public void agregar(int tipo, int cantidad)
     {
         if (lista_coleccionables.Count == 0)
         {
-            var obj = new data_coleccionable(tipo, 1, "");
+            var obj = new data_coleccionable(tipo, cantidad, "");
             lista_coleccionables.Add(obj);
             lista_cosas_nuevas.Add(obj);
 
@@ -59,11 +59,11 @@ public class bolsa_inventario : MonoBehaviour
             if (index != -1)
             {
                 var obj = lista_coleccionables[index];
-                obj.cantidad = obj.cantidad + 1;
+                obj.cantidad = obj.cantidad + cantidad;
             }
             else
             {
-                var obj = new data_coleccionable(tipo, 1, "");
+                var obj = new data_coleccionable(tipo, cantidad, "");
                 lista_coleccionables.Add(obj);
                 lista_cosas_nuevas.Add(obj);
             }
@@ -91,5 +91,16 @@ public class bolsa_inventario : MonoBehaviour
         }
 
         return -1;
+    }
+
+    public List<data_coleccionable> limpiar_para_enviar()
+    {
+        lista_cosas_nuevas.Clear();
+        return lista_coleccionables;
+    }
+
+    public void limpiar_principal()
+    {
+        lista_coleccionables.Clear();
     }
 }

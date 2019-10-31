@@ -12,9 +12,9 @@ namespace Assets.Script.Modelos
     {
         public int id { get; set; }
         public data_vector posicion { get; set; }
-        public Dictionary<int,int> objetos { get; set; }
+        public List<data_coleccionable> objetos { get; set; }
 
-        public data_botar_objetos(int id, data_vector posicion, Dictionary<int,int> objetos, int x)
+        public data_botar_objetos(int id, data_vector posicion, List<data_coleccionable> objetos)
         {
             this.id = id;
             this.posicion = posicion;

@@ -16,6 +16,11 @@ public class MenuGame : MonoBehaviour
 
     public List<GameObject> lista_objetos_gameobject;
 
+    public coleccionable coleccionable_data;
+
+    public float default_size_y;
+
+
     void Start()
     {
         lista_objetos_gameobject = new List<GameObject>();
@@ -76,6 +81,7 @@ public class MenuGame : MonoBehaviour
                 if(script!=null)
                 {
                     script.cantidad = item.cantidad;
+                    script.escribir();
                 }
                 else
                 {
@@ -83,7 +89,16 @@ public class MenuGame : MonoBehaviour
                 }
 
             }
-        }       
+        }
+
+        if (lista_objetos_gameobject.Count != 0)
+        {
+            redimensionar();
+        }
+        else
+        {
+            redimensionar_default();
+        }
     }
 
     private Item_Inventario_script buscar(int tipo)
@@ -105,7 +120,7 @@ public class MenuGame : MonoBehaviour
 
     private void generar(data_coleccionable item)
     {
-        var y = lista_objetos_gameobject.Count * 40;
+        var y = lista_objetos_gameobject.Count * 250;
 
         var go = (GameObject)Instantiate(prefab_coleccionables_vista);
         go.transform.SetParent(context_panel_inventario.transform,false);
@@ -119,6 +134,37 @@ public class MenuGame : MonoBehaviour
         script.cantidad = item.cantidad;
         script.cadena = lista_nombre_objetos[item.tipo];
 
+        script.set_sprite(coleccionable_data.img_coleccionable[item.tipo]);
+
         lista_objetos_gameobject.Add(go);
     }
+
+    public void limpiar()
+    {
+        foreach(var obj in lista_objetos_gameobject)
+        {
+            Destroy(obj);
+        }
+
+
+        lista_objetos_gameobject.Clear();
+    }
+
+    private void redimensionar()
+    {
+        var y = lista_objetos_gameobject.Count * 270;
+        var rect= context_panel_inventario.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);
+    }
+
+    private void redimensionar_default()
+    {
+        var y = default_size_y;
+        var rect = context_panel_inventario.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);
+    }
+
+
 }

@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     private string ip;
     public GameObject item;
     public GameObject contexto;
+    public float default_size_y;
     // Start is called before the first frame update
     void Start()
     {
@@ -77,8 +78,19 @@ public class UIManager : MonoBehaviour
 
             var lista_servidores = broadcast.GetListObtained();
 
+            if (lista_servidores.Count!=0)
+            {
+                redimensionar(lista_servidores.Count);
+            }
+            else
+            {
+                redimensionar_default();
+            }
+
 
             crear_gameobjects(lista_servidores);
+
+            
 
             broadcast.Destroy();
             broadcast = null;
@@ -125,5 +137,20 @@ public class UIManager : MonoBehaviour
             SceneManager.LoadScene("Sala_Cliente");
         }
     }
-     
+
+    private void redimensionar(int count)
+    {
+        var rect = contexto.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, count*50);
+    }
+
+    private void redimensionar_default()
+    {
+        var y = default_size_y;
+        var rect = contexto.GetComponent<RectTransform>();
+
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);
+    }
+
 }

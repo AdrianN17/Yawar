@@ -7,9 +7,14 @@ public class inventario_coleccionables : MonoBehaviour
 {
     // Start is called before the first frame update
     private List<data_coleccionable> lista_coleccionables;
+    private coleccionable coleccion;
+    public MenuGame menugame;
 
     void Start()
     {
+        var go = GameObject.Find("Objetos_Botados");
+        coleccion = go.GetComponent<coleccionable>();
+
         lista_coleccionables = new List<data_coleccionable>();
     }
 
@@ -19,11 +24,11 @@ public class inventario_coleccionables : MonoBehaviour
         
     }
 
-    public void agregar(int tipo)
+    public void agregar(int tipo, int cantidad)
     {
         if(lista_coleccionables.Count==0)
         {
-            lista_coleccionables.Add(new data_coleccionable(tipo,1,""));
+            lista_coleccionables.Add(new data_coleccionable(tipo, cantidad, ""));
         }
         else
         {
@@ -32,11 +37,11 @@ public class inventario_coleccionables : MonoBehaviour
             if(index != -1)
             {
                 var obj = lista_coleccionables[index];
-                obj.cantidad= obj.cantidad + 1;
+                obj.cantidad= obj.cantidad + cantidad;
             }
             else
             {
-                lista_coleccionables.Add(new data_coleccionable(tipo, 1, ""));
+                lista_coleccionables.Add(new data_coleccionable(tipo, cantidad, ""));
             }
         }  
     }
@@ -78,13 +83,32 @@ public class inventario_coleccionables : MonoBehaviour
                 if (index != -1)
                 {
                     var obj = lista_coleccionables[index];
-                    obj.cantidad = obj.cantidad + 1;
+                    obj.cantidad = obj.cantidad + lista_data.cantidad;
                 }
                 else
                 {
                     lista_coleccionables.Add(lista_data);
                 }
             }
+        }
+    }
+
+    public List<data_coleccionable> limpiar_para_enviar()
+    {
+        return lista_coleccionables;
+    }
+
+    public void limpiar_principal()
+    {
+        lista_coleccionables.Clear();
+        menugame.limpiar();
+    }
+
+    public void crear_varios(List<data_coleccionable> lista_para_crear, Vector3 pos)
+    {
+        foreach(var data in lista_para_crear)
+        {
+            coleccion.crear_nuevo_coleccionable(data.tipo, pos, data.cantidad);
         }
     }
 }

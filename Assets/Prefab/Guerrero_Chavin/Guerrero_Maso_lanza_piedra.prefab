@@ -1280,7 +1280,6 @@ MonoBehaviour:
   collider_mazo: {fileID: 381386978770866000}
   layer_receptor: Enemigo
   dano: 2
-  check: 0
 --- !u!1 &2258424981372522530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2287,7 +2286,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7317798435041210241
 Transform:
   m_ObjectHideFlags: 0
@@ -2460,7 +2459,6 @@ MonoBehaviour:
   collider_mazo: {fileID: 5776087373210957621}
   layer_receptor: Enemigo
   dano: 3
-  check: 0
 --- !u!65 &5776087373210957621
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3892,6 +3890,7 @@ GameObject:
   - component: {fileID: 381386978770866089}
   - component: {fileID: 7319544152646745155}
   - component: {fileID: 3717071170330054390}
+  - component: {fileID: 2439446711442210549}
   m_Layer: 9
   m_Name: Guerrero_Maso_lanza_piedra
   m_TagString: Untagged
@@ -4059,6 +4058,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 404c6e452464e294abc9768a17faf6dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2439446711442210549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8532940830470018726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcdabc567b9c4254e9fbde89a4a7f925, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 0
 --- !u!1 &8600748486725823487
 GameObject:
   m_ObjectHideFlags: 0

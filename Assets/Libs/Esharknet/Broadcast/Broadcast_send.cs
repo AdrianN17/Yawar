@@ -34,6 +34,8 @@ namespace Assets.Libs.Esharknet.Broadcast
             {
                 while (loop)
                 {
+                    Debug.LogError(broadcast_data.players);
+
                     var byte_data = Serialize(data);
 
 

@@ -76,6 +76,7 @@ public class Client_script : Convert_vector
 
                 var go_script = go.GetComponent<Move>();
                 go_script.SetID(personaje.id);
+                go.GetComponent<get_id>().id = personaje.id;
 
                 if (go_script.GetID() == index)
                 {
@@ -207,6 +208,9 @@ public class Client_script : Convert_vector
             {
                 obj_buscado.GetComponent<personaje_volver_inicio>().volver_al_inicio();
                 obj_buscado.GetComponent<Move>().no_arma_funcion();
+
+                inventario_cliente.crear_varios(obj.objetos, obj_to_vec(obj.posicion));
+
             }
                 
 
@@ -329,7 +333,7 @@ public class Client_script : Convert_vector
     {
         foreach(var go in lista_personajes)
         {
-            var script = go.GetComponent<enemigo_1>();
+            var script = go.GetComponent<get_id>();
             if(script.id == id)
             {
                 return go;
@@ -345,7 +349,7 @@ public class Client_script : Convert_vector
 
         foreach (var go in lista_personajes)
         {
-            var script = go.GetComponent<enemigo_1>();
+            var script = go.GetComponent<get_id>();
             if (script.id == id)
             {
                 return i;

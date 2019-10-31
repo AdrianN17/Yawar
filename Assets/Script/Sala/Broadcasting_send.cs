@@ -15,6 +15,7 @@ public class Broadcasting_send : MonoBehaviour
     public int timedelay;
 
     private Server_script server_script;
+    private Data_broadcast server_details;
 
 
     void Start()
@@ -23,7 +24,7 @@ public class Broadcasting_send : MonoBehaviour
 
         server_script = server_manager.GetComponent<Server_script>();
 
-        Data_broadcast server_details = new Data_broadcast(server_script.ip, server_script.port, server_script.server.GetListClientsCount(), server_script.max_clients, "room1");
+        server_details = new Data_broadcast(server_script.ip, server_script.port, server_script.server.GetListClientsCount(), server_script.max_clients, "room1");
 
 
         broadcast = new Broadcast_send(ip,port,port_send, timedelay, server_details);
@@ -39,6 +40,11 @@ public class Broadcasting_send : MonoBehaviour
     void OnDestroy()
     {
         broadcast.Destroy();
+    }
+
+    public void actualizar(int players)
+    {
+        server_details.players = players;
     }
 
 
