@@ -115,7 +115,7 @@ namespace Assets.Libs.Esharknet
                     break;
 
                 case ENet.EventType.Receive:
-                    //Debug.Log("Packet received from server - Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
+                    Debug.Log("Packet received from server - Channel ID: " + netEvent.ChannelID + ", Data length: " + netEvent.Packet.Length);
 
                     ExecuteTriggerBytes(netEvent);
                     netEvent.Packet.Dispose();
@@ -126,9 +126,9 @@ namespace Assets.Libs.Esharknet
 
         public void Destroy()
         {
-            client.Flush();
-
             peer.Disconnect(0);
+
+            client.Flush();
             ENet.Library.Deinitialize();
             Debug.LogWarning("Client finish");
         }

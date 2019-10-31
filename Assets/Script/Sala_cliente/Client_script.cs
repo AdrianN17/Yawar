@@ -226,6 +226,8 @@ public class Client_script : Convert_vector
 
             if(obj_buscado!=null)
             {
+                Destroy(obj_buscado);
+
                 lista_personajes.Remove(obj_buscado);
             }
         });
@@ -364,6 +366,8 @@ public class Client_script : Convert_vector
 
     void OnDestroy()
     {
+
+
         client.Destroy();
         Debug.LogWarning("Destroy gameobject");
         client = null;

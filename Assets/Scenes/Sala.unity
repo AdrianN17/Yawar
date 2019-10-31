@@ -24734,6 +24734,19 @@ MonoBehaviour:
   escribiendo: 0
   texto: {fileID: 51963551}
   acciones: {fileID: 8296172668031363188}
+--- !u!114 &8296172668031363186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296172668031363184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47305e713519faf47992b88b1919b678, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  peer: -1
 --- !u!114 &8296172668031363188 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 381386978770866088, guid: 9e3333877b1e7cb4bbce00530bb23084,

@@ -188,8 +188,8 @@ namespace Assets.Libs.Esharknet
         {
             //Debug.LogError("Client delete");
 
-            clients.Remove(net_event.Peer);
             int index = clients.IndexOf(net_event.Peer);
+            clients.Remove(net_event.Peer);
             return index;
         }
 

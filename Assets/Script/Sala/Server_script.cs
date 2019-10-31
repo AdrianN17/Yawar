@@ -77,6 +77,8 @@ public class Server_script : Convert_vector
             script_bolsa.max_counter = counter_envio_bolsa_max;
             script_bolsa.server = this;
             script_bolsa.index_peer = index_peer;
+            var script_peer = go.AddComponent<get_peer>();
+            script_peer.peer = index_peer;
 
 
             lista_personajes.Add(go);
@@ -120,9 +122,13 @@ public class Server_script : Convert_vector
         {
             int i = server.RemovePeer(net_event);
 
-            lista_personajes.RemoveAt(i);
+            int index = buscar_usuario_peer(i);
 
-            server.SendToAll("Jugador_desconectado", new data_solo_id(i));
+            Destroy(lista_personajes[index]);
+
+            lista_personajes.RemoveAt(index);
+
+            server.SendToAll("Jugador_desconectado", new data_solo_id(index));
 
         });
 
@@ -347,6 +353,26 @@ public class Server_script : Convert_vector
         {
             var script = go.GetComponent<get_id>();
             if (script.id == id)
+            {
+                return i;
+            }
+
+            i++;
+        }
+
+        return -1;
+    }
+
+    public int buscar_usuario_peer(int peer)
+    {
+        int i = 0;
+
+        foreach (var go in lista_personajes)
+        {
+
+            var script = go.GetComponent<get_peer>();
+
+            if (script.peer == peer)
             {
                 return i;
             }
