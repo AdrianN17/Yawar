@@ -20,7 +20,6 @@ public class UIManager : MonoBehaviour
     private string ip;
     public GameObject item;
     public GameObject contexto;
-    public int posicion_y;
     // Start is called before the first frame update
     void Start()
     {
@@ -108,7 +107,11 @@ public class UIManager : MonoBehaviour
             var boton = go.transform.GetChild(1).gameObject.GetComponent<Button>();
             boton.onClick.AddListener(() => delegar_dato(valores.ip,valores.port));
 
-            posicion_y = posicion_y - 40;
+            var y = i * 40;
+
+            var vec = go.transform.localPosition;
+            vec.y = vec.y - y;
+            go.transform.localPosition = vec;
 
             i++;
         }

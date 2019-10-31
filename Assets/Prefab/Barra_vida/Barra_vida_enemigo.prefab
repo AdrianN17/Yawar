@@ -88,6 +88,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7086283921375526718}
   - component: {fileID: 8231368615655728366}
+  - component: {fileID: 575353610212149121}
   m_Layer: 0
   m_Name: Barra_vida_enemigo
   m_TagString: Untagged
@@ -123,3 +124,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barra: {fileID: 1733203758913797724}
+  max_counter: 1.5
+--- !u!114 &575353610212149121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958932811752315876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dfccd4b3986a484aab7bb3297e8a549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

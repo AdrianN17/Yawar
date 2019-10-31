@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5115063822283414442}
   - component: {fileID: 7120974617445717992}
   - component: {fileID: 3508335092930226929}
+  - component: {fileID: 6407328221931426860}
   m_Layer: 14
   m_Name: Papa_4
   m_TagString: Untagged
@@ -56,6 +57,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5dfccd4b3986a484aab7bb3297e8a549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6407328221931426860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8117459786774178233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff80594b2a7d0844b5d53ed94d4c37e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8354052212779471635

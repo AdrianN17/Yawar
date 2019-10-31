@@ -74,16 +74,24 @@ public class arma_melee_atacar : MonoBehaviour
 
         for(var i = lista_personajes_golpe.Count-1; i >= 0; i--)
         {
-            var pj = lista_personajes_golpe[i];
-
-            var script = pj.gameObject.GetComponent<acciones_compartidas>();
-            script.empujon(collider_mazo.bounds.center);
-            int vida = script.disminuir_vida(dano);
-
-            if (vida < 1)
+            try
             {
-                lista_personajes_golpe.Remove(pj);
+                var pj = lista_personajes_golpe[i];
+
+                var script = pj.gameObject.GetComponent<acciones_compartidas>();
+                script.empujon(collider_mazo.bounds.center);
+                int vida = script.disminuir_vida(dano);
+
+                if (vida < 1)
+                {
+                    lista_personajes_golpe.Remove(pj);
+                }
             }
+            catch(Exception ex)
+            {
+                lista_personajes_golpe.Remove(lista_personajes_golpe[i]);
+            }
+                
         }
         
     }

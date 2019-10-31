@@ -97,6 +97,8 @@ public class Client_script : Convert_vector
                     var script_compartido = go.GetComponent<acciones_compartidas>();
                     script_compartido.personaje_principal();
 
+                    go.tag = "Personaje Principal";
+
                 }
             }
 

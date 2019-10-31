@@ -11,11 +11,10 @@ namespace Assets.Script.Modelos
     public class data_botar_objetos
     {
         public int id { get; set; }
-        [SerializeField]
         public data_vector posicion { get; set; }
         public Dictionary<int,int> objetos { get; set; }
 
-        public data_botar_objetos(int id, data_vector posicion, Dictionary<int,int> objetos)
+        public data_botar_objetos(int id, data_vector posicion, Dictionary<int,int> objetos, int x)
         {
             this.id = id;
             this.posicion = posicion;

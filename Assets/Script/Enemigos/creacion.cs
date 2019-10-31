@@ -34,8 +34,6 @@ public class creacion : Convert_vector
     public Text text_enemigos;
     public coleccionable script_crear_coleccionables;
 
-    public Convert_vector cv = new Convert_vector();
-
     void Start()
     {
         lista_enemigos = new List<GameObject>();
@@ -132,12 +130,6 @@ public class creacion : Convert_vector
     {
         //crear_enemigo_cliente objeto;
         var script = obj.GetComponent<enemigo_1>();
-
-
-        script_crear_coleccionables.crear_nuevo_coleccionable(script.coleccionable,script.collider.bounds.center);
-            
-
-
 
         enemigos_count--;
         lista_contador_enemigos[punto_id].cantidad--;

@@ -8,6 +8,10 @@ TagManager:
   - Mazo
   - Hacha
   - Sacerdote
+  - Camara
+  - Texto_Principal
+  - Personaje Principal
+  - Inventario_Main
   layers:
   - Default
   - TransparentFX

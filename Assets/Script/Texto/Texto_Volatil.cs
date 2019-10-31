@@ -8,29 +8,40 @@ public class Texto_Volatil : MonoBehaviour
     public TextMesh texto;
     public float tiempo_maximo;
     public float tiempo;
+    private Camera camera;
+    public float max_counter;
+    private float counter;
 
     void Start()
     {
+        camera = GameObject.FindGameObjectWithTag("Camara").GetComponent<Camera>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        float dt = Time.deltaTime;
+        if (enabled)
+        {
+            float dt = Time.deltaTime;
 
-        if(texto.text!="")
-        { 
-            tiempo = tiempo + dt;
-
-            if(tiempo>tiempo_maximo)
+            if (texto.text != "")
             {
-                texto.text = "";
+                tiempo = tiempo + dt;
+
+                if (tiempo > tiempo_maximo)
+                {
+                    texto.text = "";
+                }
+            }
+            else
+            {
+                tiempo = 0;
             }
         }
-        else
-        {
-            tiempo = 0;
-        }
     }
+
+
+
+
 }

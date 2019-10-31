@@ -21,7 +21,7 @@ public class coleccionable : MonoBehaviour
         
     }
 
-    public void crear_nuevo_coleccionable(int tipo,Vector3 posicion)
+    public void crear_nuevo_coleccionable(int tipo, Vector3 posicion, int id)
     {
 
         if(tipo==0)
@@ -35,6 +35,11 @@ public class coleccionable : MonoBehaviour
             go.transform.SetParent(this.transform);
             go.transform.position = posicion;
             go.transform.localScale = new Vector3(0.1f,0.1f, 0.1f);
+
+            var script = go.GetComponent<coleccionable_data>();
+            script.id = id;
+            script.tipo = tipo-1;
+
 
         }
     }

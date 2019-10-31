@@ -22,11 +22,7 @@ public class acciones_compartidas : Convert_vector
 
     //animator
     public Animator anim;
-    //sacerdote
-    public GameObject sacerdote;
-    //mensajes emergentes
-    public GameObject mensajeEmergente;
-    public Text TxtMensajeEmergente = null;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +44,7 @@ public class acciones_compartidas : Convert_vector
     // Update is called once per frame
     void Update()
     {
-        TxtMensajeEmergente.text = "Que es lo que tienes para mi? ";
+        
     }
 
 
@@ -148,13 +144,13 @@ public class acciones_compartidas : Convert_vector
         {
             var script_cliente = gameObject.GetComponent<Move>();
             script_cliente.no_arma_funcion();
-            script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),vec_to_obj(transform.position),null));
+            //script_cliente.client.client.Send("personaje_muerto", new data_botar_objetos(script_cliente.GetID(),vec_to_obj(transform.position),null));
         }
         else
         {
             var script_servidor = gameObject.GetComponent<Move_server>();
             script_servidor.no_arma_funcion();
-            script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(transform.position),null));
+            //script_servidor.server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(transform.position),null));
         }
 
         script.volver_al_inicio();
@@ -169,7 +165,7 @@ public class acciones_compartidas : Convert_vector
     }
 
 
-    public void OnTriggerStay(Collider other)
+    /*public void OnTriggerStay(Collider other)
     {
         if (other.tag == "Sacerdote")
         {
@@ -179,7 +175,7 @@ public class acciones_compartidas : Convert_vector
             mensajeEmergente.SetActive(true);
             TxtMensajeEmergente.text = "Que es lo que tienes para mi? ";
         }
-    }
+    }*/
     
 
 
