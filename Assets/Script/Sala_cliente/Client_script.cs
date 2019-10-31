@@ -33,6 +33,8 @@ public class Client_script : Convert_vector
 
     public Text texto;
 
+    public inventario_coleccionables inventario_cliente;
+
     void Start()
     {
 
@@ -136,10 +138,14 @@ public class Client_script : Convert_vector
             var data = client.JSONDecode(net_event.Packet);
 
             var obj = (data_tecla)data.value;
+            var buscado = buscar_usuario(obj.id);
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            if (buscado != null)
+            {
+                var gameobj = buscado.GetComponent<Move>();
 
-            gameobj.movimiento_cambio(obj.tecla, obj.orientacion);
+                gameobj.movimiento_cambio(obj.tecla, obj.orientacion);
+            }
 
         });
 
@@ -148,11 +154,17 @@ public class Client_script : Convert_vector
 
             var obj = (data_por_segundos)data.value;
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            var buscado = buscar_usuario(obj.id);
 
-            gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
+            if (buscado != null)
+            {
+                var gameobj = buscado.GetComponent<Move>();
 
-            gameobj.set_arma_actual(obj.arma);
+                gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
+
+                gameobj.set_arma_actual(obj.arma);
+            }
+
         });
 
         client.AddTrigger("Actualizar_enemigos", delegate (ENet.Event net_event)
@@ -173,18 +185,30 @@ public class Client_script : Convert_vector
 
             var obj = (data_chat)data.value;
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            var buscado = buscar_usuario(obj.id);
 
-            gameobj.texto.text = obj.texto;
+            if(buscado!=null)
+            {
+                var gameobj = buscado.GetComponent<Move>();
+
+                gameobj.texto.text = obj.texto;
+            }
+                
         });
 
         client.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
         {
             var data = client.JSONDecode(net_event.Packet);
             var obj = (data_botar_objetos)data.value;
-            var gameobj = lista_personajes[obj.id];
-            gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
-            gameobj.GetComponent<Move>().no_arma_funcion();
+
+            var obj_buscado = buscar_usuario(obj.id);
+
+            if (obj_buscado != null)
+            {
+                obj_buscado.GetComponent<personaje_volver_inicio>().volver_al_inicio();
+                obj_buscado.GetComponent<Move>().no_arma_funcion();
+            }
+                
 
             ///falta mas
         });
@@ -200,6 +224,46 @@ public class Client_script : Convert_vector
             {
                 lista_personajes.Remove(obj_buscado);
             }
+        });
+
+        client.AddTrigger("enviar_vidas", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+            var obj = (List<data_vidas>)data.value;
+
+            foreach(var gameobj in obj)
+            {
+                var buscado = buscar_usuario(gameobj.id);
+
+                if(buscado!=null)
+                {
+                    var script1 = buscado.GetComponent<acciones_compartidas>();
+                    script1.vidas = gameobj.vidas;
+
+                    if(gameobj.vidas<1) 
+                    {
+                        var script =  buscado.GetComponent<Move>();
+
+                        if(script.calcular_ahogo())
+                        {
+                            script1.morir(script1.get_tipomuerte(1));
+                        }
+                        else
+                        {
+                            script1.morir(script1.get_tipomuerte(0));
+                        }
+                    }
+                }
+            }
+        });
+
+        client.AddTrigger("inventario_actualizar", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+            var obj = (List<data_coleccionable>)data.value;
+
+            inventario_cliente.agregar_lista(obj);
+            
         });
 
     }
@@ -273,6 +337,24 @@ public class Client_script : Convert_vector
         }
 
         return null;
+    }
+
+    public int buscar_usuario_index(int id)
+    {
+        int i = 0;
+
+        foreach (var go in lista_personajes)
+        {
+            var script = go.GetComponent<enemigo_1>();
+            if (script.id == id)
+            {
+                return i;
+            }
+
+            i++;
+        }
+
+        return -1;
     }
 
 

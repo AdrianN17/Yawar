@@ -20,7 +20,7 @@ public class MenuGame : MonoBehaviour
     {
         lista_objetos_gameobject = new List<GameObject>();
 
-        lista_nombre_objetos = new List<string>() {"Oca","Papa","Papa 2","Papa 3", "Papa 4 "};
+        lista_nombre_objetos = new lista_coleccionables().get_colecionables_string();
 
         Pause.SetActive(false);
     }

@@ -27,19 +27,18 @@ public class inventario_coleccionables : MonoBehaviour
         }
         else
         {
-            var data = buscar(tipo);
+            var index = buscar(tipo);
 
-            if(data!=null)
+            if(index != -1)
             {
-                var obj = lista_coleccionables[lista_coleccionables.IndexOf(data)];
+                var obj = lista_coleccionables[index];
                 obj.cantidad= obj.cantidad + 1;
             }
             else
             {
                 lista_coleccionables.Add(new data_coleccionable(tipo, 1, ""));
             }
-        }
-       
+        }  
     }
 
     public List<data_coleccionable> dar_lista()
@@ -47,16 +46,45 @@ public class inventario_coleccionables : MonoBehaviour
         return lista_coleccionables;
     }
 
-    private data_coleccionable buscar(int tipo)
+    private int buscar(int tipo)
     {
+        int i = 0;
+
         foreach(var data in lista_coleccionables)
         {
             if(data.tipo==tipo)
             {
-                return data;
+                return i;
             }
+
+            i++;
         }
 
-        return null;
+        return -1;
+    }
+
+    public void agregar_lista(List<data_coleccionable> lista)
+    {
+        if (lista_coleccionables.Count == 0)
+        {
+            lista_coleccionables.AddRange(lista);
+        }
+        else
+        {
+            foreach(var lista_data in lista)
+            {
+                var index = buscar(lista_data.tipo);
+
+                if (index != -1)
+                {
+                    var obj = lista_coleccionables[index];
+                    obj.cantidad = obj.cantidad + 1;
+                }
+                else
+                {
+                    lista_coleccionables.Add(lista_data);
+                }
+            }
+        }
     }
 }

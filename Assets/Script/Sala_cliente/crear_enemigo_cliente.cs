@@ -71,10 +71,6 @@ public class crear_enemigo_cliente : Convert_vector
                 script1.transform.rotation = Quaternion.Euler(obj_to_vec(enemigo.radio));
                 script1.rb.MoveRotation(script1.transform.rotation);
 
-                if (enemigo.vida < 1)
-                {
-                    script2.morir();
-                }
             }
             else
             {

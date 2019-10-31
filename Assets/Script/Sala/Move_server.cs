@@ -115,7 +115,7 @@ public class Move_server : MonoBehaviour
 
         if(!escribiendo)
         { 
-            if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+            if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
             { 
                 teclas_presionada(dt);
                 tecla_soltada(dt);
@@ -123,6 +123,11 @@ public class Move_server : MonoBehaviour
                 atacar();
 
                 no_arma();
+            }
+            else
+            {
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
             }
         }
 

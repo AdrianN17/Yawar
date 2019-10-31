@@ -15,6 +15,7 @@ public class acciones_compartidas : Convert_vector
     public barra_vida barra;
 
     public enum tipo {personaje_principal, personaje, enemigo};
+    public enum tipo_muerte { normal,ahogamiento};
     public tipo mitipo;
 
     public int max_vidas;
@@ -74,41 +75,66 @@ public class acciones_compartidas : Convert_vector
 
         if (vidas<1)
         {
-            morir();
+            morir(tipo_muerte.normal);
         }
 
         return vidas;
     }
 
-    public bool disminuir_vida_ahogamiento()
+    public int  disminuir_vida_ahogamiento()
     {
-        disminuir_vida(1);
+        vidas = vidas - 1;
+
+        if (mitipo != tipo.personaje_principal)
+        {
+            barra.reduce(max_vidas, vidas);
+        }
 
         if (vidas < 1)
         {
-            return true;
+            morir(tipo_muerte.ahogamiento);
         }
 
-        return false;
+        return vidas;
     }
 
-    public void morir()
+    public void morir(tipo_muerte tp)
     {
         if (mitipo == tipo.enemigo)
         {
-            anim.SetTrigger("Morir");
-            Invoke("destruir_gameobject", 2.1f);
+            if(tp==tipo_muerte.normal)
+            {
+                anim.SetTrigger("Morir");
+                Invoke("destruir_gameobject", 2.1f);
+            }
+            else
+            {
+                anim.SetTrigger("Ahogar");
+            }
+                
+
             barra.reduce(max_vidas, 0);
         }
         else
         {
-            anim.SetBool("Morir", true);
-
-            if(mitipo==tipo.personaje)
+            if (tp == tipo_muerte.normal)
             {
-                barra.reduce(max_vidas, 0);
+                anim.SetBool("Morir", true);
+
+                if (mitipo == tipo.personaje)
+                {
+                    barra.reduce(max_vidas, 0);
+                }
             }
-    
+            else
+            {
+                anim.SetBool("Ahogar", true);
+
+                if (mitipo == tipo.personaje)
+                {
+                    barra.reduce(max_vidas, 0);
+                }
+            }
         }
             
     }
@@ -122,6 +148,7 @@ public class acciones_compartidas : Convert_vector
         else
         {
             anim.SetBool("Morir", false);
+            anim.SetBool("Ahogar", false);
             volver_al_inicio();
         }
     }
@@ -164,19 +191,14 @@ public class acciones_compartidas : Convert_vector
             
     }
 
-
-    /*public void OnTriggerStay(Collider other)
+    public int get_tipo()
     {
-        if (other.tag == "Sacerdote")
-        {
-            var animacionSacerdote = sacerdote.GetComponent<Animator>();
-            animacionSacerdote.SetBool("PedirObjetos", true);
+        return (int)mitipo;
+    }
 
-            mensajeEmergente.SetActive(true);
-            TxtMensajeEmergente.text = "Que es lo que tienes para mi? ";
-        }
-    }*/
-    
-
+    public tipo_muerte get_tipomuerte(int i)
+    {
+        return (tipo_muerte)i;
+    }
 
 }

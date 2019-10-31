@@ -9,7 +9,7 @@ public class sacerdote : MonoBehaviour
     public Text texto_npc;
     public List<string> lista_texto;
     public GameObject mensaje;
-    public GameObject objsacerdote;
+    public Animator animacionSacerdote;
     public int index;
     void Start()
     {
@@ -26,7 +26,6 @@ public class sacerdote : MonoBehaviour
     public void mostrar()
     {
 
-        var animacionSacerdote = objsacerdote.GetComponent<Animator>();
         animacionSacerdote.SetBool("PedirObjetos", true);
         mensaje.SetActive(true);
         texto_npc.text = lista_texto[index];
@@ -34,7 +33,6 @@ public class sacerdote : MonoBehaviour
 
     public void nomostrar()
     {
-        var animacionSacerdote = objsacerdote.GetComponent<Animator>();
         animacionSacerdote.SetBool("PedirObjetos", false);
         mensaje.SetActive(false);
         texto_npc.text = " ";

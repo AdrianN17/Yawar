@@ -25,17 +25,24 @@ public class Server_script : Convert_vector
     public GameObject player_inicial_servidor;
     public Move_server player_inicial_servidor_script;
 
-    private float counter_send = 0;
+    private float counter_send;
     public float max_counter;
 
     public creacion creador_enemigos;
     public Text texto;
 
     public GameObject water;
-    public float nivel_agua;
+    private float nivel_agua;
 
     private float counter_dano_agua;
     public float max_counter_dano_agua;
+
+    private float counter_envio_total;
+    public float max_envio_total;
+
+    private int id_personajes=1;
+
+    public float counter_envio_bolsa_max;
 
     void Start()
     {
@@ -52,15 +59,24 @@ public class Server_script : Convert_vector
         server.AddTrigger("Connect", delegate (ENet.Event net_event)
         {
 
-            int index = server.AddPeer(net_event) + 1;
+            int index_peer = server.AddPeer(net_event);
 
             var lista_para_enviar = new List<data_inicial>();
 
             GameObject go = (GameObject)Instantiate(prefab_personaje, punto_creacion.transform.position, Quaternion.identity);
             go.transform.SetParent(padre.transform);
-            go.GetComponent<Move>().SetID(index);
+            go.GetComponent<Move>().SetID(id_personajes);
+
+            //bolsa guardado
+            var script_bolsa = go.AddComponent<bolsa_inventario>();
+            script_bolsa.max_counter = counter_envio_bolsa_max;
+            script_bolsa.server = this;
+            script_bolsa.index_peer = index_peer;
+
 
             lista_personajes.Add(go);
+
+            var data_nueva = new data_inicial(id_personajes, vec_to_obj( punto_creacion.transform.position));
 
             int i = 0;
 
@@ -85,9 +101,11 @@ public class Server_script : Convert_vector
 
             }
 
-            server.Send("Inicializador", new Listado_Usuarios(index, lista_para_enviar), net_event.Peer);
+            server.Send("Inicializador", new Listado_Usuarios(id_personajes, lista_para_enviar), net_event.Peer);
 
-            server.SendToAllBut("Nuevo_Usuario", lista_para_enviar[index], net_event.Peer);
+            server.SendToAllBut("Nuevo_Usuario", data_nueva, net_event.Peer);
+
+            id_personajes++;
 
         });
 
@@ -111,12 +129,17 @@ public class Server_script : Convert_vector
 
             var obj = (data_tecla)data.value;
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            var buscado = buscar_usuario(obj.id);
 
-            gameobj.movimiento_cambio(obj.tecla, obj.orientacion);
+            if(buscado!=null)
+            {
+                var gameobj = buscado.GetComponent<Move>();
 
-            server.SendToAllBut("movimiento", net_event.Packet, net_event.Peer, false);
-            
+                gameobj.movimiento_cambio(obj.tecla, obj.orientacion);
+
+                server.SendToAllBut("movimiento", net_event.Packet, net_event.Peer, false);
+            }
+
         });
 
         server.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
@@ -124,14 +147,19 @@ public class Server_script : Convert_vector
 
             var obj = (data_por_segundos)data.value;
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            var buscado = buscar_usuario(obj.id);
 
-            gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
-            gameobj.set_arma_actual(obj.arma);
+            if (buscado != null)
+            {
+                var script = buscado.GetComponent<Move>();
 
-            
+                script.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
+                script.set_arma_actual(obj.arma);
 
-            server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
+                server.SendToAllBut("enviar_posicion", net_event.Packet, net_event.Peer, false);
+            }
+
+                
         });
 
         server.AddTrigger("chat", delegate (ENet.Event net_event)
@@ -140,23 +168,39 @@ public class Server_script : Convert_vector
 
             var obj = (data_chat)data.value;
 
-            var gameobj = lista_personajes[obj.id].GetComponent<Move>();
+            var buscado = buscar_usuario(obj.id);
 
-            gameobj.texto.text = obj.texto;
+            if (buscado != null)
+            {
+                var gameobj = buscado.GetComponent<Move>();
+
+                gameobj.texto.text = obj.texto;
+            }
+
+            
         });
 
         server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
         {
             var data = server.JSONDecode(net_event.Packet);
             var obj = (data_botar_objetos)data.value;
-            var gameobj = lista_personajes[obj.id];
-            gameobj.GetComponent<personaje_volver_inicio>().volver_al_inicio();
-            gameobj.GetComponent<Move>().no_arma_funcion();
 
-            ///falta mas
-            ///
-            server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
+            var buscado = buscar_usuario(obj.id);
+
+            if (buscado != null)
+            {
+
+                buscado.GetComponent<personaje_volver_inicio>().volver_al_inicio();
+                buscado.GetComponent<Move>().no_arma_funcion();
+
+                ///falta mas
+                ///
+                server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
+            }
+                
         });
+
+        
 
 
         nivel_agua = transform.TransformPoint(water.transform.position).y;
@@ -187,6 +231,32 @@ public class Server_script : Convert_vector
             server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), vec_to_obj(player_inicial_servidor_script.transform.position), vec_to_obj(player_inicial_servidor.transform.rotation.eulerAngles), player_inicial_servidor_script.get_arma_actual()));
 
             counter_send = 0;
+        }
+
+        counter_envio_total = counter_envio_total + dt;
+
+        if (counter_envio_total > max_envio_total)
+        {
+            var listado = new List<data_vidas>();
+            foreach(var obj in lista_personajes)
+            {
+                var script = obj.GetComponent<acciones_compartidas>();
+                int id;
+
+                if(obj.tag== "Personaje Principal")
+                {
+                    id = obj.GetComponent<Move_server>().GetID();
+                }
+                else
+                {
+                    id = obj.GetComponent<Move>().GetID();
+                }
+
+                listado.Add(new data_vidas(id,script.vidas));
+            }
+
+
+            server.SendToAll("enviar_vidas", listado);
         }
 
         if (player_inicial_servidor_script.escribiendo)
@@ -246,7 +316,39 @@ public class Server_script : Convert_vector
         }
     }
 
- 
+    public GameObject buscar_usuario(int id)
+    {
+        foreach (var go in lista_personajes)
+        {
+            var script = go.GetComponent<enemigo_1>();
+            if (script.id == id)
+            {
+                return go;
+            }
+        }
+
+        return null;
+    }
+
+    public int buscar_usuario_index(int id)
+    {
+        int i = 0;
+
+        foreach (var go in lista_personajes)
+        {
+            var script = go.GetComponent<enemigo_1>();
+            if (script.id == id)
+            {
+                return i;
+            }
+
+            i++;
+        }
+
+        return -1;
+    }
+
+
     void OnDestroy()
     {
         server.Destroy();

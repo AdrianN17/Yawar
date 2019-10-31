@@ -9,6 +9,7 @@ public class coleccionable : MonoBehaviour
     public List<GameObject> coleccionables;
     public GameObject padre;
 
+
     void Start()
     {
         lista = new lista_coleccionables();
@@ -34,7 +35,7 @@ public class coleccionable : MonoBehaviour
             var go = Instantiate(coleccionables[tipo - 1]);
             go.transform.SetParent(this.transform);
             go.transform.position = posicion;
-            go.transform.localScale = new Vector3(0.1f,0.1f, 0.1f);
+            go.transform.localScale = new Vector3(0.25f,0.25f, 0.25f);
 
             var script = go.GetComponent<coleccionable_data>();
             script.id = id;

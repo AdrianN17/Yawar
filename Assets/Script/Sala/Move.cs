@@ -36,6 +36,9 @@ public class Move : MonoBehaviour
 
     public TextMesh texto;
 
+    private bool is_client;
+    public float nivel_agua_y;
+
     void Start()
     {
 
@@ -122,7 +125,7 @@ public class Move : MonoBehaviour
         {
             if (!escribiendo)
             {
-                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01"))
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
                 {
                     teclas_presionada(dt);
                     tecla_soltada(dt);
@@ -130,6 +133,11 @@ public class Move : MonoBehaviour
                     atacar();
 
                     no_arma();
+                }
+                else
+                {
+                    mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                    mover_player_vertical = movimiento_Vertical.Ninguno;
                 }
             }
         }
@@ -510,6 +518,18 @@ public class Move : MonoBehaviour
                         break;
                     }
             }
+        }
+    }
+
+    public bool calcular_ahogo()
+    {
+        if(collider.bounds.center.y < nivel_agua_y)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
 

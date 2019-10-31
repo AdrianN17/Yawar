@@ -53,8 +53,7 @@ public class enemigo_1 : MonoBehaviour
         {
             if (collider.bounds.center.y < nivel_agua_y)
             { 
-                script_compartido.disminuir_vida_ahogamiento();
-                
+                script_compartido.disminuir_vida_ahogamiento();     
             }
 
             counter_ahogo = 0;
