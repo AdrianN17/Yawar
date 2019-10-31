@@ -1088,7 +1088,6 @@ GameObject:
   - component: {fileID: 517210766364416179}
   - component: {fileID: 9075961010128164593}
   - component: {fileID: 381386978770866000}
-  - component: {fileID: 381386978770866002}
   - component: {fileID: 381386978770866003}
   m_Layer: 0
   m_Name: Maso
@@ -1265,22 +1264,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.21668887, y: 0.1190527, z: 0.06480046}
   m_Center: {x: -0.0025294067, y: -0.047258716, z: 0.1450693}
---- !u!114 &381386978770866002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202329337702775623}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ea33fba6a9e45045b94adeea759d0fd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lista_personajes_golpe: []
-  collider_mazo: {fileID: 381386978770866000}
-  layer_receptor: Enemigo
-  dano: 2
 --- !u!114 &381386978770866003
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1297,6 +1280,7 @@ MonoBehaviour:
   collider_mazo: {fileID: 381386978770866000}
   layer_receptor: Enemigo
   dano: 2
+  check: 0
 --- !u!1 &2258424981372522530
 GameObject:
   m_ObjectHideFlags: 0
@@ -2295,13 +2279,15 @@ GameObject:
   m_Component:
   - component: {fileID: 7317798435041210241}
   - component: {fileID: 1715739984711988682}
+  - component: {fileID: 907357656559277500}
+  - component: {fileID: 5776087373210957621}
   m_Layer: 0
   m_Name: Lanza
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &7317798435041210241
 Transform:
   m_ObjectHideFlags: 0
@@ -2458,6 +2444,36 @@ SkinnedMeshRenderer:
     m_Center: {x: 5.1092873, y: 1.3720603, z: 2.2493854}
     m_Extent: {x: 5.0033503, y: 4.161733, z: 7.673762}
   m_DirtyAABB: 0
+--- !u!114 &907357656559277500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4422887786576340086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ea33fba6a9e45045b94adeea759d0fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lista_personajes_golpe: []
+  collider_mazo: {fileID: 5776087373210957621}
+  layer_receptor: Enemigo
+  dano: 3
+  check: 0
+--- !u!65 &5776087373210957621
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4422887786576340086}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.085573845, y: 0.22080496, z: 0.08323657}
+  m_Center: {x: -0.0009699226, y: -0.07085321, z: 0.13081722}
 --- !u!1 &4428621843629156997
 GameObject:
   m_ObjectHideFlags: 0
@@ -3979,14 +3995,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 381386978770866007}
   collider: {fileID: 381386978770866006}
-  collider_arma: {fileID: 381386978770866000}
-  ama: {fileID: 381386978770866003}
+  ama: {fileID: 0}
   prefab_barra: {fileID: 5837467488645836739}
   barra: {fileID: 0}
   mitipo: 1
   max_vidas: 5
   vidas: 5
   anim: {fileID: 3367076653914507727}
+  lista_armas: []
+  index_arma: 0
 --- !u!114 &381386978770866089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4029,6 +4046,7 @@ MonoBehaviour:
   escribiendo: 0
   texto: {fileID: 3176610140755180242}
   nivel_agua_y: 30
+  acciones: {fileID: 381386978770866088}
 --- !u!114 &3717071170330054390
 MonoBehaviour:
   m_ObjectHideFlags: 0

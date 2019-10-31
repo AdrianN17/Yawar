@@ -12,7 +12,6 @@ public class arma_melee_atacar : MonoBehaviour
     public int dano;
 
 
-
     void Start()
     {
         lista_personajes_golpe = new List<acciones_compartidas>();
@@ -70,9 +69,8 @@ public class arma_melee_atacar : MonoBehaviour
     }
 
     public void golpear_todos()
-    {
-
-        for(var i = lista_personajes_golpe.Count-1; i >= 0; i--)
+    { 
+        for (var i = lista_personajes_golpe.Count-1; i >= 0; i--)
         {
             try
             {

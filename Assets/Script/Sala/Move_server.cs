@@ -36,8 +36,12 @@ public class Move_server : MonoBehaviour
 
     public TextMesh texto;
 
+    public acciones_compartidas acciones;
+
     void Start()
     {
+        acciones.index_arma = 0;
+
         //Debug.Log(id);
         rb.freezeRotation = true;
 
@@ -54,27 +58,29 @@ public class Move_server : MonoBehaviour
             switch(arma.gameObject.tag)
             {
                 case "Mazo":
-                {
-                    anim.SetBool("ConArma", true);
+                    {
+                        anim.SetBool("ConArma", true);
 
-                    GameObject go = transform.GetChild(2).gameObject;
-                    go.SetActive(true);
+                        GameObject go = transform.GetChild(2).gameObject;
+                        go.SetActive(true);
 
-                    arma_actual = tipo_arma.mazo;
+                        arma_actual = tipo_arma.mazo;
+                        acciones.index_arma = 0;
 
-                    break;
-                }
+                        break;
+                    }
                 case "Lanza":
-                {
-                    anim.SetBool("ConArma", true);
+                    {
+                        anim.SetBool("ConArma", true);
 
-                    GameObject go = transform.GetChild(1).gameObject;
-                    go.SetActive(true);
+                        GameObject go = transform.GetChild(1).gameObject;
+                        go.SetActive(true);
 
-                    arma_actual = tipo_arma.lanza;
+                        arma_actual = tipo_arma.lanza;
+                        acciones.index_arma = 1;
 
-                    break;
-                }
+                        break;
+                    }
 
             }
 
@@ -114,9 +120,9 @@ public class Move_server : MonoBehaviour
         }
 
         if(!escribiendo)
-        { 
-            if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
-            { 
+        {
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
+            {
                 teclas_presionada(dt);
                 tecla_soltada(dt);
 
@@ -312,12 +318,20 @@ public class Move_server : MonoBehaviour
             case "atacar":
                 if (arma_actual == tipo_arma.mazo && pisando_tierra)
                 {
+                    acciones.index_arma = 0;
                     anim.SetTrigger("Ataque01");
 
                     mover_player_horizontal = movimiento_Horizontal.Ninguno;
                     mover_player_vertical = movimiento_Vertical.Ninguno;
+                }
+                else if (arma_actual == tipo_arma.lanza && pisando_tierra)
+                {
+                    acciones.index_arma = 1;
+                    anim.SetTrigger("Ataque02");
 
-                    server.server.SendToAll("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                    mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                    mover_player_vertical = movimiento_Vertical.Ninguno;
+
                 }
                 break;
 
@@ -400,6 +414,15 @@ public class Move_server : MonoBehaviour
                 mover_player_vertical = movimiento_Vertical.Ninguno;
 
                 server.server.SendToAll("movimiento", new data_tecla(GetID(), "X", "atacar"));
+
+            }else if (arma_actual == tipo_arma.lanza && pisando_tierra)
+            {
+                anim.SetTrigger("Ataque02");
+
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                server.server.SendToAll("movimiento", new data_tecla(GetID(), "2", "atacar"));
             }
         }
     }

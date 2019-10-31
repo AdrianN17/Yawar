@@ -8,7 +8,6 @@ public class acciones_compartidas : Convert_vector
 {
     public Rigidbody rb;
     public Collider collider;
-    public Collider collider_arma;
     public arma_melee_atacar ama;
 
     public GameObject prefab_barra;
@@ -23,11 +22,17 @@ public class acciones_compartidas : Convert_vector
 
     //animator
     public Animator anim;
+
+    public List<arma_melee_atacar> lista_armas;
+    public int index_arma;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        lista_armas = new List<arma_melee_atacar>();
+
+
         vidas = max_vidas;
 
         if (mitipo!=tipo.personaje_principal)
@@ -37,6 +42,12 @@ public class acciones_compartidas : Convert_vector
         else
         {
             prefab_barra.SetActive(false);
+        }
+
+        if(mitipo!=tipo.enemigo)
+        {
+            lista_armas.Add(transform.GetChild(2).GetComponent<arma_melee_atacar>());//mazo
+            lista_armas.Add(transform.GetChild(1).GetComponent<arma_melee_atacar>());//lanza
         }
 
         
@@ -61,7 +72,15 @@ public class acciones_compartidas : Convert_vector
 
     public void ataque()
     {
-        ama.golpear_todos();
+        if(mitipo==tipo.enemigo)
+        {
+            ama.golpear_todos();
+        }
+        else
+        {
+            lista_armas[index_arma].golpear_todos();
+        }
+            
     }
 
     public int disminuir_vida(int dano)

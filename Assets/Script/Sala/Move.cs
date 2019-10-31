@@ -39,8 +39,11 @@ public class Move : MonoBehaviour
     private bool is_client;
     public float nivel_agua_y;
 
+    public acciones_compartidas acciones;
+
     void Start()
     {
+        acciones.index_arma = 0;
 
         if (es_controlable)
         { 
@@ -61,27 +64,31 @@ public class Move : MonoBehaviour
             switch (arma.gameObject.tag)
             {
                 case "Mazo":
-                { 
-                    anim.SetBool("ConArma", true);
+                    { 
+                        anim.SetBool("ConArma", true);
 
-                    GameObject go = transform.GetChild(2).gameObject;
-                    go.SetActive(true);
+                        GameObject go = transform.GetChild(2).gameObject;
+                        go.SetActive(true);
 
-                    arma_actual = tipo_arma.mazo;
+                        arma_actual = tipo_arma.mazo;
 
-                    break;
-                }
+                        acciones.index_arma = 0;
+
+                        break;
+                    }
                 case "Lanza":
-                { 
-                    anim.SetBool("ConArma", true);
+                    { 
+                        anim.SetBool("ConArma", true);
 
-                    GameObject go = transform.GetChild(1).gameObject;
-                    go.SetActive(true);
+                        GameObject go = transform.GetChild(1).gameObject;
+                        go.SetActive(true);
 
-                    arma_actual = tipo_arma.lanza;
+                        acciones.index_arma = 1;
 
-                    break;
-                }
+                        arma_actual = tipo_arma.lanza;
+
+                        break;
+                    }
 
             }
 
@@ -125,7 +132,7 @@ public class Move : MonoBehaviour
         {
             if (!escribiendo)
             {
-                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza")  && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
                 {
                     teclas_presionada(dt);
                     tecla_soltada(dt);
@@ -339,12 +346,24 @@ public class Move : MonoBehaviour
             case "atacar":
                 if (arma_actual == tipo_arma.mazo && pisando_tierra)
                 {
+                    acciones.index_arma = 0;
+
                     anim.SetTrigger("Ataque01");
 
                     mover_player_horizontal = movimiento_Horizontal.Ninguno;
                     mover_player_vertical = movimiento_Vertical.Ninguno;
 
-                    client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
+
+
+                }
+                else if (arma_actual == tipo_arma.lanza && pisando_tierra)
+                {
+
+                    acciones.index_arma = 1;
+                    anim.SetTrigger("Ataque02");
+
+                    mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                    mover_player_vertical = movimiento_Vertical.Ninguno;
                 }
                 break;
 
@@ -426,7 +445,16 @@ public class Move : MonoBehaviour
                 mover_player_horizontal = movimiento_Horizontal.Ninguno;
                 mover_player_vertical = movimiento_Vertical.Ninguno;
 
-                client.client.Send("movimiento", new data_tecla(GetID(), "X", "atacar"));
+                client.client.Send("movimiento", new data_tecla(GetID(), "1", "atacar"));
+            }
+            else if  (arma_actual == tipo_arma.lanza && pisando_tierra)
+            {
+                anim.SetTrigger("Ataque02");
+
+                mover_player_horizontal = movimiento_Horizontal.Ninguno;
+                mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                client.client.Send("movimiento", new data_tecla(GetID(), "2", "atacar"));
             }
         }
     }
