@@ -210,6 +210,8 @@ public class Client_script : Convert_vector
                 obj_buscado.GetComponent<Move>().no_arma_funcion();
 
                 inventario_cliente.crear_varios(obj.objetos, obj_to_vec(obj.posicion));
+                inventario_cliente.limpiar_principal();
+
 
             }
                 
