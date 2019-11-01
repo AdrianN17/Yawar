@@ -33,8 +33,9 @@ public class Item_Inventario_script : MonoBehaviour
     {
         if(check==false)
         {
+            var delta = img.rectTransform.sizeDelta;
             img.sprite = sprite;
-            img.rectTransform.sizeDelta = new Vector2(210, 150);
+            img.rectTransform.sizeDelta = delta;
             check = true;
         }
             

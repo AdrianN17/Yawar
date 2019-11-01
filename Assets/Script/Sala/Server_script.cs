@@ -56,7 +56,7 @@ public class Server_script : Convert_vector
 
         ip = new LocalIP().SetLocalIP();
 
-        server = new Server(ip, port, max_clients, 3, timeout);
+        server = new Server(ip, port, max_clients, 0, timeout);
 
         lista_personajes = new List<GameObject>();
 

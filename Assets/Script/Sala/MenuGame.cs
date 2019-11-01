@@ -19,7 +19,7 @@ public class MenuGame : MonoBehaviour
     public coleccionable coleccionable_data;
 
     public float default_size_y;
-
+    public float separacion;
 
     void Start()
     {
@@ -120,7 +120,7 @@ public class MenuGame : MonoBehaviour
 
     private void generar(data_coleccionable item)
     {
-        var y = lista_objetos_gameobject.Count * 250;
+        var y = lista_objetos_gameobject.Count * separacion;
 
         var go = (GameObject)Instantiate(prefab_coleccionables_vista);
         go.transform.SetParent(context_panel_inventario.transform,false);
@@ -152,7 +152,7 @@ public class MenuGame : MonoBehaviour
 
     private void redimensionar()
     {
-        var y = lista_objetos_gameobject.Count * 270;
+        var y = lista_objetos_gameobject.Count * separacion;
         var rect= context_panel_inventario.GetComponent<RectTransform>();
 
         rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);

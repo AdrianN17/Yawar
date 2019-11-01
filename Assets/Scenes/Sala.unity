@@ -19452,7 +19452,8 @@ MonoBehaviour:
     type: 3}
   lista_objetos_gameobject: []
   coleccionable_data: {fileID: 1021824183}
-  default_size_y: 280
+  default_size_y: 160
+  separacion: 180
 --- !u!43 &1769416722
 Mesh:
   m_ObjectHideFlags: 0
