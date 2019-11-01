@@ -12,7 +12,6 @@ public class crear_enemigo_cliente : Convert_vector
 
     public GameObject padre_puntos;
     private List<Vector3> puntos_creacion;
-    public Text cantidad_enemigos;
 
 
 
@@ -88,7 +87,6 @@ public class crear_enemigo_cliente : Convert_vector
 
                 lista_enemigos.Add(ene);
 
-                cantidad_enemigos.text = lista_enemigos.Count.ToString();
             }
 
         }
@@ -115,8 +113,6 @@ public class crear_enemigo_cliente : Convert_vector
 
 
                 lista_enemigos.Add(ene);
-
-                cantidad_enemigos.text = lista_enemigos.Count.ToString();
             }
         }
     }
@@ -124,7 +120,6 @@ public class crear_enemigo_cliente : Convert_vector
     public void contar_muertes(GameObject enemigo)
     {
         lista_enemigos.Remove(enemigo);
-        cantidad_enemigos.text = lista_enemigos.Count.ToString();
     }
 
 }

@@ -47,6 +47,9 @@ public class Server_script : Convert_vector
     public float counter_envio_bolsa_max;
 
     public inventario_coleccionables script_inventario_coleccionable;
+    public coleccionable coleccionable_script;
+    private float counter_enviar_coleccionables;
+    public float max_counter_enviar_coleccionables;
 
     void Start()
     {
@@ -294,6 +297,18 @@ public class Server_script : Convert_vector
                     texto.text += c;
                 }
             }
+        }
+
+        counter_enviar_coleccionables = counter_enviar_coleccionables + dt;
+        if (counter_enviar_coleccionables< max_counter_enviar_coleccionables)
+        {
+            var lista = coleccionable_script.get_actual();
+            if(lista.Count!=0)
+            {
+                server.SendToAll("Actualizar_Coleccionables", lista);
+            }
+
+            counter_enviar_coleccionables = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.Return))

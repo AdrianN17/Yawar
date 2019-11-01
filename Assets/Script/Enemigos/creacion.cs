@@ -31,7 +31,6 @@ public class creacion : Convert_vector
 
     public int max_punto_cantidad;
 
-    public Text text_enemigos;
     public coleccionable script_crear_coleccionables;
 
     void Start()
@@ -89,8 +88,6 @@ public class creacion : Convert_vector
 
             time_creacion = 0;
 
-            text_enemigos.text = enemigos_count.ToString();
-
         }
 
         count_envio = count_envio + dt;
@@ -135,16 +132,6 @@ public class creacion : Convert_vector
         lista_contador_enemigos[punto_id].cantidad--;
 
         lista_enemigos.Remove(obj);
-
-
-        try
-        {
-            text_enemigos.text = enemigos_count.ToString();
-        }
-        catch(Exception ex)
-        {
-            Debug.LogWarning("Error al acceder a una variable destruida");
-        }
         
     }
 

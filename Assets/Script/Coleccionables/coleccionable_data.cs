@@ -6,6 +6,9 @@ public class coleccionable_data : MonoBehaviour
 {
     public int tipo;
     public int cantidad;
+    public coleccionable padre_script;
+    public bool enviar;
+    public int id_coleccionable;
 
     // Start is called before the first frame update
     void Start()
@@ -35,9 +38,12 @@ public class coleccionable_data : MonoBehaviour
                     var script = other.gameObject.GetComponent<bolsa_inventario>();
                     script.agregar(tipo, cantidad);
                 }
-                    
+
+                padre_script.eliminar(this);
+                
+
             }
-              
+
             Destroy(this.gameObject);
         }
 

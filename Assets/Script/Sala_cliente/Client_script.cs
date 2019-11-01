@@ -35,6 +35,8 @@ public class Client_script : Convert_vector
 
     public inventario_coleccionables inventario_cliente;
 
+    public coleccionable coleccionable_script;
+
     void Start()
     {
 
@@ -272,6 +274,14 @@ public class Client_script : Convert_vector
 
             inventario_cliente.agregar_lista(obj);
             
+        });
+
+        client.AddTrigger("Actualizar_Coleccionables", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+            var obj = (List<data_colecionable_con_id>)data.value;
+            coleccionable_script.actualizar(obj);
+
         });
 
     }
