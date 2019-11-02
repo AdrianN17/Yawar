@@ -233,6 +233,7 @@ GameObject:
   - component: {fileID: 4466092200755152653}
   - component: {fileID: 6012513241890286199}
   - component: {fileID: 5268113895465839543}
+  - component: {fileID: 1271514527423761501}
   m_Layer: 0
   m_Name: ARBOL01
   m_TagString: Untagged
@@ -288,6 +289,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 8.304787, z: 1}
   m_Center: {x: 0, y: 3.6523933, z: 0}
+--- !u!114 &1271514527423761501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838204895540655390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dfccd4b3986a484aab7bb3297e8a549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1062890648652062626
 GameObject:
   m_ObjectHideFlags: 0

@@ -102,6 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3261348817655710379}
   - component: {fileID: 4884330515719974865}
+  - component: {fileID: 3346039258676082398}
   m_Layer: 8
   m_Name: puente01
   m_TagString: Untagged
@@ -144,6 +145,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3346039258676082398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1952867480868532408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dfccd4b3986a484aab7bb3297e8a549, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3362900474231597245
 GameObject:
   m_ObjectHideFlags: 0
