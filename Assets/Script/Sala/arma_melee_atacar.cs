@@ -77,12 +77,16 @@ public class arma_melee_atacar : MonoBehaviour
                 var pj = lista_personajes_golpe[i];
 
                 var script = pj.gameObject.GetComponent<acciones_compartidas>();
-                script.empujon(collider_mazo.bounds.center);
+                
                 int vida = script.disminuir_vida(dano);
 
                 if (vida < 1)
                 {
                     lista_personajes_golpe.Remove(pj);
+                }
+                else
+                {
+                    script.empujon();
                 }
             }
             catch(Exception ex)

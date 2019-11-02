@@ -60,13 +60,9 @@ public class acciones_compartidas : Convert_vector
     }
 
 
-    public void empujon(Vector3 point)
+    public void empujon()
     {
-        Vector3 dir = collider.bounds.center - point;
-        dir.Normalize();
-
-        //rb.AddForce(dir * 2500 * rb.mass);
-        rb.AddForce(dir * 900 * rb.mass);
+        anim.SetTrigger("RecibirDano");
 
     }
 
@@ -129,6 +125,7 @@ public class acciones_compartidas : Convert_vector
             else
             {
                 anim.SetTrigger("Ahogar");
+                Invoke("destruir_gameobject", 3.5f);
             }
                 
 

@@ -193,14 +193,6 @@ namespace Assets.Libs.Esharknet
             return index;
         }
 
-        public void Destroy()
-        {
-            server.Flush();
-            clients.Clear();
-            ENet.Library.Deinitialize();
-            //Debug.LogWarning("Server finish");
-        }
-
         void switch_callbacks(ENet.Event netEvent)
         {
             switch (netEvent.Type)
@@ -238,5 +230,27 @@ namespace Assets.Libs.Esharknet
                     }
             }
         }
+
+        public void DisconnectAllPeer()
+        {
+            foreach(Peer peer in clients)
+            {
+                peer.DisconnectNow(0);
+            }
+        }
+
+        public void Destroy()
+        {
+            DisconnectAllPeer();
+
+            server.Flush();
+            server.Dispose();
+            clients.Clear();
+
+            ENet.Library.Deinitialize();
+            Debug.LogWarning("Server finish");
+        }
+
+        
     }  
 }

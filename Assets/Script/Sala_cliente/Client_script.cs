@@ -1,7 +1,6 @@
 ﻿using Assets.Libs.Esharknet;
 using Assets.Libs.Esharknet.IP;
 using Assets.Script.Modelos;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,6 +35,7 @@ public class Client_script : Convert_vector
     public inventario_coleccionables inventario_cliente;
 
     public coleccionable coleccionable_script;
+    public Text ping_text;
 
     void Start()
     {
@@ -284,12 +284,24 @@ public class Client_script : Convert_vector
 
         });
 
+        client.AddTrigger("Timeout", delegate (ENet.Event net_event)
+        {
+            Debug.LogWarning("Tiempo de espera finalizado");
+        });
+
+        client.AddTrigger("Disconnect", delegate (ENet.Event net_event)
+        {
+            Debug.LogWarning("Servidor Desconectado");
+        });
+
     }
 
     // Update is called once per frame
     void Update()
     {
         client.update();
+
+        ping_text.text = client.RountTripTimer()+" ms";
 
         float dt = Time.deltaTime;
 

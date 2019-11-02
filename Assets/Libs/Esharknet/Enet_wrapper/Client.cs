@@ -124,6 +124,11 @@ namespace Assets.Libs.Esharknet
             }
         }
 
+        public uint RountTripTimer()
+        {
+            return peer.RoundTripTime;
+        }
+
         public void Destroy()
         {
             peer.Disconnect(0);

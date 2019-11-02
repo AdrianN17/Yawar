@@ -127,7 +127,8 @@ public class Move_server : MonoBehaviour
 
         if(!escribiendo)
         {
-            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
+            if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar")
+                 && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano 0") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano"))
             {
                 teclas_presionada(dt);
                 tecla_soltada(dt);
@@ -325,7 +326,7 @@ public class Move_server : MonoBehaviour
                 if (arma_actual == tipo_arma.mazo && pisando_tierra)
                 {
                     acciones.index_arma = 0;
-                    anim.SetTrigger("Ataque01");
+                    empezar_animacion_ataque(0);
 
                     mover_player_horizontal = movimiento_Horizontal.Ninguno;
                     mover_player_vertical = movimiento_Vertical.Ninguno;
@@ -333,7 +334,7 @@ public class Move_server : MonoBehaviour
                 else if (arma_actual == tipo_arma.lanza && pisando_tierra)
                 {
                     acciones.index_arma = 1;
-                    anim.SetTrigger("Ataque02");
+                    empezar_animacion_ataque(1);
 
                     mover_player_horizontal = movimiento_Horizontal.Ninguno;
                     mover_player_vertical = movimiento_Vertical.Ninguno;
@@ -414,7 +415,7 @@ public class Move_server : MonoBehaviour
         {
             if (arma_actual == tipo_arma.mazo && pisando_tierra)
             {
-                anim.SetTrigger("Ataque01");
+                empezar_animacion_ataque(0);
 
                 mover_player_horizontal = movimiento_Horizontal.Ninguno;
                 mover_player_vertical = movimiento_Vertical.Ninguno;
@@ -423,7 +424,7 @@ public class Move_server : MonoBehaviour
 
             }else if (arma_actual == tipo_arma.lanza && pisando_tierra)
             {
-                anim.SetTrigger("Ataque02");
+                empezar_animacion_ataque(1);
 
                 mover_player_horizontal = movimiento_Horizontal.Ninguno;
                 mover_player_vertical = movimiento_Vertical.Ninguno;
@@ -500,6 +501,33 @@ public class Move_server : MonoBehaviour
         {
             obj.SetActive(false);
         }
+    }
+
+    public void empezar_animacion_ataque(int i)
+    {
+        switch (i)
+        {
+            case 0:
+                {
+                    anim.SetBool("Ataque01", true);
+                    Invoke("Terminar_anim",1f);
+
+                    break;
+                }
+            case 1:
+                {
+                    anim.SetBool("Ataque02", true);
+                    Invoke("Terminar_anim",1.5f);
+                    break;
+                }
+        }
+
+    }
+
+    public void Terminar_anim()
+    {
+        anim.SetBool("Ataque01", false);
+        anim.SetBool("Ataque02", false);
     }
 
 }

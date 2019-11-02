@@ -10,6 +10,7 @@ public class Sonidos_Pj : MonoBehaviour
     void Start()
     {
         Audios.AddRange(Resources.LoadAll<AudioClip>("Sonidos") as AudioClip[]);
+        aSource.PlayOneShot(Audios[1]);
     }
 
     // Update is called once per frame
@@ -17,7 +18,7 @@ public class Sonidos_Pj : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S))
         {
-            aSource.PlayOneShot(Audios[1]);
+            
         }
     }
 }
