@@ -39,6 +39,7 @@ public class Move_server : MonoBehaviour
     public acciones_compartidas acciones;
 
     public List<GameObject> lista_gameobject_armas;
+    public Sonidos_Pj sound;
 
     void Start()
     {
@@ -54,6 +55,8 @@ public class Move_server : MonoBehaviour
         rb.freezeRotation = true;
 
         escribiendo = false;
+
+        sound = GameObject.FindGameObjectWithTag("Sonido_main").GetComponent<Sonidos_Pj>();
 
 
     }
@@ -133,6 +136,15 @@ public class Move_server : MonoBehaviour
                 teclas_presionada(dt);
                 tecla_soltada(dt);
 
+                if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra)
+                {
+                    sound.moverse = true;
+                }
+                else
+                {
+                    sound.moverse = false;
+                }
+
                 atacar();
 
                 no_arma();
@@ -141,6 +153,8 @@ public class Move_server : MonoBehaviour
             {
                 mover_player_horizontal = movimiento_Horizontal.Ninguno;
                 mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                sound.moverse = false;
             }
         }
 

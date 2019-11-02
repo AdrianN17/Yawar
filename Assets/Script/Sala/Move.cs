@@ -42,6 +42,7 @@ public class Move : MonoBehaviour
     public acciones_compartidas acciones;
 
     public List<GameObject> lista_gameobject_armas;
+    public Sonidos_Pj sound;
 
     void Start()
     {
@@ -55,6 +56,7 @@ public class Move : MonoBehaviour
         if (es_controlable)
         { 
             client = client_manager.GetComponent<Client_script>();
+            sound = GameObject.FindGameObjectWithTag("Sonido_main").GetComponent<Sonidos_Pj>();
         }
 
         //Debug.Log(id);
@@ -137,11 +139,23 @@ public class Move : MonoBehaviour
         {
             if (!escribiendo)
             {
-                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza")  && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar") 
+                if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar")
                     && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano 0") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano"))
                 {
                     teclas_presionada(dt);
                     tecla_soltada(dt);
+
+                    if (es_controlable)
+                    {
+                        if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra)
+                        {
+                            sound.moverse = true;
+                        }
+                        else
+                        {
+                            sound.moverse = false;
+                        }
+                    }
 
                     atacar();
 
@@ -151,6 +165,11 @@ public class Move : MonoBehaviour
                 {
                     mover_player_horizontal = movimiento_Horizontal.Ninguno;
                     mover_player_vertical = movimiento_Vertical.Ninguno;
+
+                    if (es_controlable)
+                    {
+                        sound.moverse = false;
+                    }
                 }
             }
         }

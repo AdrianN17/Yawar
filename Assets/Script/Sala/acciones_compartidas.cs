@@ -25,11 +25,16 @@ public class acciones_compartidas : Convert_vector
 
     public List<arma_melee_atacar> lista_armas;
     public int index_arma;
+
+    public Sonidos_Pj sound;
     
 
     // Start is called before the first frame update
     void Start()
     {
+        sound = GameObject.FindGameObjectWithTag("Sonido_main").GetComponent<Sonidos_Pj>();
+
+
         lista_armas = new List<arma_melee_atacar>();
 
 
@@ -63,12 +68,13 @@ public class acciones_compartidas : Convert_vector
     public void empujon()
     {
         anim.SetTrigger("RecibirDano");
-
+        sound.emitir_grito_dano(this.enabled);
     }
 
     public void ataque()
     {
-        if(mitipo==tipo.enemigo)
+        
+        if (mitipo==tipo.enemigo)
         {
             ama.golpear_todos();
         }
@@ -115,6 +121,8 @@ public class acciones_compartidas : Convert_vector
 
     public void morir(tipo_muerte tp)
     {
+        sound.emitir_grito_muerte(this.enabled);
+
         if (mitipo == tipo.enemigo)
         {
             if(tp==tipo_muerte.normal)
@@ -167,6 +175,8 @@ public class acciones_compartidas : Convert_vector
             anim.SetBool("Ahogar", false);
             volver_al_inicio();
         }
+
+        
     }
 
     public void destruir_gameobject()

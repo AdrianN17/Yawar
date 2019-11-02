@@ -12,6 +12,7 @@ TagManager:
   - Texto_Principal
   - Personaje Principal
   - Inventario_Main
+  - Sonido_main
   layers:
   - Default
   - TransparentFX
