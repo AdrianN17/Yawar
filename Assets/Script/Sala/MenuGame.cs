@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuGame : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class MenuGame : MonoBehaviour
 
     public coleccionable coleccionable_data;
 
+    public GameObject alerta;
+    public Text alerta_text;
+
     public float default_size_y;
     public float separacion;
 
@@ -31,18 +35,19 @@ public class MenuGame : MonoBehaviour
     }
 
 
-    public void pause()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Pause.SetActive(!Pause.activeSelf);
         }
+        else if( Input.GetKeyDown(KeyCode.I))
+        {
+            boton_inventario();
+        }
     }
 
-    void Update()
-    {
-        pause();
-    }
+
 
     public void Volver_Menu()
     {
@@ -61,6 +66,7 @@ public class MenuGame : MonoBehaviour
         }
             
     }
+
 
     public void generar_objects(List<data_coleccionable> lista)
     {
@@ -164,6 +170,21 @@ public class MenuGame : MonoBehaviour
         var rect = context_panel_inventario.GetComponent<RectTransform>();
 
         rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);
+    }
+
+    public void alerta_llamar(string text)
+    {
+        if(!alerta.activeSelf)
+        {
+            alerta_text.text = text;
+            alerta.SetActive(true);
+        }
+    }
+
+    public void alerta_cerrar()
+    {
+        alerta_text.text = "";
+        alerta.SetActive(false);
     }
 
 

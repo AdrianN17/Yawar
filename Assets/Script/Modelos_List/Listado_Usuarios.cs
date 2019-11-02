@@ -13,10 +13,13 @@ namespace Assets.Script.Modelos
         public int id { get; set; }
         public List<data_inicial> lista { get; set; }
 
-        public Listado_Usuarios(int id, List<data_inicial> lista)
+        public data_periodo periodo { get; set; }
+
+        public Listado_Usuarios(int id, List<data_inicial> lista, data_periodo periodo)
         {
             this.id = id;
             this.lista = lista;
+            this.periodo = periodo;
         }
     }
 }

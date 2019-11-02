@@ -10,10 +10,12 @@ public class coleccionable_data : MonoBehaviour
     public bool enviar;
     public int id_coleccionable;
 
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        enviar = false;
     }
 
     // Update is called once per frame

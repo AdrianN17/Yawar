@@ -9,9 +9,9 @@ namespace Assets.Script.Modelos
     [Serializable]
     public class data_coleccionable
     {
-        public int tipo;
-        public int cantidad;
-        public string cadena;
+        public int tipo { get; set; }
+        public int cantidad { get; set; }
+        public string cadena { get; set; }
 
         public data_coleccionable(int tipo, int cantidad, string cadena)
         {

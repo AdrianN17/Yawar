@@ -77,7 +77,12 @@ public class coleccionable : Convert_vector
 
         foreach(var script in listado_actual)
         {
-            listado.Add(new data_colecionable_con_id(script.id_coleccionable, script.tipo, script.cantidad,vec_to_obj(script.transform.position)));
+            if(!script.enviar)
+            {
+                listado.Add(new data_colecionable_con_id(script.id_coleccionable, script.tipo, script.cantidad, vec_to_obj(script.transform.position)));
+                script.enviar = true;
+            }
+                
         }
 
         return listado;
@@ -148,5 +153,28 @@ public class coleccionable : Convert_vector
             }
         }
         return null;
+    }
+
+    public List<data_colecionable_con_id> ejercer_envio()
+    {
+        var listado = new List<data_colecionable_con_id>();
+
+        foreach (var script in listado_actual)
+        {
+            
+            listado.Add(new data_colecionable_con_id(script.id_coleccionable, script.tipo, script.cantidad, vec_to_obj(script.transform.position)));
+            
+
+        }
+
+        return listado;
+    }
+
+    public void crear_varios_coleccionalbes(List<data_colecionable_con_id> lista)
+    {
+        foreach(var data in lista)
+        {
+            crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
+        }
     }
 }

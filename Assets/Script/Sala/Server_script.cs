@@ -51,6 +51,8 @@ public class Server_script : Convert_vector
     private float counter_enviar_coleccionables;
     public float max_counter_enviar_coleccionables;
 
+    public Control_dia_noche control_periodo;
+
     void Start()
     {
 
@@ -113,7 +115,7 @@ public class Server_script : Convert_vector
 
             broadcasting.actualizar(server.GetListClientsCount());
 
-            server.Send("Inicializador", new Listado_Usuarios(id_personajes, lista_para_enviar), net_event.Peer);
+            server.Send("Inicializador", new Listado_Usuarios(id_personajes, lista_para_enviar, control_periodo.get_periodo()), net_event.Peer);
 
             server.SendToAllBut("Nuevo_Usuario", data_nueva, net_event.Peer);
 
@@ -135,9 +137,27 @@ public class Server_script : Convert_vector
 
         });
 
+        server.AddTrigger("Timeout", delegate (ENet.Event net_event)
+        {
+            int i = server.RemovePeer(net_event);
+
+            int index = buscar_usuario_peer(i);
+
+            Destroy(lista_personajes[index]);
+
+            lista_personajes.RemoveAt(index);
+
+            server.SendToAll("Jugador_desconectado", new data_solo_id(index));
+        });
+
         server.AddTrigger("Pedir_enemigos", delegate (ENet.Event net_event)
         {
             server.Send("Inicializador_enemigos", creador_enemigos.lista_enemigos_actual(), net_event.Peer);
+        });
+
+        server.AddTrigger("Pedir_coleccionables", delegate (ENet.Event net_event)
+        {
+            server.Send("Inicializador_coleccionables", coleccionable_script.ejercer_envio(),net_event.Peer);
         });
 
         server.AddTrigger("movimiento", delegate (ENet.Event net_event) {

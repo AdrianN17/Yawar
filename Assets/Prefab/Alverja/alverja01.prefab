@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3980720708498831684}
   - component: {fileID: 6463896529236759614}
+  - component: {fileID: 6198465264022072169}
   m_Layer: 0
   m_Name: alverja01
   m_TagString: Untagged
@@ -52,6 +53,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &6198465264022072169
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100492872428276567}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.16789028, y: 1.6373553, z: 0.24673466}
+  m_Center: {x: -0.021514893, y: 0.7355881, z: 0.003825575}
 --- !u!1 &205357245182178133
 GameObject:
   m_ObjectHideFlags: 0

@@ -21,16 +21,23 @@ public class UIManager : MonoBehaviour
     public GameObject item;
     public GameObject contexto;
     public float default_size_y;
+    public float separacion;
+
+    private bool buscando;
     // Start is called before the first frame update
     void Start()
     {
+        buscando = false;
         this.ip = new LocalIP().SetLocalIP();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(buscando)
+        {
+
+        }
     }
 
     public void On_Nuevo()
@@ -119,7 +126,7 @@ public class UIManager : MonoBehaviour
             var boton = go.transform.GetChild(1).gameObject.GetComponent<Button>();
             boton.onClick.AddListener(() => delegar_dato(valores.ip,valores.port));
 
-            var y = i * 40;
+            var y = i * separacion;
 
             var vec = go.transform.localPosition;
             vec.y = vec.y - y;

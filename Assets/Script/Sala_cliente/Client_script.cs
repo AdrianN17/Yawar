@@ -37,6 +37,9 @@ public class Client_script : Convert_vector
     public coleccionable coleccionable_script;
     public Text ping_text;
 
+    public Control_dia_noche control_periodo;
+    public MenuGame menu_game;
+
     void Start()
     {
 
@@ -67,6 +70,8 @@ public class Client_script : Convert_vector
 
             int index = obj.id;
             var personajes = obj.lista;
+
+            control_periodo.set_periodo(obj.periodo);
 
 
             foreach (var personaje in personajes)
@@ -119,6 +124,17 @@ public class Client_script : Convert_vector
             script_crearenemigo.crear_enemigo_creacion_player(enemigos);
 
             start_send = true;
+
+            client.Send("Pedir_coleccionables", null);
+        });
+
+        client.AddTrigger("Inicializador_coleccionables", delegate (ENet.Event net_event)
+        {
+            var data = client.JSONDecode(net_event.Packet);
+
+            var coleccionables_data = (List<data_colecionable_con_id>)data.value;
+
+            coleccionable_script.crear_varios_coleccionalbes(coleccionables_data);
         });
 
         client.AddTrigger("Nuevo_Usuario", delegate (ENet.Event net_event)
@@ -286,12 +302,12 @@ public class Client_script : Convert_vector
 
         client.AddTrigger("Timeout", delegate (ENet.Event net_event)
         {
-            Debug.LogWarning("Tiempo de espera finalizado");
+            menu_game.alerta_llamar("Tiempo de espera finalizado");
         });
 
         client.AddTrigger("Disconnect", delegate (ENet.Event net_event)
         {
-            Debug.LogWarning("Servidor Desconectado");
+            menu_game.alerta_llamar("Servidor Desconectado");
         });
 
     }
