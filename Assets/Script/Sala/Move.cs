@@ -147,7 +147,7 @@ public class Move : MonoBehaviour
 
                     if (es_controlable)
                     {
-                        if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra)
+                        if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra && collider.bounds.center.y > sound.nivel_agua)
                         {
                             sound.moverse = true;
                         }
@@ -174,6 +174,14 @@ public class Move : MonoBehaviour
             }
         }
 
+        if(collider.bounds.center.y < sound.nivel_agua)
+        {
+            sound.agua = true;
+        }
+        else
+        {
+            sound.agua = false;
+        }
         
 
     }
@@ -283,6 +291,13 @@ public class Move : MonoBehaviour
             
 
             pisando_tierra = false;
+
+            if(es_controlable)
+            {
+                sound.emitir_salto();
+            }
+
+
             anim.SetTrigger("Saltar");
 
             

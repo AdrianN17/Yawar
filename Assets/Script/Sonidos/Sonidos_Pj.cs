@@ -8,7 +8,12 @@ public class Sonidos_Pj : MonoBehaviour
     public List<AudioClip> Audios;
     public List<AudioSource> Sources;
     public bool moverse;
-    public 
+    public bool agua;
+    public float nivel_agua;
+
+    
+    private enum tipo_audio {caminar_grass,dano,saltar_grass,muerte,agua};
+    
     void Start()
     {
         Audios.AddRange(Resources.LoadAll<AudioClip>("Sonidos") as AudioClip[]);
@@ -25,32 +30,20 @@ public class Sonidos_Pj : MonoBehaviour
     }
     public void Update()
     {
-        if(moverse)
-        {
-            if(Sources[0].isPlaying)
-            {
+        emitir_mientras((int)tipo_audio.caminar_grass, moverse);
+        emitir_mientras((int)tipo_audio.agua, agua);
 
-            }
-            else
-            {
-                Sources[0].Play();
-            }
-        }
-        else
-        {
-            if (Sources[0].isPlaying)
-            {
-                Sources[0].Stop();
-            }
-        }
     }
 
 
     public void emitir_grito_dano(bool ena)
     {
+
         if(ena)
         {
-            Sources[1].PlayOneShot(Sources[1].clip);
+            int i = (int)tipo_audio.dano;
+
+            Sources[i].PlayOneShot(Sources[i].clip);
         }
            
     }
@@ -59,7 +52,41 @@ public class Sonidos_Pj : MonoBehaviour
     {
         if(ena)
         {
-            Sources[2].PlayOneShot(Sources[2].clip);
+            int i = (int)tipo_audio.muerte;
+
+            Sources[i].PlayOneShot(Sources[i].clip);
         }   
+    }
+
+    public void emitir_salto()
+    {
+        if(!agua)
+        {
+            int i = (int)tipo_audio.saltar_grass;
+
+            Sources[i].PlayOneShot(Sources[i].clip);
+        }   
+    }
+
+    public void emitir_mientras(int i, bool condicion)
+    {
+        if (condicion)
+        {
+            if (Sources[i].isPlaying)
+            {
+
+            }
+            else
+            {
+                Sources[i].Play();
+            }
+        }
+        else
+        {
+            if (Sources[i].isPlaying)
+            {
+                Sources[i].Stop();
+            }
+        }
     }
 }

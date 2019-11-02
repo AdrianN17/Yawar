@@ -46,3 +46,5 @@ MonoBehaviour:
   Audios: []
   Sources: []
   moverse: 0
+  agua: 0
+  nivel_agua: 30

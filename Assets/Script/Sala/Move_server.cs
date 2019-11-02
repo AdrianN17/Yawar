@@ -136,7 +136,7 @@ public class Move_server : MonoBehaviour
                 teclas_presionada(dt);
                 tecla_soltada(dt);
 
-                if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra)
+                if ((mover_player_horizontal != movimiento_Horizontal.Ninguno || mover_player_vertical != movimiento_Vertical.Ninguno) && pisando_tierra && collider.bounds.center.y>sound.nivel_agua)
                 {
                     sound.moverse = true;
                 }
@@ -156,6 +156,15 @@ public class Move_server : MonoBehaviour
 
                 sound.moverse = false;
             }
+        }
+
+        if (collider.bounds.center.y < sound.nivel_agua)
+        {
+            sound.agua = true;
+        }
+        else
+        {
+            sound.agua = false;
         }
 
     }
@@ -255,6 +264,10 @@ public class Move_server : MonoBehaviour
 
             server.server.SendToAll("movimiento", new data_tecla(GetID(), "SPACE", "salto"));
             pisando_tierra = false;
+
+
+            sound.emitir_salto();
+            
 
             anim.SetTrigger("Saltar");
             

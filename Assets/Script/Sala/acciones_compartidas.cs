@@ -13,8 +13,8 @@ public class acciones_compartidas : Convert_vector
     public GameObject prefab_barra;
     public barra_vida barra;
 
-    public enum tipo {personaje_principal, personaje, enemigo};
-    public enum tipo_muerte { normal,ahogamiento};
+    public enum tipo { personaje_principal, personaje, enemigo };
+    public enum tipo_muerte { normal, ahogamiento };
     public tipo mitipo;
 
     public int max_vidas;
@@ -27,11 +27,15 @@ public class acciones_compartidas : Convert_vector
     public int index_arma;
 
     public Sonidos_Pj sound;
-    
+
+    public bool muerto;
+
 
     // Start is called before the first frame update
     void Start()
     {
+        muerto = false;
+
         sound = GameObject.FindGameObjectWithTag("Sonido_main").GetComponent<Sonidos_Pj>();
 
 
@@ -40,7 +44,7 @@ public class acciones_compartidas : Convert_vector
 
         vidas = max_vidas;
 
-        if (mitipo!=tipo.personaje_principal)
+        if (mitipo != tipo.personaje_principal)
         {
             barra = prefab_barra.GetComponent<barra_vida>();
         }
@@ -49,19 +53,19 @@ public class acciones_compartidas : Convert_vector
             prefab_barra.SetActive(false);
         }
 
-        if(mitipo!=tipo.enemigo)
+        if (mitipo != tipo.enemigo)
         {
             lista_armas.Add(transform.GetChild(2).GetComponent<arma_melee_atacar>());//mazo
             lista_armas.Add(transform.GetChild(1).GetComponent<arma_melee_atacar>());//lanza
         }
 
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
@@ -73,8 +77,8 @@ public class acciones_compartidas : Convert_vector
 
     public void ataque()
     {
-        
-        if (mitipo==tipo.enemigo)
+
+        if (mitipo == tipo.enemigo)
         {
             ama.golpear_todos();
         }
@@ -82,38 +86,46 @@ public class acciones_compartidas : Convert_vector
         {
             lista_armas[index_arma].golpear_todos();
         }
-            
+
     }
 
     public int disminuir_vida(int dano)
     {
         vidas = vidas - dano;
 
-        if (mitipo != tipo.personaje_principal)
-        {
-            barra.reduce(max_vidas, vidas);
-        }
+        if (!muerto) 
+        { 
+            if (mitipo != tipo.personaje_principal)
+            {
+                barra.reduce(max_vidas, vidas);
+            }
 
-        if (vidas<1)
-        {
-            morir(tipo_muerte.normal);
+            if (vidas<1 )
+            {
+                muerto = true;
+                morir(tipo_muerte.normal);
+            }
         }
 
         return vidas;
     }
 
-    public int  disminuir_vida_ahogamiento()
+    public int disminuir_vida_ahogamiento()
     {
         vidas = vidas - 1;
 
-        if (mitipo != tipo.personaje_principal)
+        if (!muerto)
         {
-            barra.reduce(max_vidas, vidas);
-        }
+            if (mitipo != tipo.personaje_principal)
+            {
+                barra.reduce(max_vidas, vidas);
+            }
 
-        if (vidas < 1)
-        {
-            morir(tipo_muerte.ahogamiento);
+            if (vidas < 1)
+            {
+                muerto = true;
+                morir(tipo_muerte.ahogamiento);
+            }
         }
 
         return vidas;
@@ -143,7 +155,9 @@ public class acciones_compartidas : Convert_vector
         {
             if (tp == tipo_muerte.normal)
             {
-                anim.SetBool("Morir", true);
+                anim.SetBool("Morir_b", true);
+                anim.SetTrigger("Morir");
+
 
                 if (mitipo == tipo.personaje)
                 {
@@ -152,7 +166,9 @@ public class acciones_compartidas : Convert_vector
             }
             else
             {
-                anim.SetBool("Ahogar", true);
+                anim.SetBool("Ahogar_b", true);
+                anim.SetTrigger("Ahogar");
+
 
                 if (mitipo == tipo.personaje)
                 {
@@ -167,21 +183,15 @@ public class acciones_compartidas : Convert_vector
     {
         if (mitipo == tipo.enemigo)
         {
-            
+            Destroy(this.gameObject);
         }
         else
         {
-            anim.SetBool("Morir", false);
-            anim.SetBool("Ahogar", false);
+            anim.SetBool("Morir_b", false);
+            anim.SetBool("Ahogar_b", false);
             volver_al_inicio();
         }
-
-        
-    }
-
-    public void destruir_gameobject()
-    {
-        Destroy(this.gameObject);
+  
     }
 
     public void personaje_principal()
@@ -239,6 +249,8 @@ public class acciones_compartidas : Convert_vector
         {
             barra.reduce(max_vidas, vidas);
         }
+
+        muerto = false;
             
     }
 
