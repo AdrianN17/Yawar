@@ -34,12 +34,12 @@ public class Move_server : MonoBehaviour
 
     public bool escribiendo;
 
-    public TextMesh texto;
-
     public acciones_compartidas acciones;
 
     public List<GameObject> lista_gameobject_armas;
     public Sonidos_Pj sound;
+
+    public Texto_Volatil texto_volatil;
 
     void Start()
     {

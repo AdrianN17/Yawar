@@ -30,8 +30,6 @@ public class Client_script : Convert_vector
 
     public crear_enemigo_cliente script_crearenemigo;
 
-    public Text texto;
-
     public inventario_coleccionables inventario_cliente;
 
     public coleccionable coleccionable_script;
@@ -39,6 +37,11 @@ public class Client_script : Convert_vector
 
     public Control_dia_noche control_periodo;
     public MenuGame menu_game;
+
+    public Text texto;
+    public GameObject texto_panel;
+    public int max_length_texto;
+
 
     void Start()
     {
@@ -108,6 +111,8 @@ public class Client_script : Convert_vector
                     script_compartido.personaje_principal();
 
                     go.tag = "Personaje Principal";
+
+                    
 
                 }
             }
@@ -210,7 +215,7 @@ public class Client_script : Convert_vector
             {
                 var gameobj = buscado.GetComponent<Move>();
 
-                gameobj.texto.text = obj.texto;
+                gameobj.texto_volatil.set_text(obj.texto);
             }
                 
         });
@@ -339,9 +344,12 @@ public class Client_script : Convert_vector
                     {
 
                     }
-                    else
+                    else 
                     {
-                        texto.text += c;
+                        if (texto.text.Length < max_length_texto)
+                        {
+                            texto.text += c;
+                        }
                     }
                 }
             }
@@ -351,13 +359,14 @@ public class Client_script : Convert_vector
 
                 if (!string.IsNullOrWhiteSpace(texto.text))
                 {
-                    player_object_script.texto.text = texto.text;
+                    player_object_script.texto_volatil.set_text(texto.text);
 
                     client.Send("chat", new data_chat(player_object_script.GetID(), texto.text));
 
                     texto.text = "";
                 }
                 player_object_script.escribiendo = !player_object_script.escribiendo;
+                texto_panel.SetActive(!texto_panel.activeSelf);
 
             }
         } 

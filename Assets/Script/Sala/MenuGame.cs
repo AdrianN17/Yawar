@@ -40,10 +40,13 @@ public class MenuGame : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             Pause.SetActive(!Pause.activeSelf);
+            panel_inventario.SetActive(false);
         }
         else if( Input.GetKeyDown(KeyCode.I))
         {
+            Pause.SetActive(false);
             boton_inventario();
+            
         }
     }
 

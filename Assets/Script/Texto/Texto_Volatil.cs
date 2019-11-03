@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Texto_Volatil : MonoBehaviour
 {
     // Start is called before the first frame update
-    public TextMesh texto;
+    public GameObject texto_gameobj;
+    public Text texto;
     public float tiempo_maximo;
-    public float tiempo;
+    private float tiempo;
     private Camera camera;
-    public float max_counter;
     private float counter;
 
     void Start()
@@ -32,6 +33,7 @@ public class Texto_Volatil : MonoBehaviour
                 if (tiempo > tiempo_maximo)
                 {
                     texto.text = "";
+                    texto_gameobj.SetActive(false);
                 }
             }
             else
@@ -39,6 +41,15 @@ public class Texto_Volatil : MonoBehaviour
                 tiempo = 0;
             }
         }
+    }
+
+
+    public void set_text(string text)
+    {
+        texto.text = text;
+        texto_gameobj.SetActive(true);
+        tiempo = 0;
+
     }
 
 

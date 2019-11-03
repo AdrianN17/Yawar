@@ -31,7 +31,6 @@ public class Server_script : Convert_vector
     public float max_counter;
 
     public creacion creador_enemigos;
-    public Text texto;
 
     public GameObject water;
     private float nivel_agua;
@@ -52,6 +51,11 @@ public class Server_script : Convert_vector
     public float max_counter_enviar_coleccionables;
 
     public Control_dia_noche control_periodo;
+
+    public Text texto;
+    public GameObject texto_panel;
+
+    public int max_length_texto;
 
     void Start()
     {
@@ -210,36 +214,11 @@ public class Server_script : Convert_vector
             {
                 var gameobj = buscado.GetComponent<Move>();
 
-                gameobj.texto.text = obj.texto;
-            }
+                gameobj.texto_volatil.set_text(obj.texto);
 
+            }
             
         });
-
-        /*server.AddTrigger("personaje_muerto", delegate (ENet.Event net_event)
-        {
-            var data = server.JSONDecode(net_event.Packet);
-            var obj = (data_botar_objetos)data.value;
-
-            var buscado = buscar_usuario(obj.id);
-
-            if (buscado != null)
-            {
-
-                buscado.GetComponent<personaje_volver_inicio>().volver_al_inicio();
-                buscado.GetComponent<Move>().no_arma_funcion();
-
-                script_inventario_coleccionable.crear_varios(obj.objetos,obj_to_vec(obj.posicion));
-
-
-
-                //server.SendToAllBut("personaje_muerto", net_event.Packet, net_event.Peer, false);
-            }
-                
-        });*/
-
-        
-
 
         nivel_agua = transform.TransformPoint(water.transform.position).y;
 
@@ -312,9 +291,13 @@ public class Server_script : Convert_vector
                 {
                     
                 }
-                else
+                else 
                 {
-                    texto.text += c;
+                    if (texto.text.Length < max_length_texto)
+                    {
+                        texto.text += c;
+                    }
+                        
                 }
             }
         }
@@ -336,13 +319,15 @@ public class Server_script : Convert_vector
 
             if(!string.IsNullOrWhiteSpace(texto.text))
             {
-                player_inicial_servidor_script.texto.text = texto.text;
+                player_inicial_servidor_script.texto_volatil.set_text(texto.text);
+
 
                 server.SendToAll("chat", new data_chat(player_inicial_servidor_script.GetID(), texto.text));
 
                 texto.text = "";
             }
             player_inicial_servidor_script.escribiendo = !player_inicial_servidor_script.escribiendo;
+            texto_panel.SetActive(!texto_panel.activeSelf);
 
         }
 

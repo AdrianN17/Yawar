@@ -34,8 +34,6 @@ public class Move : MonoBehaviour
 
     public bool escribiendo;
 
-    public TextMesh texto;
-
     private bool is_client;
     public float nivel_agua_y;
 
@@ -43,6 +41,8 @@ public class Move : MonoBehaviour
 
     public List<GameObject> lista_gameobject_armas;
     public Sonidos_Pj sound;
+
+    public Texto_Volatil texto_volatil;
 
     void Start()
     {
