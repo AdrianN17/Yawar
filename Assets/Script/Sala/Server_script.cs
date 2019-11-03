@@ -125,7 +125,7 @@ public class Server_script : Convert_vector
 
         server.AddTrigger("Disconnect", delegate (ENet.Event net_event)
         {
-            int i = server.RemovePeer(net_event);
+           int i = server.RemovePeer(net_event);
 
             int index = buscar_usuario_peer(i);
 

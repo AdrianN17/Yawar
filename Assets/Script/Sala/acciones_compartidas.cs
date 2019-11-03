@@ -71,8 +71,11 @@ public class acciones_compartidas : Convert_vector
 
     public void empujon()
     {
-        anim.SetTrigger("RecibirDano");
-        sound.emitir_grito_dano(this.enabled);
+        if(!muerto)
+        {
+            anim.SetTrigger("RecibirDano");
+            sound.emitir_grito_dano(this.enabled);
+        }     
     }
 
     public void ataque()
@@ -140,12 +143,10 @@ public class acciones_compartidas : Convert_vector
             if(tp==tipo_muerte.normal)
             {
                 anim.SetTrigger("Morir");
-                Invoke("destruir_gameobject", 2.1f);
             }
             else
             {
                 anim.SetTrigger("Ahogar");
-                Invoke("destruir_gameobject", 3.5f);
             }
                 
 
@@ -202,9 +203,9 @@ public class acciones_compartidas : Convert_vector
     public void volver_al_inicio()
     {
         var script = gameObject.GetComponent<personaje_volver_inicio>();
-        var obj = GameObject.Find("Server_Manager"); 
+        var obj = GameObject.Find("Server_Manager");
 
-        if(obj!=null)
+        if (obj != null)
         {
             var server = obj.GetComponent<Server_script>();
             var bolsa = GameObject.FindGameObjectWithTag("Inventario_Main");
@@ -215,7 +216,7 @@ public class acciones_compartidas : Convert_vector
                 var script_servidor = gameObject.GetComponent<Move_server>();
                 script_servidor.no_arma_funcion();
 
-                
+
                 var lista = bolsa_script.limpiar_para_enviar();
 
                 server.server.SendToAll("personaje_muerto", new data_botar_objetos(script_servidor.GetID(), vec_to_obj(collider.bounds.center), lista));
@@ -240,6 +241,18 @@ public class acciones_compartidas : Convert_vector
                 bolsa_2.limpiar_principal();
             }
         }
+        else
+        {
+            if (gameObject.tag == "Personaje Principal")
+            {
+                var bolsa = GameObject.FindGameObjectWithTag("Inventario_Main");
+                var bolsa_script = bolsa.GetComponent<inventario_coleccionables>();
+
+                bolsa_script.crear_varios(bolsa_script.limpiar_para_enviar(), collider.bounds.center);
+
+                bolsa_script.limpiar_principal();
+            }
+        }
 
         script.volver_al_inicio();
 
@@ -262,6 +275,21 @@ public class acciones_compartidas : Convert_vector
     public tipo_muerte get_tipomuerte(int i)
     {
         return (tipo_muerte)i;
+    }
+
+    public void generar_muerte_cliente_personaje(bool tipo, Animator anim)
+    {
+        if(!anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar"))
+        {
+            if (tipo)
+            {
+                morir(tipo_muerte.ahogamiento);
+            }
+            else
+            {
+                morir(tipo_muerte.normal);
+            }
+        }   
     }
 
 }

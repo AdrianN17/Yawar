@@ -108,7 +108,7 @@ public class inventario_coleccionables : MonoBehaviour
     {
         foreach(var data in lista_para_crear)
         {
-            coleccion.crear_nuevo_coleccionable(data.tipo+1, pos, data.cantidad);
+            coleccion.crear_nuevo_coleccionable(data.tipo, pos, data.cantidad);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Assets.Script.Modelos
     [Serializable]
     public class lista_coleccionables
     {
-        private enum coleccionables {ninguno = 0 , choclo=1,oca_1=2,papa_1=3, papa_2=4,papa_3=5,papa_4=6};
+        private enum coleccionables {ninguno = -1 , choclo=0,oca_1=1,papa_1=2, papa_2=3,papa_3=4,papa_4=5};
         
 
         public lista_coleccionables()
@@ -21,7 +21,7 @@ namespace Assets.Script.Modelos
         {
             int cantidad = Enum.GetNames(typeof(coleccionables)).Length;
             Random rnd = new Random();
-            int tipo = rnd.Next(0, cantidad);
+            int tipo = rnd.Next(-1, cantidad-1);
 
             return tipo;
         }

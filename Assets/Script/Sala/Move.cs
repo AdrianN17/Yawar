@@ -140,7 +140,7 @@ public class Move : MonoBehaviour
             if (!escribiendo)
             {
                 if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Ataque01") && !anim.GetCurrentAnimatorStateInfo(0).IsName("AtaqueLanza") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Muerte_p") && !anim.GetCurrentAnimatorStateInfo(0).IsName("ahogar")
-                    && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano 0") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano"))
+                    && !anim.GetCurrentAnimatorStateInfo(0).IsName("Pj_Dano"))
                 {
                     teclas_presionada(dt);
                     tecla_soltada(dt);
@@ -174,13 +174,16 @@ public class Move : MonoBehaviour
             }
         }
 
-        if(collider.bounds.center.y < sound.nivel_agua)
+        if (es_controlable)
         {
-            sound.agua = true;
-        }
-        else
-        {
-            sound.agua = false;
+            if (collider.bounds.center.y < sound.nivel_agua)
+            {
+                sound.agua = true;
+            }
+            else
+            {
+                sound.agua = false;
+            }
         }
         
 

@@ -269,15 +269,7 @@ public class Client_script : Convert_vector
                     if(gameobj.vidas<1) 
                     {
                         var script =  buscado.GetComponent<Move>();
-
-                        if(script.calcular_ahogo())
-                        {
-                            script1.morir(script1.get_tipomuerte(1));
-                        }
-                        else
-                        {
-                            script1.morir(script1.get_tipomuerte(0));
-                        }
+                        script1.generar_muerte_cliente_personaje(script.calcular_ahogo(), script.anim);
                     }
                 }
             }

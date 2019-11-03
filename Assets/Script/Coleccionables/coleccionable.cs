@@ -29,7 +29,7 @@ public class coleccionable : Convert_vector
 
     void Update()
     {
-        
+
     }
 
     public void crear_nuevo_coleccionable(int tipo, Vector3 posicion, int cantidad=1)
@@ -41,20 +41,20 @@ public class coleccionable : Convert_vector
 
 
 
-        if(tipo==0)
+        if(tipo==-1)
         {
 
         }
         else
         {
 
-            var go = Instantiate(coleccionables[tipo - 1]);
+            var go = Instantiate(coleccionables[tipo]);
             go.transform.SetParent(this.transform);
             go.transform.position = posicion;
             go.transform.localScale = new Vector3(0.25f,0.25f, 0.25f);
 
             var script = go.GetComponent<coleccionable_data>();
-            script.tipo = tipo-1;
+            script.tipo = tipo;
             script.cantidad = cantidad;
             script.id_coleccionable = id_coleccionable;
 
@@ -115,7 +115,7 @@ public class coleccionable : Convert_vector
                         Debug.LogWarning("Colecionable error al borrar");
                     }
 
-                    crear_nuevo_coleccionable(data.tipo+1, obj_to_vec(data.vector), data.cantidad);
+                    crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
 
                 }
             }
