@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public GameObject Partida;
     public GameObject Panel_Servidores;
     public GameObject Panel_Creditos;
+    public GameObject Panel_Configuracion; 
     public GameObject Btn_Atras;
     public GameObject Btn_Buscar;
     public GameObject Culturas;
@@ -56,6 +57,9 @@ public class UIManager : MonoBehaviour
         //SceneManager.LoadScene("Sala_cliente");
         fuenteAudio.Play();
         Partida.SetActive(false);
+        Panel_Creditos.SetActive(false);
+        Panel_Servidores.SetActive(false);
+        Panel_Configuracion.SetActive(false);
         Panel_Servidores.SetActive(true);
     }
 
@@ -73,12 +77,17 @@ public class UIManager : MonoBehaviour
 
         Panel_Creditos.SetActive(false);
         Panel_Servidores.SetActive(false);
+        Panel_Configuracion.SetActive(false);
         Partida.SetActive(true);
     }
 
     public void On_Configuracion()
     {
         fuenteAudio.Play();
+        Panel_Configuracion.SetActive(true);
+        Partida.SetActive(false);
+        Panel_Servidores.SetActive(false);
+        Panel_Creditos.SetActive(false);
     }
 
     public void On_Credito()
@@ -87,6 +96,7 @@ public class UIManager : MonoBehaviour
         Panel_Creditos.SetActive(true);
         Partida.SetActive(false);
         Panel_Servidores.SetActive(false);
+        Panel_Configuracion.SetActive(false);
     }
 
     public void On_Culturas()
