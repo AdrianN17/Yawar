@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 {
     public GameObject Partida;
     public GameObject Panel_Servidores;
+    public GameObject Panel_Creditos;
     public GameObject Btn_Atras;
     public GameObject Btn_Buscar;
     public GameObject Culturas;
@@ -24,11 +25,16 @@ public class UIManager : MonoBehaviour
     public float separacion;
 
     private bool buscando;
-    // Start is called before the first frame update
+    //audio
+    public AudioClip click;
+    AudioSource fuenteAudio;
+
     void Start()
     {
         buscando = false;
         this.ip = new LocalIP().SetLocalIP();
+        fuenteAudio = GetComponent<AudioSource>();
+        fuenteAudio.clip = click;
     }
 
     // Update is called once per frame
@@ -48,12 +54,14 @@ public class UIManager : MonoBehaviour
     public void On_Unirse()
     {
         //SceneManager.LoadScene("Sala_cliente");
+        fuenteAudio.Play();
         Partida.SetActive(false);
         Panel_Servidores.SetActive(true);
     }
 
     public void On_Buscar()
     {
+        fuenteAudio.Play();
         Btn_Buscar.GetComponent<Button>().interactable = false;
         broadcast = new Broadcast_receive(ip,22124,timedelay);
         Invoke("finalizar_listado", 5);
@@ -61,17 +69,29 @@ public class UIManager : MonoBehaviour
 
     public void On_Atras()
     {
+        fuenteAudio.Play();
+
+        Panel_Creditos.SetActive(false);
         Panel_Servidores.SetActive(false);
         Partida.SetActive(true);
     }
 
     public void On_Configuracion()
     {
+        fuenteAudio.Play();
+    }
 
+    public void On_Credito()
+    {
+        fuenteAudio.Play();
+        Panel_Creditos.SetActive(true);
+        Partida.SetActive(false);
+        Panel_Servidores.SetActive(false);
     }
 
     public void On_Culturas()
     {
+        fuenteAudio.Play();
         Partida.SetActive(false);
         Culturas.SetActive(true);
     }
