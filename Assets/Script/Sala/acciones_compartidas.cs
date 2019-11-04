@@ -30,6 +30,9 @@ public class acciones_compartidas : Convert_vector
 
     public bool muerto;
 
+    public Slider slider;
+    public bool tengo_slider;
+
 
     // Start is called before the first frame update
     void Start()
@@ -102,6 +105,10 @@ public class acciones_compartidas : Convert_vector
             {
                 barra.reduce(max_vidas, vidas);
             }
+            else if(mitipo == tipo.personaje_principal)
+            {
+                slider_set_value(vidas);
+            }
 
             if (vidas<1 )
             {
@@ -122,6 +129,10 @@ public class acciones_compartidas : Convert_vector
             if (mitipo != tipo.personaje_principal)
             {
                 barra.reduce(max_vidas, vidas);
+            }
+            else if (mitipo == tipo.personaje_principal)
+            {
+                slider_set_value(vidas);
             }
 
             if (vidas < 1)
@@ -164,6 +175,10 @@ public class acciones_compartidas : Convert_vector
                 {
                     barra.reduce(max_vidas, 0);
                 }
+                else if (mitipo == tipo.personaje_principal)
+                {
+                    slider_set_value(0);
+                }
             }
             else
             {
@@ -174,6 +189,10 @@ public class acciones_compartidas : Convert_vector
                 if (mitipo == tipo.personaje)
                 {
                     barra.reduce(max_vidas, 0);
+                }
+                else if (mitipo == tipo.personaje_principal)
+                {
+                    slider_set_value(0);
                 }
             }
         }
@@ -224,6 +243,7 @@ public class acciones_compartidas : Convert_vector
                 bolsa_script.crear_varios(lista, collider.bounds.center);
 
                 bolsa_script.limpiar_principal();
+                slider_set_value(max_vidas);
             }
             else
             {
@@ -251,6 +271,7 @@ public class acciones_compartidas : Convert_vector
                 bolsa_script.crear_varios(bolsa_script.limpiar_para_enviar(), collider.bounds.center);
 
                 bolsa_script.limpiar_principal();
+                slider_set_value(max_vidas);
             }
         }
 
@@ -261,6 +282,10 @@ public class acciones_compartidas : Convert_vector
         if(mitipo != tipo.personaje_principal)
         {
             barra.reduce(max_vidas, vidas);
+        }
+        else if(mitipo == tipo.personaje_principal)
+        {
+            slider_set_value(max_vidas);
         }
 
         muerto = false;
@@ -283,13 +308,38 @@ public class acciones_compartidas : Convert_vector
         {
             if (tipo)
             {
+                slider_set_value(0);
                 morir(tipo_muerte.ahogamiento);
             }
             else
             {
+                slider_set_value(0);
                 morir(tipo_muerte.normal);
             }
         }   
+    }
+
+    public void set_slider(Slider obj)
+    {
+        slider = obj;
+        tengo_slider = true;
+    }
+
+    public void slider_set_value(int i)
+    {
+        if(slider!=null)
+        {
+            slider.value = i;
+        }      
+    }
+
+    public void barra_reduce_try(int vida)
+    {
+        if(mitipo==tipo.personaje)
+        {
+            barra.reduce(max_vidas, vida);
+        }
+            
     }
 
 }

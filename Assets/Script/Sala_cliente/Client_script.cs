@@ -42,6 +42,8 @@ public class Client_script : Convert_vector
     public GameObject texto_panel;
     public int max_length_texto;
 
+    public Slider mivida;
+
 
     void Start()
     {
@@ -109,6 +111,7 @@ public class Client_script : Convert_vector
 
                     var script_compartido = go.GetComponent<acciones_compartidas>();
                     script_compartido.personaje_principal();
+                    script_compartido.set_slider(mivida);
 
                     go.tag = "Personaje Principal";
 
@@ -270,8 +273,10 @@ public class Client_script : Convert_vector
                 {
                     var script1 = buscado.GetComponent<acciones_compartidas>();
                     script1.vidas = gameobj.vidas;
+                    script1.slider_set_value(gameobj.vidas);
+                    script1.barra_reduce_try(gameobj.vidas);
 
-                    if(gameobj.vidas<1) 
+                    if (gameobj.vidas<1) 
                     {
                         var script =  buscado.GetComponent<Move>();
                         script1.generar_muerte_cliente_personaje(script.calcular_ahogo(), script.anim);
