@@ -511,7 +511,6 @@ GameObject:
   - component: {fileID: 8615667621902186500}
   - component: {fileID: 1809043851172959614}
   - component: {fileID: 5026604462106442496}
-  - component: {fileID: 5129721427290854346}
   m_Layer: 0
   m_Name: palmera
   m_TagString: Untagged
@@ -566,19 +565,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dfccd4b3986a484aab7bb3297e8a549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &5129721427290854346
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4740700329220672023}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 4.5422363, y: 55.658188, z: 3.3752441}
-  m_Center: {x: -0.16540527, y: 26.29528, z: -0.2508545}
 --- !u!1 &5741383353817743464
 GameObject:
   m_ObjectHideFlags: 0
