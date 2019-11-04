@@ -25,26 +25,24 @@ public class UIManager : MonoBehaviour
     public float default_size_y;
     public float separacion;
 
-    private bool buscando;
     //audio
     public AudioClip click;
     AudioSource fuenteAudio;
 
+    public Toggle resolucion;
+
     void Start()
     {
-        buscando = false;
         this.ip = new LocalIP().SetLocalIP();
         fuenteAudio = GetComponent<AudioSource>();
         fuenteAudio.clip = click;
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(buscando)
-        {
-
-        }
     }
 
     public void On_Nuevo()
@@ -83,6 +81,8 @@ public class UIManager : MonoBehaviour
 
     public void On_Configuracion()
     {
+        resolucion.isOn = Screen.fullScreen;
+
         fuenteAudio.Play();
         Panel_Configuracion.SetActive(true);
         Partida.SetActive(false);
@@ -188,6 +188,11 @@ public class UIManager : MonoBehaviour
         var rect = contexto.GetComponent<RectTransform>();
 
         rect.sizeDelta = new Vector2(rect.sizeDelta.x, y);
+    }
+
+    public void guardar_cambios_resolucion()
+    {
+        Screen.fullScreen = resolucion.isOn;
     }
 
 }

@@ -196,8 +196,8 @@ public class coleccionable : Convert_vector
 
             if (!script.actualizable_enviar)
             {
-                Destroy(script.gameObject);
                 listado_actual.RemoveAt(i);
+                Destroy(script.gameObject);
             }
 
         }

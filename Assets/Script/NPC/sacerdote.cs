@@ -13,7 +13,7 @@ public class sacerdote : MonoBehaviour
     public int index;
     void Start()
     {
-        lista_texto = new List<string> { "Que es lo que tienes para mi? - pulsa A para entregar objetos" };
+        lista_texto = new List<string> { "Que es lo que tienes para mi?" };
 
     }
 
