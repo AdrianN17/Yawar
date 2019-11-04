@@ -70,6 +70,8 @@ public class crear_enemigo_cliente : Convert_vector
                 script1.transform.rotation = Quaternion.Euler(obj_to_vec(enemigo.radio));
                 script1.rb.MoveRotation(script1.transform.rotation);
 
+                script1.actualizado_envio = true;
+
             }
             else
             {
@@ -87,9 +89,13 @@ public class crear_enemigo_cliente : Convert_vector
 
                 lista_enemigos.Add(ene);
 
+                script.actualizado_envio = true;
+
             }
 
         }
+
+        limpiar_enemigos();
     }
 
     public void crear_enemigo_creacion_player(List<data_enemigo_por_segundos> data_list)
@@ -120,6 +126,28 @@ public class crear_enemigo_cliente : Convert_vector
     public void contar_muertes(GameObject enemigo)
     {
         lista_enemigos.Remove(enemigo);
+    }
+
+    public void limpiar_enemigos()
+    {
+        for (var i = lista_enemigos.Count - 1; i >= 0; i--)
+        {
+            var enemigo = lista_enemigos[i];
+            var script = enemigo.GetComponent<enemigo_1>();
+            if (!script.actualizado_envio)
+            {
+                lista_enemigos.RemoveAt(i);
+                Destroy(enemigo);
+            }
+
+        }
+
+        foreach(var data in lista_enemigos)
+        {
+            var script = data.GetComponent<enemigo_1>();
+            script.actualizado_envio = false;
+        }
+
     }
 
 }

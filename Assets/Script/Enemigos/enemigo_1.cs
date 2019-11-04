@@ -24,6 +24,8 @@ public class enemigo_1 : MonoBehaviour
     public int coleccionable;
     public bool es_servidor;
 
+    public bool actualizado_envio;
+
 
     void Start()
     {

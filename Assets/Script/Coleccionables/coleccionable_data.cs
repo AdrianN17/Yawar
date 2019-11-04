@@ -9,6 +9,7 @@ public class coleccionable_data : MonoBehaviour
     public coleccionable padre_script;
     public bool enviar;
     public int id_coleccionable;
+    public bool actualizable_enviar;
 
 
 

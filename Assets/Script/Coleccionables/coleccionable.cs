@@ -14,6 +14,7 @@ public class coleccionable : Convert_vector
     public List<coleccionable_data> listado_actual;
     private int id_coleccionable = 0;
     public float nivel_agua_y;
+    public bool is_cliente;
 
     void Start()
     {
@@ -32,18 +33,18 @@ public class coleccionable : Convert_vector
 
     }
 
-    public void crear_nuevo_coleccionable(int tipo, Vector3 posicion, int cantidad=1)
+    public coleccionable_data crear_nuevo_coleccionable(int tipo, Vector3 posicion, int cantidad=1)
     {
         if(posicion.y<nivel_agua_y)
         {
-            return;
+            return null;
         }
 
 
 
         if(tipo==-1)
         {
-
+            return null;
         }
         else
         {
@@ -63,6 +64,8 @@ public class coleccionable : Convert_vector
 
 
             id_coleccionable++;
+
+            return script;
         }
     }
 
@@ -88,7 +91,7 @@ public class coleccionable : Convert_vector
         return listado;
     }
 
-    public void actualizar(List<data_colecionable_con_id> listado)
+    public void actualizar(List<data_colecionable_con_id> listado) //para cliente
     {
         foreach(var data in listado)
         {
@@ -105,25 +108,32 @@ public class coleccionable : Convert_vector
                 }
                 else
                 {
-                    try
-                    {
-                        listado_actual.Remove(obj);
-                        Destroy(obj.gameObject);
-                    }
-                    catch(Exception ex)
-                    {
-                        Debug.LogWarning("Colecionable error al borrar");
-                    }
 
-                    crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
+                    listado_actual.Remove(obj);
+                    Destroy(obj.gameObject);
+
+                    var script = crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
+
+                    if(script!=null)
+                    {
+                        script.actualizable_enviar = true;
+                    }
 
                 }
             }
             else
             {
-                crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
+                var script = crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
+
+                if (script != null)
+                {
+                    script.actualizable_enviar = true;
+                }
             }
         }
+
+
+        limpiar_coleccionables();
     }
 
     public void validar(coleccionable_data data, float y)
@@ -176,5 +186,26 @@ public class coleccionable : Convert_vector
         {
             crear_nuevo_coleccionable(data.tipo, obj_to_vec(data.vector), data.cantidad);
         }
+    }
+
+    public void limpiar_coleccionables()
+    {
+        for (var i = listado_actual.Count - 1; i >= 0; i--)
+        {
+            var script = listado_actual[i];
+
+            if (!script.actualizable_enviar)
+            {
+                Destroy(script.gameObject);
+                listado_actual.RemoveAt(i);
+            }
+
+        }
+
+        foreach (var script in listado_actual)
+        {
+            script.actualizable_enviar = false;
+        }
+
     }
 }
