@@ -1,4 +1,5 @@
 ﻿using Assets.Script.Modelos;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -132,12 +133,19 @@ public class crear_enemigo_cliente : Convert_vector
     {
         for (var i = lista_enemigos.Count - 1; i >= 0; i--)
         {
-            var enemigo = lista_enemigos[i];
-            var script = enemigo.GetComponent<enemigo_1>();
-            if (!script.actualizado_envio)
+            try
+            {
+                var enemigo = lista_enemigos[i];
+                var script = enemigo.GetComponent<enemigo_1>();
+                if (!script.actualizado_envio)
+                {
+                    lista_enemigos.RemoveAt(i);
+                    Destroy(enemigo);
+                }
+            }
+            catch (Exception ex)
             {
                 lista_enemigos.RemoveAt(i);
-                Destroy(enemigo);
             }
 
         }

@@ -192,14 +192,20 @@ public class coleccionable : Convert_vector
     {
         for (var i = listado_actual.Count - 1; i >= 0; i--)
         {
-            var script = listado_actual[i];
+            try
+            {
+                var script = listado_actual[i];
 
-            if (!script.actualizable_enviar)
+                if (!script.actualizable_enviar)
+                {
+                    listado_actual.RemoveAt(i);
+                    Destroy(script.gameObject);
+                }
+            }
+            catch(Exception ex)
             {
                 listado_actual.RemoveAt(i);
-                Destroy(script.gameObject);
             }
-
         }
 
         foreach (var script in listado_actual)
