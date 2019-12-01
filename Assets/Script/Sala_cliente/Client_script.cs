@@ -179,17 +179,21 @@ public class Client_script : Convert_vector
         client.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
             var data = client.JSONDecode(net_event.Packet);
 
-            var obj = (data_por_segundos)data.value;
+            var obj_list = (List<data_por_segundos>)data.value;
 
-            var buscado = buscar_usuario(obj.id);
 
-            if (buscado != null)
-            {
-                var gameobj = buscado.GetComponent<Move>();
+            foreach(var obj in obj_list)
+            { 
+                var buscado = buscar_usuario(obj.id);
 
-                gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
+                if (buscado != null)
+                {
+                    var gameobj = buscado.GetComponent<Move>();
 
-                gameobj.set_arma_actual(obj.arma);
+                    gameobj.normalizado(obj_to_vec(obj.posicion), Quaternion.Euler(obj_to_vec(obj.radio)));
+
+                    gameobj.set_arma_actual(obj.arma);
+                }
             }
 
         });
@@ -325,14 +329,14 @@ public class Client_script : Convert_vector
 
         if (start_send)
         {
-            counter_send = counter_send + dt;
+            /*counter_send = counter_send + dt;
 
-            if (counter_send > max_counter)
+            /if (counter_send > max_counter)
             {
                 client.Send("enviar_posicion", new data_por_segundos(player_object_script.GetID(), vec_to_obj(player_object_script.transform.position), vec_to_obj(player_object_script.transform.rotation.eulerAngles),player_object_script.get_arma_actual()));
 
                 counter_send = 0;
-            }
+            }*/
 
             if (player_object_script.escribiendo)
             {

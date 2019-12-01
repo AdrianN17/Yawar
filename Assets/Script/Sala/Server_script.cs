@@ -182,7 +182,7 @@ public class Server_script : Convert_vector
 
         });
 
-        server.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
+        /*server.AddTrigger("enviar_posicion", delegate (ENet.Event net_event) {
             var data = server.JSONDecode(net_event.Packet);
 
             var obj = (data_por_segundos)data.value;
@@ -200,7 +200,7 @@ public class Server_script : Convert_vector
             }
 
                 
-        });
+        });*/
 
         server.AddTrigger("chat", delegate (ENet.Event net_event)
         {
@@ -245,8 +245,7 @@ public class Server_script : Convert_vector
 
         if (counter_send > max_counter)
         {
-            server.SendToAll("enviar_posicion", new data_por_segundos(player_inicial_servidor_script.GetID(), vec_to_obj(player_inicial_servidor_script.transform.position), vec_to_obj(player_inicial_servidor.transform.rotation.eulerAngles), player_inicial_servidor_script.get_arma_actual()));
-
+            server.SendToAll("enviar_posicion", posiciones_todos());
             counter_send = 0;
         }
 
@@ -401,6 +400,37 @@ public class Server_script : Convert_vector
         }
 
         return -1;
+    }
+
+    List<data_por_segundos> posiciones_todos()
+    {
+        var listado = new List<data_por_segundos>();
+
+        foreach (var obj in lista_personajes)
+        {
+            var script_id = obj.GetComponent<get_id>();
+            var script_center = obj.GetComponent<get_center>();
+
+            int i = 0;
+
+            if(obj.tag == "Personaje Principal")
+            {
+                i = obj.GetComponent<Move_server>().get_arma_actual();
+            }
+            else
+            {
+                i = obj.GetComponent<Move>().get_arma_actual();
+            }
+
+
+            listado.Add(new data_por_segundos(script_id.id,vec_to_obj(script_center.get_center_position()), vec_to_obj(obj.transform.rotation.eulerAngles),i));
+        }
+
+        return listado;
+
+
+        //new data_por_segundos(player_inicial_servidor_script.GetID(), vec_to_obj(player_inicial_servidor_script.transform.position), vec_to_obj(player_inicial_servidor.transform.rotation.eulerAngles), player_inicial_servidor_script.get_arma_actual()));
+
     }
 
 
