@@ -409,7 +409,6 @@ public class Server_script : Convert_vector
         foreach (var obj in lista_personajes)
         {
             var script_id = obj.GetComponent<get_id>();
-            var script_center = obj.GetComponent<get_center>();
 
             int i = 0;
 
@@ -423,7 +422,7 @@ public class Server_script : Convert_vector
             }
 
 
-            listado.Add(new data_por_segundos(script_id.id,vec_to_obj(script_center.get_center_position()), vec_to_obj(obj.transform.rotation.eulerAngles),i));
+            listado.Add(new data_por_segundos(script_id.id,vec_to_obj(obj.transform.position), vec_to_obj(obj.transform.rotation.eulerAngles),i));
         }
 
         return listado;
